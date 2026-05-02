@@ -10,7 +10,7 @@
     <p class="text-muted text-sm">{% trans "Manage discounts, promotions and loyalty campaigns." %}</p>
     <div style="display:flex; gap:10px;">
       <a href="{% url 'coupon_list' %}" class="btn btn-secondary btn-sm">🎟️ {% trans "Coupons" %}</a>
-      <a href="{% url 'campaign_create' %}" class="btn btn-primary btn-sm">+ {% trans "New Campaign" %}</a>
+      <a href="{% url 'campaign_add' %}" class="btn btn-primary btn-sm">+ {% trans "New Campaign" %}</a>
     </div>
   </div>
 
@@ -75,7 +75,7 @@
         </div>
 
         <div style="display:flex; gap:8px;">
-          <a href="{% url 'campaign_update' c.pk %}" class="btn btn-secondary btn-sm btn-block">✏️ {% trans "Edit" %}</a>
+          <a href="{% url 'campaign_add' %}" class="btn btn-secondary btn-sm btn-block">✏️ {% trans "Edit" %}</a>
         </div>
       </div>
     </div>

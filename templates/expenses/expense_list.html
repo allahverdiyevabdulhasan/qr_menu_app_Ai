@@ -21,7 +21,7 @@
     <p class="text-muted text-sm">{% trans "Monitor and categorize all restaurant costs." %}</p>
     <div style="display:flex; gap:10px;">
       <a href="{% url 'expense_report' %}" class="btn btn-secondary btn-sm">📊 {% trans "Report" %}</a>
-      <a href="{% url 'expense_create' %}" class="btn btn-primary btn-sm">+ {% trans "Add Expense" %}</a>
+      <a href="{% url 'expense_add' %}" class="btn btn-primary btn-sm">+ {% trans "Add Expense" %}</a>
     </div>
   </div>
 
@@ -91,7 +91,7 @@
             </td>
             <td style="text-align:right;">
               <div style="display:flex; gap:6px; justify-content:flex-end;">
-                <a href="{% url 'expense_update' expense.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px;">✏️</a>
+                <a href="{% url 'expense_edit' expense.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px;">✏️</a>
                 <a href="{% url 'expense_delete' expense.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px; color:var(--danger);">🗑</a>
               </div>
             </td>

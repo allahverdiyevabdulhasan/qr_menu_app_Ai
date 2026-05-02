@@ -19,7 +19,7 @@
 
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
     <p class="text-muted text-sm">{% trans "Track all stock levels and supplier info." %}</p>
-    <a href="{% url 'inventory_create' %}" class="btn btn-primary btn-sm">+ {% trans "Add Item" %}</a>
+    <a href="{% url 'inventory_add' %}" class="btn btn-primary btn-sm">+ {% trans "Add Item" %}</a>
   </div>
 
   {# ── Summary Cards ── #}
@@ -102,7 +102,7 @@
               {% endif %}
             </td>
             <td style="text-align:right;">
-              <a href="{% url 'inventory_update' item.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px;">✏️</a>
+              <a href="{% url 'inventory_edit' item.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px;">✏️</a>
             </td>
           </tr>
           {% endwith %}

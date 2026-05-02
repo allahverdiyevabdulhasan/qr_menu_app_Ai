@@ -50,7 +50,7 @@
     </div>
     <div style="display:flex; gap:10px;">
       <a href="{% url 'category_list' %}" class="btn btn-secondary btn-sm">📂 {% trans "Categories" %}</a>
-      <a href="{% url 'product_create' %}" class="btn btn-primary btn-sm">+ {% trans "Add Product" %}</a>
+      <a href="{% url 'product_add' %}" class="btn btn-primary btn-sm">+ {% trans "Add Product" %}</a>
     </div>
   </div>
 
@@ -141,7 +141,7 @@
             </td>
             <td style="text-align:right;">
               <div style="display:flex; gap:6px; justify-content:flex-end;">
-                <a href="{% url 'product_update' product.pk %}" class="action-btn" title="{% trans 'Edit' %}">✏️</a>
+                <a href="{% url 'product_edit' product.pk %}" class="action-btn" title="{% trans 'Edit' %}">✏️</a>
                 <a href="{% url 'product_detail_admin' product.pk %}" class="action-btn" title="{% trans 'View' %}">👁️</a>
               </div>
             </td>
