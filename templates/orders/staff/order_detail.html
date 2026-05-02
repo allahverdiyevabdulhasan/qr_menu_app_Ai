@@ -1,0 +1,75 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Order" %} #{{ order.id }}{% endblock %}
+{% block page_title %}📋 {% trans "Order Detail" %} #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="max-width:900px;">
+
+  {# ── Header ── #}
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px;">
+    <a href="{% url 'order_list' %}" class="btn btn-secondary">← {% trans "Back to Orders" %}</a>
+    <span class="badge badge-{% if order.status == 'COMPLETED' %}success{% elif order.status == 'CANCELLED' %}danger{% else %}primary{% endif %}" style="font-size:0.9rem; padding:8px 20px;">
+      {{ order.get_status_display }}
+    </span>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:24px;">
+
+    {# ── Items ── #}
+    <div class="card">
+      <div class="card-header"><span>🍽️ {% trans "Order Items" %}</span></div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <tbody>
+            {% for item in order.items.all %}
+            <tr>
+              <td><strong>{{ item.quantity }} ×</strong> {{ item.product_name_snapshot }}</td>
+              <td style="text-align:right; font-weight:700;">{{ item.total_price }} ₼</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--bg);">
+              <td><strong>{% trans "Total" %}</strong></td>
+              <td style="text-align:right; font-size:1.2rem; font-weight:900; color:var(--primary);">{{ order.total_amount }} ₼</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    {# ── Info & Status Update ── #}
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div class="card">
+        <div class="card-header"><span>ℹ️ {% trans "Order Info" %}</span></div>
+        <div class="card-body">
+          <div style="display:flex; flex-direction:column; gap:12px; font-size:0.9rem;">
+            <div style="display:flex; justify-content:space-between;"><span class="text-muted">{% trans "Order #" %}</span><strong>#{{ order.id }}</strong></div>
+            <div style="display:flex; justify-content:space-between;"><span class="text-muted">{% trans "Table" %}</span><strong>{{ order.table.table_number|default:"—" }}</strong></div>
+            <div style="display:flex; justify-content:space-between;"><span class="text-muted">{% trans "Customer" %}</span><strong>{{ order.customer_name|default:"Guest" }}</strong></div>
+            <div style="display:flex; justify-content:space-between;"><span class="text-muted">{% trans "Type" %}</span><strong>{{ order.get_order_type_display|default:"—" }}</strong></div>
+            <div style="display:flex; justify-content:space-between;"><span class="text-muted">{% trans "Time" %}</span><strong>{{ order.created_at|date:"d M, H:i" }}</strong></div>
+            {% if order.note %}<div style="padding:10px; background:var(--bg); border-radius:10px; font-size:0.85rem;"><strong>{% trans "Note:" %}</strong> {{ order.note }}</div>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>🔄 {% trans "Update Status" %}</span></div>
+        <div class="card-body">
+          <form method="post" action="{% url 'order_status_update' order.pk %}">
+            {% csrf_token %}
+            <select name="status" class="form-control mb-4">
+              {% for val, label in order.STATUS_CHOICES %}
+              <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary btn-block">{% trans "Update Status" %}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

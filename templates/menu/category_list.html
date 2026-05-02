@@ -1,0 +1,61 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Categories" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Menu Categories" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:1.25rem;">📂 {% trans "Categories" %}</h2>
+        <a href="{% url 'category_add' %}" class="btn btn-primary">
+            <span>+</span> {% trans "Add New Category" %}
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body" style="padding:0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Sort Order" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th style="text-align:right;">{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categories %}
+                    <tr>
+                        <td><span class="font-bold">{{ cat.name }}</span></td>
+                        <td><span class="badge badge-info">{{ cat.sort_order }}</span></td>
+                        <td>
+                            <span class="badge badge-{% if cat.is_active %}success{% else %}danger{% endif %}">
+                                {{ cat.is_active|yesno:_("Active,Inactive") }}
+                            </span>
+                        </td>
+                        <td style="text-align:right;">
+                            <div style="display:flex; gap:8px; justify-content:flex-end;">
+                                <a href="{% url 'category_edit' cat.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Edit' %}">✏️</a>
+                                <a href="{% url 'category_delete' cat.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Delete' %}" style="color:var(--danger);">🗑️</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <div style="font-size:3rem; margin-bottom:12px;">📂</div>
+                                <p>{% trans "No categories found." %}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

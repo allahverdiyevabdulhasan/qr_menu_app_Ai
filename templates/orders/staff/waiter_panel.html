@@ -1,0 +1,111 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Waiter Panel" %} — NeyMenu AI{% endblock %}
+{% block page_title %}🛎️ {% trans "Waiter Panel" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.waiter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.waiter-card {
+  background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
+  box-shadow: var(--shadow); overflow: hidden; transition: var(--transition);
+}
+.waiter-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.waiter-card-head {
+  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.table-number { font-size: 1.5rem; font-weight: 800; color: var(--dark); }
+.ready-badge {
+  background: linear-gradient(135deg,#10b981,#34d399);
+  color: #fff; padding: 4px 12px; border-radius: 20px;
+  font-size: 0.72rem; font-weight: 700;
+}
+.waiter-items { padding: 14px 20px; display: flex; flex-direction: column; gap: 8px; }
+.waiter-item { display: flex; justify-content: space-between; font-size: 0.875rem; }
+.waiter-item-qty { font-weight: 700; color: var(--primary); margin-right: 8px; }
+.waiter-card-foot { padding: 14px 20px; background: var(--bg); border-top: 1px solid var(--border); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div>
+      <h2 style="font-size:1.1rem; margin-bottom:4px;">{% trans "Orders ready to be served" %}</h2>
+      <p class="text-muted text-sm">{% trans "Tap 'Served' when the order reaches the customer." %}</p>
+    </div>
+    <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Refresh" %}</button>
+  </div>
+
+  <div class="grid grid-4 mb-6">
+    <div class="metric-card metric-success">
+      <div class="icon">✅</div>
+      <div class="label">{% trans "Ready to Serve" %}</div>
+      <div class="value">{{ orders|length }}</div>
+    </div>
+    <div class="metric-card metric-primary">
+      <div class="icon">🛎️</div>
+      <div class="label">{% trans "Tables Active" %}</div>
+      <div class="value">{{ orders|length }}</div>
+    </div>
+  </div>
+
+  {% if orders %}
+  <div class="waiter-grid">
+    {% for order in orders %}
+    <div class="waiter-card">
+      <div class="waiter-card-head">
+        <div>
+          <div class="table-number">
+            {% if order.table %}🪑 #{{ order.table.table_number }}{% else %}🥡{% endif %}
+          </div>
+          <div class="text-xs text-muted">#{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
+        </div>
+        <span class="ready-badge">✅ {% trans "Ready" %}</span>
+      </div>
+
+      <div class="waiter-items">
+        {% for item in order.items.all %}
+        <div class="waiter-item">
+          <span><span class="waiter-item-qty">{{ item.quantity }}×</span>{{ item.product_name_snapshot }}</span>
+          <span class="text-muted text-sm">{{ item.total_price }} ₼</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if order.note %}
+      <div style="margin: 0 20px 12px; padding: 10px 12px; background:#fffbeb; border-radius:8px; border:1px solid #fef3c7; font-size:0.82rem; color:#92400e;">
+        💬 {{ order.note }}
+      </div>
+      {% endif %}
+
+      <div class="waiter-card-foot">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:800; color:var(--dark);">{{ order.total_amount }} ₼</span>
+          <form method="post" action="{% url 'order_status_update' order.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="SERVED">
+            <button type="submit" class="btn btn-success btn-sm">🍽️ {% trans "Mark Served" %}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card">
+    <div class="empty-state" style="padding:80px 24px;">
+      <div style="font-size:4rem; margin-bottom:16px;">🎉</div>
+      <h3>{% trans "All orders served!" %}</h3>
+      <p class="text-muted">{% trans "No orders waiting to be served right now." %}</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

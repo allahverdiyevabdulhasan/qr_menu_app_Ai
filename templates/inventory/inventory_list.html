@@ -1,0 +1,117 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Inventory" %} — NeyMenu AI{% endblock %}
+{% block page_title %}📦 {% trans "Inventory" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.qty-bar-wrap { width: 80px; }
+.qty-bar { height: 5px; border-radius: 5px; background: var(--border); overflow: hidden; margin-top: 4px; }
+.qty-bar-fill { height: 100%; border-radius: 5px; }
+.status-in  { background: linear-gradient(90deg,#10b981,#34d399); }
+.status-low { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+.status-out { background: linear-gradient(90deg,#ef4444,#f87171); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p class="text-muted text-sm">{% trans "Track all stock levels and supplier info." %}</p>
+    <a href="{% url 'inventory_create' %}" class="btn btn-primary btn-sm">+ {% trans "Add Item" %}</a>
+  </div>
+
+  {# ── Summary Cards ── #}
+  <div class="grid grid-4 mb-6">
+    <div class="metric-card metric-success">
+      <div class="icon">📦</div>
+      <div class="label">{% trans "Total Items" %}</div>
+      <div class="value">{{ items.count }}</div>
+    </div>
+    <div class="metric-card metric-warning">
+      <div class="icon">⚠️</div>
+      <div class="label">{% trans "Low Stock" %}</div>
+      <div class="value">0</div>
+    </div>
+    <div class="metric-card metric-danger">
+      <div class="icon">❌</div>
+      <div class="label">{% trans "Out of Stock" %}</div>
+      <div class="value">0</div>
+    </div>
+    <div class="metric-card metric-primary">
+      <div class="icon">📊</div>
+      <div class="label">{% trans "Total Value" %}</div>
+      <div class="value" style="font-size:1.3rem;">— ₼</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span>📦 {% trans "Inventory Stock" %}</span>
+      <a href="{% url 'stock_alerts' %}" class="btn btn-secondary btn-sm">⚠️ {% trans "Alerts" %}</a>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{% trans "Item" %}</th>
+            <th>{% trans "Current Qty" %}</th>
+            <th>{% trans "Min. Qty" %}</th>
+            <th>{% trans "Unit Cost" %}</th>
+            <th>{% trans "Supplier" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th style="text-align:right;">{% trans "Action" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          {% with pct=item.current_quantity|floatformat:0 %}
+          <tr>
+            <td>
+              <div style="font-weight:700;">{{ item.name }}</div>
+              <div class="text-xs text-muted">{{ item.category|default:"—" }}</div>
+            </td>
+            <td>
+              <div style="font-weight:800; color:var(--primary);">
+                {{ item.current_quantity|floatformat:0 }}
+                <span class="text-xs text-muted" style="font-weight:400;">{{ item.unit }}</span>
+              </div>
+              <div class="qty-bar">
+                <div class="qty-bar-fill {% if item.current_quantity <= item.minimum_quantity %}status-out{% elif item.current_quantity <= item.minimum_quantity|add:10 %}status-low{% else %}status-in{% endif %}"
+                     style="width:{% if item.current_quantity and item.minimum_quantity %}{{ item.current_quantity|floatformat:0 }}{% else %}70{% endif %}%;">
+                </div>
+              </div>
+            </td>
+            <td class="text-muted">{{ item.minimum_quantity|floatformat:0 }}</td>
+            <td style="font-weight:600;">{{ item.unit_cost }} ₼</td>
+            <td>
+              {% if item.supplier %}
+              <span class="badge badge-info" style="font-size:0.7rem;">{{ item.supplier }}</span>
+              {% else %}
+              <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if item.current_quantity <= item.minimum_quantity %}
+              <span class="badge badge-danger">{% trans "Out" %}</span>
+              {% elif item.current_quantity <= item.minimum_quantity|add:10 %}
+              <span class="badge badge-warning">{% trans "Low" %}</span>
+              {% else %}
+              <span class="badge badge-success">{% trans "In Stock" %}</span>
+              {% endif %}
+            </td>
+            <td style="text-align:right;">
+              <a href="{% url 'inventory_update' item.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px;">✏️</a>
+            </td>
+          </tr>
+          {% endwith %}
+          {% empty %}
+          <tr><td colspan="7"><div class="empty-state"><div style="font-size:3rem; margin-bottom:12px;">📦</div><h3>{% trans "No inventory items" %}</h3><p>{% trans "Start tracking your stock." %}</p></div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

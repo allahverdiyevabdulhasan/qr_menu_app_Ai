@@ -1,0 +1,204 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% if object %}{% trans "Edit Product" %}{% else %}{% trans "Add Product" %}{% endif %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% if object %}{% trans "Edit Product" %}{% else %}{% trans "Add Product" %}{% endif %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 32px;
+    }
+    .ai-assist-box {
+        background: var(--primary-light);
+        border: 1.5px dashed var(--primary);
+        border-radius: 16px;
+        padding: 20px;
+        margin-top: 24px;
+    }
+    .sticky-actions {
+        position: sticky;
+        bottom: 24px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+        border: 1px solid var(--border);
+        margin-top: 40px;
+        z-index: 100;
+        display: flex;
+        gap: 16px;
+    }
+    .field-group {
+        background: #fff;
+        padding: 24px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        margin-bottom: 24px;
+    }
+    .field-group-title {
+        font-weight: 800;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <div class="main-fields">
+                {# --- Basic Info --- #}
+                <div class="field-group">
+                    <div class="field-group-title"><span>📝</span> {% trans "Basic Information" %}</div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Product Name" %}</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<div class="text-danger text-xs mt-1">{{ form.name.errors }}</div>{% endif %}
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">{% trans "Category" %}</label>
+                            {{ form.category }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">{% trans "Price (₼)" %}</label>
+                            {{ form.price }}
+                        </div>
+                    </div>
+                </div>
+
+                {# --- Description with AI --- #}
+                <div class="field-group">
+                    <div class="field-group-title" style="justify-content: space-between;">
+                        <span>📖 {% trans "Description" %}</span>
+                        <button type="button" id="aiDescBtn" class="btn btn-glass btn-sm" style="color:var(--primary); font-weight:800;">✨ {% trans "AI Generate" %}</button>
+                    </div>
+                    {{ form.description }}
+                    <div id="aiLoading" style="display:none; font-size:0.75rem; color:var(--primary); margin-top:8px;" class="fade-in">
+                        ⏳ {% trans "AI is writing a premium description..." %}
+                    </div>
+                </div>
+
+                {# --- Toggles --- #}
+                <div class="field-group">
+                    <div class="field-group-title"><span>⚙️</span> {% trans "Visibility & Stock" %}</div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">{% trans "Stock Status" %}</label>
+                            {{ form.stock_status }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">{% trans "Flags" %}</label>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; cursor:pointer;">{{ form.is_active }} {% trans "Is Active" %}</label>
+                                <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; cursor:pointer;">{{ form.is_popular }} {% trans "Popular Item" %}</label>
+                                <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; cursor:pointer;">{{ form.is_featured }} {% trans "Featured in Hero" %}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-fields">
+                {# --- Media --- #}
+                <div class="field-group">
+                    <div class="field-group-title"><span>🖼️</span> {% trans "Media" %}</div>
+                    <div style="text-align:center;">
+                        {% if object.image %}
+                            <img src="{{ object.image.url }}" style="width:100%; height:200px; border-radius:12px; object-fit:cover; margin-bottom:16px; border:1px solid var(--border);">
+                        {% else %}
+                            <div style="width:100%; height:150px; background:var(--bg); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; border:2px dashed var(--border);">
+                                <span style="font-size:3rem; opacity:0.3;">🍔</span>
+                            </div>
+                        {% endif %}
+                        {{ form.image }}
+                    </div>
+                </div>
+
+                {# --- Nutritional AI Info --- #}
+                <div class="field-group">
+                    <div class="field-group-title"><span>🥗</span> {% trans "Nutritional Info" %}</div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                        <div class="form-group">
+                            <label class="form-label text-xs">{% trans "Calories" %}</label>
+                            {{ form.calories }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label text-xs">{% trans "Prep Time" %}</label>
+                            {{ form.preparation_time }}
+                        </div>
+                    </div>
+                    <p class="text-xs text-muted mt-2">{% trans "AI will automatically calculate protein, fat, and carbs if left blank." %}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky-actions">
+            <button type="submit" class="btn btn-primary" style="flex:2; height:56px; font-weight:900; font-size:1.1rem; border-radius:16px;">
+                💾 {% trans "Save Product Changes" %}
+            </button>
+            <a href="{% url 'product_list' %}" class="btn btn-secondary" style="flex:1; height:56px; display:flex; align-items:center; justify-content:center; font-weight:700; border-radius:16px;">
+                {% trans "Cancel" %}
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('aiDescBtn').addEventListener('click', async function() {
+        const name = document.querySelector('[name="name"]').value;
+        if (!name) {
+            alert('{% trans "Please enter a product name first." %}');
+            return;
+        }
+        
+        const loading = document.getElementById('aiLoading');
+        loading.style.display = 'block';
+        this.disabled = true;
+
+        try {
+            const response = await fetch('{% url "ai_product_description" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `product_name=${encodeURIComponent(name)}`
+            });
+            const data = await response.json();
+            if (data.description) {
+                document.querySelector('[name="description"]').value = data.description;
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            loading.style.display = 'none';
+            this.disabled = false;
+        }
+    });
+</script>
+
+<style>
+    input, select, textarea {
+        width: 100%; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 14px;
+        font-size: 0.95rem; transition: all var(--transition); background: #fdfdfd; font-weight: 600;
+    }
+    input:focus, select:focus, textarea:focus {
+        outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.05);
+    }
+    textarea { height: 160px; line-height: 1.6; }
+</style>
+{% endblock %}

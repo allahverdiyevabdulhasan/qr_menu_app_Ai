@@ -1,0 +1,288 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "KDS — Kitchen Display System" %} — NeyMenu AI{% endblock %}
+{% block page_title %}👨‍🍳 {% trans "Kitchen Display System" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --kds-bg: #0b0e14;
+    --kds-card-bg: #151921;
+    --kds-border: #232a35;
+    --kds-text: #e2e8f0;
+  }
+  
+  body, .main-content, .page-content { 
+    background: var(--kds-bg) !important; 
+    color: var(--kds-text); 
+  }
+  
+  .topbar { 
+    background: rgba(21, 25, 33, 0.8) !important; 
+    border-color: var(--kds-border) !important; 
+    backdrop-filter: blur(10px);
+  }
+  
+  .topbar-title { color: #fff; }
+  
+  .kds-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+    gap: 24px; 
+    padding: 20px 0;
+  }
+  
+  .kds-card {
+    background: var(--kds-card-bg); 
+    border: 2px solid var(--kds-border); 
+    border-radius: var(--radius);
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    animation: kdsSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform var(--transition);
+  }
+  
+  .kds-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+  }
+  
+  @keyframes kdsSlideIn { 
+    from { opacity: 0; transform: translateY(20px); } 
+    to { opacity: 1; transform: translateY(0); } 
+  }
+
+  .kds-card-header { 
+    padding: 20px; 
+    border-bottom: 2px solid var(--kds-border); 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+  }
+  
+  .kds-card-number { 
+    font-size: 2rem; 
+    font-weight: 800; 
+    font-family: 'Outfit', sans-serif; 
+    line-height: 1; 
+  }
+  
+  .kds-items { 
+    list-style: none; 
+    padding: 20px; 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 16px; 
+  }
+  
+  .kds-item { 
+    display: flex; 
+    align-items: flex-start; 
+    gap: 16px; 
+    font-size: 1.15rem; 
+  }
+  
+  .kds-item-qty { 
+    background: var(--primary); 
+    color: #fff; 
+    width: 32px; 
+    height: 32px; 
+    border-radius: 8px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: 800; 
+    font-size: 1rem; 
+    flex-shrink: 0;
+  }
+  
+  .kds-item-name { 
+    font-weight: 600; 
+    line-height: 1.3; 
+  }
+
+  .kds-footer { 
+    padding: 20px; 
+    background: rgba(0,0,0,0.2); 
+    border-top: 1px solid var(--kds-border); 
+  }
+  
+  .status-new { border-color: var(--danger); }
+  .status-preparing { border-color: var(--warning); }
+  .status-ready { border-color: var(--success); }
+  
+  .kds-timer { 
+    font-size: 0.9rem; 
+    font-weight: 800; 
+    color: #94a3b8; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px;
+    background: rgba(255,255,255,0.05);
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  
+  .kds-timer.warning { 
+    color: #fff; 
+    background: var(--danger);
+    animation: pulse 1.5s infinite; 
+  }
+
+  .pulse {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+    animation: pulse-ring 2s infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex gap-4">
+        <div class="card" style="padding:10px 20px; border-radius:30px; display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.03); border-color:var(--kds-border);">
+          <span class="pulse"></span>
+          <span style="font-weight:700; font-size:0.9rem; color:#fff;">{% trans "System Live" %}</span>
+        </div>
+        <div class="badge badge-danger" style="font-size:0.9rem; padding:8px 16px;">
+            {{ orders|length }} {% trans "Orders Pending" %}
+        </div>
+      </div>
+      <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Sync Screen" %}</button>
+    </div>
+
+    {% if orders %}
+    <div class="kds-grid">
+      {% for order in orders %}
+      <div class="kds-card status-{{ order.status|lower }}">
+        <div class="kds-card-header" style="{% if order.status == 'NEW' %}background:rgba(239, 68, 68, 0.08);{% elif order.status == 'PREPARING' %}background:rgba(245, 158, 11, 0.08);{% endif %}">
+          <div>
+            <div class="kds-card-number">#{{ order.id }}</div>
+            <div class="text-xs font-bold" style="opacity:0.7; margin-top:4px;">
+              {% if order.table %}🪑 {{ order.table.table_name }}{% else %}🥡 {% trans "Takeaway" %}{% endif %}
+            </div>
+          </div>
+          <div class="kds-timer" id="timer-{{ order.id }}" data-time="{{ order.created_at|date:'c' }}">
+            ⏱ <span>00:00</span>
+          </div>
+        </div>
+
+        <ul class="kds-items">
+          {% for item in order.items.all %}
+          <li class="kds-item">
+            <div class="kds-item-qty">{{ item.quantity }}</div>
+            <div class="kds-item-name">
+              {{ item.product_name_snapshot }}
+              {% if item.note %}<div class="text-xs" style="color:var(--warning); margin-top:6px; background:rgba(245,158,11,0.1); padding:4px 8px; border-radius:4px;">📝 {{ item.note }}</div>{% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+        {% if order.note %}
+        <div style="padding:16px; background:rgba(245, 158, 11, 0.1); border-top:1px solid var(--kds-border); color:var(--warning); font-size:0.9rem; font-weight:600;">
+          💬 {{ order.note }}
+        </div>
+        {% endif %}
+
+        <div class="kds-footer">
+          <form method="post" action="{% url 'order_status_update' order.pk %}">
+            {% csrf_token %}
+            {% if order.status == 'NEW' %}
+              <input type="hidden" name="status" value="PREPARING">
+              <button type="submit" class="btn btn-warning btn-block" style="height:50px; font-weight:800;">🔥 {% trans "Start Preparing" %}</button>
+            {% elif order.status == 'PREPARING' %}
+              <input type="hidden" name="status" value="READY">
+              <button type="submit" class="btn btn-success btn-block" style="height:50px; font-weight:800;">✅ {% trans "Mark Ready" %}</button>
+            {% elif order.status == 'READY' %}
+              <input type="hidden" name="status" value="SERVED">
+              <button type="submit" class="btn btn-primary btn-block" style="height:50px; font-weight:800;">🍽️ {% trans "Order Served" %}</button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state" style="padding:120px 0;">
+      <div style="font-size:6rem; margin-bottom:24px;">👨‍🍳</div>
+      <h2 style="color:#fff; font-size:2rem;">{% trans "The kitchen is empty!" %}</h2>
+      <p class="text-muted" style="font-size:1.1rem;">{% trans "All orders have been served. Take a well-deserved break!" %}</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function updateTimers() {
+  const timers = document.querySelectorAll('.kds-timer');
+  timers.forEach(timer => {
+    const startTime = new Date(timer.dataset.time);
+    const diff = Math.floor((new Date() - startTime) / 1000);
+    const mins = Math.floor(diff / 60).toString().padStart(2, '0');
+    const secs = (diff % 60).toString().padStart(2, '0');
+    timer.querySelector('span').innerText = `${mins}:${secs}`;
+    
+    if (diff > 600) timer.classList.add('warning'); // Red if > 10 mins
+  });
+}
+setInterval(updateTimers, 1000);
+updateTimers();
+
+// WebSocket for Real-time updates
+const restaurantSlug = "{{ request.user.restaurant.slug }}";
+const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const socketUrl = `${protocol}//${window.location.host}/ws/orders/${restaurantSlug}/`;
+const orderSocket = new WebSocket(socketUrl);
+
+orderSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log("Order update received:", data);
+    
+    // For now, we reload to get the fresh state from DB
+    // In a more advanced version, we would append the new order card dynamically
+    showNotification(data.message);
+    setTimeout(() => location.reload(), 1000);
+};
+
+function showNotification(msg) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed; top: 20px; right: 20px; 
+        background: var(--primary); color: #fff; 
+        padding: 16px 24px; border-radius: 12px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        z-index: 9999; font-weight: 800;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    toast.innerText = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
+}
+
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}
+

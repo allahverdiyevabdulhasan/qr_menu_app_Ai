@@ -1,0 +1,35 @@
+﻿{% extends 'dashboard_base.html' %}
+{% block content %}
+<h2>Daily Payment Summary ({{ today }})</h2>
+
+<table class="table" style="max-width: 400px;">
+    <thead>
+        <tr>
+            <th>Payment Method</th>
+            <th>Total Collected</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in summary %}
+        <tr>
+            <td>{{ item.method }}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No payments collected today.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th><strong>Total</strong></th>
+            <th><strong>{{ total_today }}</strong></th>
+        </tr>
+    </tfoot>
+</table>
+
+<br>
+<a href="{% url 'payment_list' %}">Back to History</a>
+{% endblock %}
+

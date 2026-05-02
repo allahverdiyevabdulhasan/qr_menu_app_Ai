@@ -1,0 +1,28 @@
+﻿{% extends 'dashboard_base.html' %}
+{% block content %}
+<h2>Ingredients for {{ product.name }}</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ingredient</th>
+            <th>Quantity Used</th>
+            <th>Unit Cost</th>
+            <th>Total Cost per Product</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ing in ingredients %}
+        <tr>
+            <td>{{ ing.inventory_item.name }}</td>
+            <td>{{ ing.quantity_used }} {{ ing.inventory_item.get_unit_display }}</td>
+            <td>{{ ing.inventory_item.cost_per_unit }}</td>
+            <td><!-- We'd calculate in view, this is mock --></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No ingredients mapped for this product.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

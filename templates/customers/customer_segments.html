@@ -1,0 +1,83 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Segmentation" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Customer Segmentation" %}{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h2 style="font-size:1.25rem;">📊 {% trans "Audience Analysis" %}</h2>
+        <a href="{% url 'customer_list' %}" class="btn btn-secondary">
+            ← {% trans "Back to CRM" %}
+        </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 32px;">
+        {% for segment, cust_list in segments.items %}
+        <div class="metric-card metric-{% if segment == 'VIP' %}success{% elif segment == 'Inactive' %}danger{% elif segment == 'Loyal' %}primary{% else %}warning{% endif %}">
+            <div class="text-xs" style="opacity:0.8;">{{ segment }}</div>
+            <div style="font-size:2rem; font-weight:bold;">{{ cust_list|length }}</div>
+            <div class="text-xs" style="margin-top:4px;">{% trans "Customers" %}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="display:grid; grid-template-columns: 2fr 1fr; gap:24px;">
+        <div class="card">
+            <div class="card-header">
+                <span>🥧 {% trans "Segment Distribution" %}</span>
+            </div>
+            <div class="card-body" style="padding:40px;">
+                <div style="max-width: 400px; margin: auto;">
+                    <canvas id="segmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>💡 {% trans "AI Insights" %}</span>
+            </div>
+            <div class="card-body">
+                <div style="padding:12px; background:rgba(99, 102, 241, 0.05); border-radius:8px; border-left:4px solid var(--primary);">
+                    <p class="text-sm">{% trans "Your 'VIP' segment has grown by 12% this month. Consider launching a dedicated loyalty campaign to maintain this momentum." %}</p>
+                </div>
+                <div style="margin-top:16px; padding:12px; background:rgba(239, 68, 68, 0.05); border-radius:8px; border-left:4px solid var(--danger);">
+                    <p class="text-sm">{% trans "The 'Inactive' segment represents 15% of your database. A re-engagement coupon could recover lost revenue." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const ctx = document.getElementById('segmentChart').getContext('2d');
+const segmentChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [
+            {% for segment in segments.keys %}'{{ segment }}',{% endfor %}
+        ],
+        datasets: [{
+            data: [
+                {% for cust_list in segments.values %}{{ cust_list|length }},{% endfor %}
+            ],
+            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#6b7280'],
+            borderWidth: 0,
+            hoverOffset: 20
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' }
+        },
+        cutout: '70%'
+    }
+});
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,43 @@
+﻿{% extends 'dashboard_base.html' %}
+{% block title %}AI Campaign Suggestions{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <h2>ðŸŽ¯ AI Campaign Suggestions</h2>
+  <a href="{% url 'campaign_add' %}" class="btn" style="background:#28a745;">+ Create Campaign</a>
+</div>
+
+{% if rate_limited %}
+<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:16px; color:#856404;">
+  âš ï¸ Rate limit reached. Please try again in an hour.
+</div>
+{% elif suggestions %}
+<p style="color:#666; margin-bottom:20px;">Based on your recent sales analytics, here are AI-generated campaign ideas:</p>
+<div style="display:grid; gap:16px;">
+  {% for s in suggestions %}
+  <div style="border:1px solid #dee2e6; border-radius:10px; padding:22px; background:#fff; display:flex; justify-content:space-between; align-items:flex-start; gap:20px;">
+    <div style="flex:1;">
+      <h4 style="margin:0 0 8px; color:#333;">{{ s.title }}</h4>
+      <div style="display:flex; gap:12px; margin-bottom:10px;">
+        <span style="background:#e9ecef; padding:3px 10px; border-radius:20px; font-size:0.82rem;">{{ s.type }}</span>
+        <span style="background:#d4edda; color:#155724; padding:3px 10px; border-radius:20px; font-size:0.82rem; font-weight:600;">
+          {{ s.value }}% OFF
+        </span>
+      </div>
+      <p style="color:#666; margin:0; font-size:0.9rem;">ðŸ’¡ {{ s.reason }}</p>
+    </div>
+    <div style="flex-shrink:0;">
+      <a href="{% url 'campaign_add' %}?title={{ s.title }}&type={{ s.type }}&value={{ s.value }}"
+         class="btn" style="background:#6f42c1; white-space:nowrap;">
+        Save as Campaign
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div style="background:#f8f9fa; padding:30px; border-radius:8px; text-align:center; color:#888;">
+  No suggestions available. Add more sales data for better AI insights.
+</div>
+{% endif %}
+{% endblock %}
+

@@ -1,0 +1,118 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "CRM — Customers" %} — NeyMenu AI{% endblock %}
+{% block page_title %}👥 {% trans "CRM" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.tier-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+}
+.tier-gold     { background: #fef9c3; color: #854d0e; }
+.tier-silver   { background: #f1f5f9; color: #475569; }
+.tier-bronze   { background: #fff7ed; color: #9a3412; }
+.tier-regular  { background: var(--bg); color: var(--text-muted); }
+.customer-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--primary-gradient); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem; flex-shrink: 0;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p class="text-muted text-sm">{% trans "Manage customer relationships and loyalty." %}</p>
+    <div style="display:flex; gap:10px;">
+      <a href="{% url 'customer_segments' %}" class="btn btn-secondary btn-sm">🎯 {% trans "Segments" %}</a>
+    </div>
+  </div>
+
+  <div class="grid grid-4 mb-6">
+    <div class="metric-card metric-primary">
+      <div class="icon">👥</div>
+      <div class="label">{% trans "Total Customers" %}</div>
+      <div class="value">{{ customers|length }}</div>
+    </div>
+    <div class="metric-card metric-warning">
+      <div class="icon">🥇</div>
+      <div class="label">{% trans "VIP / Gold" %}</div>
+      <div class="value">0</div>
+    </div>
+    <div class="metric-card metric-success">
+      <div class="icon">🔄</div>
+      <div class="label">{% trans "Returning" %}</div>
+      <div class="value">0</div>
+    </div>
+    <div class="metric-card metric-info">
+      <div class="icon">💰</div>
+      <div class="label">{% trans "Total Revenue" %}</div>
+      <div class="value" style="font-size:1.3rem;">— ₼</div>
+    </div>
+  </div>
+
+  {# ── Search ── #}
+  <div style="margin-bottom:16px;">
+    <input type="text" placeholder="🔍 {% trans 'Search customers...' %}" id="custSearch"
+      class="form-control" style="max-width:320px; padding:9px 16px; font-size:0.85rem;"
+      oninput="document.querySelectorAll('#custTable tbody tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(this.value.toLowerCase())?'':'none')">
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding:0;">
+      <table class="data-table" id="custTable">
+        <thead>
+          <tr>
+            <th>{% trans "Customer" %}</th>
+            <th>{% trans "Phone" %}</th>
+            <th>{% trans "Orders" %}</th>
+            <th>{% trans "Total Spent" %}</th>
+            <th>{% trans "Tier" %}</th>
+            <th>{% trans "Last Visit" %}</th>
+            <th style="text-align:right;">{% trans "Action" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for customer in customers %}
+          <tr>
+            <td>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div class="customer-avatar">{{ customer.full_name|slice:":1"|upper }}</div>
+                <div>
+                  <div style="font-weight:700;">{{ customer.full_name }}</div>
+                  <div class="text-xs text-muted">{{ customer.email|default:"—" }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="text-muted">{{ customer.phone|default:"—" }}</td>
+            <td><span class="badge badge-primary">{{ customer.order_count|default:"0" }}</span></td>
+            <td style="font-weight:700;">{{ customer.total_spent|default:"0.00" }} ₼</td>
+            <td>
+              {% if customer.tier == 'GOLD' %}
+              <span class="tier-badge tier-gold">🥇 Gold</span>
+              {% elif customer.tier == 'SILVER' %}
+              <span class="tier-badge tier-silver">🥈 Silver</span>
+              {% elif customer.tier == 'BRONZE' %}
+              <span class="tier-badge tier-bronze">🥉 Bronze</span>
+              {% else %}
+              <span class="tier-badge tier-regular">Regular</span>
+              {% endif %}
+            </td>
+            <td class="text-muted text-sm">{{ customer.last_visit|date:"d M Y"|default:"—" }}</td>
+            <td style="text-align:right;">
+              <a href="{% url 'customer_detail' customer.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 12px;">{% trans "View" %}</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7"><div class="empty-state"><div style="font-size:3rem; margin-bottom:12px;">👥</div><h3>{% trans "No customers yet" %}</h3><p>{% trans "Customers appear after their first order." %}</p></div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

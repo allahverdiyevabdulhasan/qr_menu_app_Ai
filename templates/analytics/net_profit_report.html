@@ -1,0 +1,112 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Profitability Analysis" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Net Profit Insights" %}{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h2 style="font-size:1.25rem;">💎 {% trans "Profitability Report" %}</h2>
+        <div class="flex gap-2">
+            <button class="btn btn-secondary btn-sm">📥 {% trans "Generate Report" %}</button>
+        </div>
+    </div>
+
+    {# --- Filter Card --- #}
+    <div class="card mb-8">
+        <div class="card-body">
+            <form method="get" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; align-items:end;">
+                {% for field in form %}
+                <div class="form-group mb-0">
+                    <label class="form-label text-xs">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary" style="height:45px;">🔍 {% trans "Calculate" %}</button>
+            </form>
+        </div>
+    </div>
+
+    {# --- Metrics Row --- #}
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px;">
+        <div class="metric-card metric-primary">
+            <div class="text-xs" style="opacity:0.8; text-transform:uppercase; letter-spacing:1px;">{% trans "Gross Revenue" %}</div>
+            <div style="font-size:2rem; font-weight:bold;">{{ revenue }} ₼</div>
+        </div>
+        <div class="metric-card metric-danger">
+            <div class="text-xs" style="opacity:0.8; text-transform:uppercase; letter-spacing:1px;">{% trans "Estimated Costs" %}</div>
+            <div style="font-size:2rem; font-weight:bold;">- {{ costs }} ₼</div>
+        </div>
+        <div class="metric-card metric-success">
+            <div class="text-xs" style="opacity:0.8; text-transform:uppercase; letter-spacing:1px;">{% trans "Net Profit" %}</div>
+            <div style="font-size:2rem; font-weight:bold;">{{ net_profit }} ₼</div>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+        {# --- Chart Card --- #}
+        <div class="card">
+            <div class="card-header">
+                <span>🥧 {% trans "Margin Distribution" %}</span>
+            </div>
+            <div class="card-body" style="padding:40px;">
+                <div style="max-width: 300px; margin: auto;">
+                    <canvas id="profitChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        {# --- AI Insight Card --- #}
+        <div class="card">
+            <div class="card-header">
+                <span>💡 {% trans "Margin Optimization" %}</span>
+            </div>
+            <div class="card-body">
+                <div style="padding:16px; background:rgba(16, 185, 129, 0.05); border-radius:8px; border-left:4px solid var(--success); margin-bottom:16px;">
+                    <p class="text-sm">{% trans "Your current net margin is healthy. To improve further, consider bundling high-margin side dishes with popular main courses." %}</p>
+                </div>
+                <div style="padding:16px; background:rgba(239, 68, 68, 0.05); border-radius:8px; border-left:4px solid var(--danger);">
+                    <p class="text-sm">{% trans "Costs have increased by 5% compared to last period. Check inventory waste reports for potential optimizations." %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    select, input {
+        width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+        font-size: 0.9rem; transition: all var(--transition); background: #fff;
+    }
+    select:focus, input:focus {
+        outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+</style>
+
+<script>
+const ctx = document.getElementById('profitChart').getContext('2d');
+const profitChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['{% trans "Net Profit" %}', '{% trans "Costs" %}'],
+        datasets: [{
+            data: [{{ net_profit|default:0 }}, {{ costs|default:0 }}],
+            backgroundColor: ['#10b981', '#ef4444'],
+            borderWidth: 0,
+            hoverOffset: 15
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' }
+        },
+        cutout: '70%'
+    }
+});
+</script>
+{% endblock %}
+
+

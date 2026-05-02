@@ -1,0 +1,15 @@
+﻿{% extends 'dashboard_base.html' %}
+{% block content %}
+<h2>AI Stock Forecast (Beta)</h2>
+<p><a href="{% url 'inventory_list' %}" class="btn">Back to Inventory</a></p>
+
+<div style="border: 1px solid #17a2b8; padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
+    <h3 style="color: #17a2b8;">Forecast for next {{ forecast.forecast_days }} days</h3>
+    
+    <p><em>{{ forecast.message }}</em></p>
+    
+    <hr>
+    <small>This feature analyzes your recent Order usages via machine learning to predict exactly how many raw materials you will need to survive the coming week. Coming fully online in v2.0.</small>
+</div>
+{% endblock %}
+

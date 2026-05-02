@@ -1,0 +1,190 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "AI Insights" %} — NeyMenu AI{% endblock %}
+{% block page_title %}💡 {% trans "AI Insights" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 22px;
+    margin-top: 24px;
+  }
+
+  .insight-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 26px 26px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+  }
+
+  .insight-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+  }
+
+  .insight-priority {
+    position: absolute;
+    top: 0; left: 0;
+    width: 5px; height: 100%;
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+
+  .priority-high   { background: var(--danger); }
+  .priority-medium { background: var(--warning); }
+  .priority-low    { background: var(--success); }
+
+  .insight-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .insight-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .badge-high   { background: rgba(239,68,68,0.1);   color: var(--danger); }
+  .badge-medium { background: rgba(245,158,11,0.1);  color: var(--warning); }
+  .badge-low    { background: rgba(16,185,129,0.1);  color: var(--success); }
+
+  .insight-type {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .insight-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--dark);
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.3;
+  }
+
+  .insight-desc {
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .insight-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .dismiss-btn {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+    padding: 7px 16px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Poppins', sans-serif;
+  }
+  .dismiss-btn:hover {
+    background: rgba(239,68,68,0.06);
+    color: var(--danger);
+    border-color: var(--danger);
+  }
+
+  .empty-state {
+    padding: 80px 20px;
+    text-align: center;
+    background: var(--card-bg);
+    border: 2px dashed var(--border);
+    border-radius: 24px;
+    margin-top: 24px;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-black">{% trans "AI Intelligence Hub" %}</h2>
+            <p class="text-muted">{% trans "Actionable insights generated from your restaurant data." %}</p>
+        </div>
+        <div class="flex gap-4">
+            <a href="{% url 'ai_campaign_suggestions' %}" class="btn btn-primary">
+                ✨ {% trans "Suggest Campaign" %}
+            </a>
+            <a href="{% url 'ai_manager_chat' %}" class="btn btn-secondary">
+                💬 {% trans "Chat with Manager" %}
+            </a>
+        </div>
+    </div>
+
+    {% if insights %}
+    <div class="insight-grid">
+        {% for insight in insights %}
+        <div class="insight-card">
+            <div class="insight-priority priority-{{ insight.priority|lower }}"></div>
+            
+            <div class="insight-header">
+                <div class="flex flex-col gap-1">
+                    <span class="insight-badge badge-{{ insight.priority|lower }}">
+                        {{ insight.get_priority_display }}
+                    </span>
+                    <span class="insight-type">{{ insight.get_insight_type_display }}</span>
+                </div>
+                <div class="text-xs text-muted font-bold">{{ insight.created_at|timesince }} {% trans "ago" %}</div>
+            </div>
+
+            <h3 class="insight-title">{{ insight.title }}</h3>
+            <p class="insight-desc">{{ insight.description }}</p>
+
+            <div class="insight-footer">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="insight_id" value="{{ insight.id }}">
+                    <button type="submit" class="dismiss-btn">
+                        ✕ {% trans "Dismiss" %}
+                    </button>
+                </form>
+                <div class="text-xs font-bold" style="color:var(--primary);">{% trans "Action Recommended" %} →</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 5rem; margin-bottom: 24px;">🎯</div>
+        <h3 class="text-xl font-bold mb-4">{% trans "System Fully Optimized" %}</h3>
+        <p class="text-muted max-w-md mx-auto">
+            {% trans "No new insights detected. Your restaurant is performing at its peak efficiency based on current data." %}
+        </p>
+        <button onclick="location.reload()" class="btn btn-secondary mt-8">🔄 {% trans "Run Deep Scan" %}</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

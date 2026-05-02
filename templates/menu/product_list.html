@@ -1,0 +1,171 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Menu Items" %} — NeyMenu AI{% endblock %}
+{% block page_title %}🍔 {% trans "Menu Items" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.product-row td { padding: 14px 20px; }
+.product-thumb {
+  width: 42px; height: 42px; border-radius: 10px;
+  object-fit: cover; background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; border: 1px solid var(--border); flex-shrink: 0;
+}
+.cat-chip {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  background: var(--primary-light); color: var(--primary);
+  font-size: 0.72rem; font-weight: 600;
+}
+.stock-dot {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.75rem; font-weight: 700;
+}
+.stock-dot::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%;
+}
+.stock-in::before  { background: var(--success); }
+.stock-out::before { background: var(--danger); }
+.stock-low::before { background: var(--warning); }
+.stock-in  { color: #065f46; }
+.stock-out { color: #991b1b; }
+.stock-low { color: #92400e; }
+.action-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--border);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; transition: var(--transition); background: #fff; cursor: pointer;
+}
+.action-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.action-btn.danger:hover { border-color: var(--danger); color: var(--danger); background: #fef2f2; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+
+  {# ── Page Header ── #}
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div>
+      <p class="text-muted text-sm">{{ products.count }} {% trans "products across" %} {{ categories.count }} {% trans "categories" %}</p>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <a href="{% url 'category_list' %}" class="btn btn-secondary btn-sm">📂 {% trans "Categories" %}</a>
+      <a href="{% url 'product_create' %}" class="btn btn-primary btn-sm">+ {% trans "Add Product" %}</a>
+    </div>
+  </div>
+
+  {# ── Stats ── #}
+  <div class="grid grid-4 mb-6">
+    <div class="metric-card metric-primary">
+      <div class="icon">🍔</div>
+      <div class="label">{% trans "Total Products" %}</div>
+      <div class="value">{{ products.count }}</div>
+    </div>
+    <div class="metric-card metric-success">
+      <div class="icon">✅</div>
+      <div class="label">{% trans "Active" %}</div>
+      <div class="value">{{ products.count }}</div>
+    </div>
+    <div class="metric-card metric-warning">
+      <div class="icon">📂</div>
+      <div class="label">{% trans "Categories" %}</div>
+      <div class="value">{{ categories.count }}</div>
+    </div>
+    <div class="metric-card metric-info">
+      <div class="icon">💰</div>
+      <div class="label">{% trans "Avg Price" %}</div>
+      <div class="value" style="font-size:1.4rem;">— ₼</div>
+    </div>
+  </div>
+
+  {# ── Filter Row ── #}
+  <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+    <input type="text" id="searchInput" placeholder="🔍 {% trans 'Search products...' %}"
+      class="form-control" style="max-width:280px; padding:9px 16px; font-size:0.85rem;"
+      oninput="filterProducts(this.value)">
+    <select id="catFilter" class="form-control" style="max-width:200px; padding:9px 16px; font-size:0.85rem;" onchange="filterByCat(this.value)">
+      <option value="">{% trans "All Categories" %}</option>
+      {% for cat in categories %}
+      <option value="{{ cat.name }}">{{ cat.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  {# ── Table ── #}
+  <div class="card">
+    <div class="card-body" style="padding:0;">
+      <table class="data-table" id="productsTable">
+        <thead>
+          <tr>
+            <th style="width:48px;"></th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Category" %}</th>
+            <th>{% trans "Price" %}</th>
+            <th>{% trans "Stock" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th style="text-align:right;">{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+          <tr class="product-row" data-name="{{ product.name|lower }}" data-cat="{{ product.category.name }}">
+            <td>
+              {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-thumb">
+              {% else %}
+              <div class="product-thumb">🍽️</div>
+              {% endif %}
+            </td>
+            <td>
+              <div style="font-weight:700; margin-bottom:2px;">{{ product.name }}</div>
+              {% if product.is_popular %}<span class="badge badge-warning" style="font-size:0.62rem;">⭐ {% trans "Popular" %}</span>{% endif %}
+              {% if product.is_vegetarian %}<span class="badge badge-success" style="font-size:0.62rem; margin-left:4px;">🌿</span>{% endif %}
+            </td>
+            <td><span class="cat-chip">{{ product.category.name }}</span></td>
+            <td style="font-weight:800; color:var(--primary); font-size:1rem;">{{ product.price }} ₼</td>
+            <td>
+              {% if product.stock_status == 'in_stock' %}
+              <span class="stock-dot stock-in">{% trans "In Stock" %}</span>
+              {% elif product.stock_status == 'out_of_stock' %}
+              <span class="stock-dot stock-out">{% trans "Out of Stock" %}</span>
+              {% else %}
+              <span class="stock-dot stock-low">{% trans "Low Stock" %}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if product.is_active %}
+              <span class="badge badge-success">{% trans "Active" %}</span>
+              {% else %}
+              <span class="badge badge-danger">{% trans "Inactive" %}</span>
+              {% endif %}
+            </td>
+            <td style="text-align:right;">
+              <div style="display:flex; gap:6px; justify-content:flex-end;">
+                <a href="{% url 'product_update' product.pk %}" class="action-btn" title="{% trans 'Edit' %}">✏️</a>
+                <a href="{% url 'product_detail_admin' product.pk %}" class="action-btn" title="{% trans 'View' %}">👁️</a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7"><div class="empty-state"><div style="font-size:3rem; margin-bottom:12px;">🍽️</div><h3>{% trans "No products yet" %}</h3><p>{% trans "Add your first menu item." %}</p></div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+function filterProducts(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('#productsTable tbody tr[data-name]').forEach(r => {
+    r.style.display = r.dataset.name.includes(q) ? '' : 'none';
+  });
+}
+function filterByCat(cat) {
+  document.querySelectorAll('#productsTable tbody tr[data-cat]').forEach(r => {
+    r.style.display = (!cat || r.dataset.cat === cat) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Order History" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Customer Order History" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h2 style="font-size:1.25rem;">🛍️ {% trans "Purchase Records" %}</h2>
+        <a href="{% url 'customer_list' %}" class="btn btn-secondary">
+            ← {% trans "Back to Customers" %}
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body" style="padding:0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Order #" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Total Amount" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th style="text-align:right;">{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td><span class="font-bold">#{{ order.order_number|slice:"-6:" }}</span></td>
+                        <td><span class="badge badge-info">{{ order.get_order_type_display }}</span></td>
+                        <td><span class="font-bold" style="color:var(--primary);">{{ order.total_amount }} ₼</span></td>
+                        <td>
+                            <span class="badge badge-{% if order.status == 'COMPLETED' %}success{% elif order.status == 'CANCELLED' %}danger{% else %}warning{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td><span class="text-xs">{{ order.created_at|date:"d M Y, H:i" }}</span></td>
+                        <td style="text-align:right;">
+                            <a href="#" class="btn btn-secondary btn-sm" title="{% trans 'View Details' %}">👁️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <div style="font-size:3rem; margin-bottom:12px;">🛍️</div>
+                                <p>{% trans "No order history found for this customer." %}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

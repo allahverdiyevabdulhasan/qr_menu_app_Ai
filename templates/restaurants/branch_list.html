@@ -1,0 +1,69 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Branches" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Restaurant Branches" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:1.25rem;">📍 {% trans "Our Branches" %}</h2>
+        {% if user.is_owner %}
+            <a href="{% url 'branch_add' %}" class="btn btn-primary">
+                <span>+</span> {% trans "Add New Branch" %}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body" style="padding:0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Address" %}</th>
+                        <th>{% trans "Phone" %}</th>
+                        <th>{% trans "Manager" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th style="text-align:right;">{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for branch in branches %}
+                    <tr>
+                        <td><span class="font-bold">{{ branch.name }}</span></td>
+                        <td><span class="text-xs">{{ branch.address }}</span></td>
+                        <td>{{ branch.phone }}</td>
+                        <td><span class="badge badge-info">{{ branch.manager|default:_("None") }}</span></td>
+                        <td>
+                            <span class="badge badge-{% if branch.status == 'OPEN' %}success{% else %}danger{% endif %}">
+                                {{ branch.get_status_display }}
+                            </span>
+                        </td>
+                        <td style="text-align:right;">
+                            <div style="display:flex; gap:8px; justify-content:flex-end;">
+                                {% if user.is_owner %}
+                                    <a href="{% url 'branch_edit' branch.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Edit' %}">✏️</a>
+                                    <a href="{% url 'branch_delete' branch.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Delete' %}" style="color:var(--danger);">🗑️</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <div style="font-size:3rem; margin-bottom:12px;">📍</div>
+                                <p>{% trans "No branches found." %}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

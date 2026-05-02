@@ -1,0 +1,52 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Table" %} #{{ table.table_number }} {% trans "QR Code" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "QR Code Details" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 700px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <span>📷 {% trans "QR Code for" %} {{ table.table_name }} ({% trans "Table" %} #{{ table.table_number }})</span>
+        </div>
+        <div class="card-body" style="text-align:center; padding:40px;">
+            {% if table.qr_code_image %}
+                <div style="background:#fff; padding:24px; border-radius:var(--radius); border:1px solid var(--border); display:inline-block; box-shadow:var(--shadow-md); margin-bottom:32px;">
+                    <img src="{{ table.qr_code_image.url }}" alt="QR Code" style="max-width:320px; border-radius:0;">
+                </div>
+                
+                <div style="margin-bottom:32px; background:var(--bg); padding:16px; border-radius:var(--radius-sm); border:1.5px dashed var(--border);">
+                    <div class="text-muted text-xs mb-2">{% trans "Direct Menu URL" %}</div>
+                    <a href="{{ table.qr_code_url }}" target="_blank" class="font-bold" style="color:var(--primary); word-break:break-all;">
+                        {{ table.qr_code_url }}
+                    </a>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <a href="{{ table.qr_code_image.url }}" download="Table_{{ table.table_number }}_QR.png" class="btn btn-primary btn-lg">
+                        📥 {% trans "Download PNG" %}
+                    </a>
+                    <a href="{% url 'table_qr_print' table.pk %}" target="_blank" class="btn btn-secondary btn-lg">
+                        🖨️ {% trans "Print Version" %}
+                    </a>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="pulse" style="font-size:4rem; margin-bottom:20px;">⚙️</div>
+                    <h3>{% trans "Generating QR Code..." %}</h3>
+                    <p>{% trans "Please wait while we prepare the digital menu link for this table." %}</p>
+                </div>
+            {% endif %}
+            
+            <div style="margin-top:40px; border-top:1px solid var(--border); padding-top:24px;">
+                <a href="{% url 'table_list' %}" class="btn btn-glass btn-sm">
+                    ← {% trans "Back to Tables" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

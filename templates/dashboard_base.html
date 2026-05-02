@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block body %}
+<div class="dashboard-layout">
+
+  <!-- Sidebar Overlay (Mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-mark">🚀</div>
+      <div>NeyMenu <span style="color:#818cf8;">AI</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'restaurant_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_dashboard' %}active{% endif %}">
+        <span class="icon">📊</span> {% trans "Overview" %}
+      </a>
+      <a href="{% url 'analytics_dashboard' %}" class="sidebar-link {% if 'analytics' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">📈</span> {% trans "Analytics" %}
+      </a>
+
+      <div class="sidebar-section">{% trans "Operations" %}</div>
+      <a href="{% url 'order_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'order_list' %}active{% endif %}">
+        <span class="icon">📋</span> {% trans "Orders" %}
+      </a>
+      <a href="{% url 'kitchen_screen' %}" class="sidebar-link {% if request.resolver_match.url_name == 'kitchen_screen' %}active{% endif %}">
+        <span class="icon">🍳</span> {% trans "Kitchen" %}
+      </a>
+      <a href="{% url 'waiter_panel' %}" class="sidebar-link {% if request.resolver_match.url_name == 'waiter_panel' %}active{% endif %}">
+        <span class="icon">🛎️</span> {% trans "Waiter" %}
+      </a>
+      <a href="{% url 'cashier_panel' %}" class="sidebar-link {% if request.resolver_match.url_name == 'cashier_panel' %}active{% endif %}">
+        <span class="icon">💳</span> {% trans "Cashier" %}
+      </a>
+
+      <div class="sidebar-section">{% trans "Management" %}</div>
+      <a href="{% url 'product_list' %}" class="sidebar-link {% if 'product' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">🍔</span> {% trans "Menu Items" %}
+      </a>
+      <a href="{% url 'inventory_list' %}" class="sidebar-link {% if 'inventory' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">📦</span> {% trans "Inventory" %}
+      </a>
+      <a href="{% url 'expense_list' %}" class="sidebar-link {% if 'expense' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">📉</span> {% trans "Expenses" %}
+      </a>
+      <a href="{% url 'customer_list' %}" class="sidebar-link {% if 'customer' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">👥</span> {% trans "CRM" %}
+      </a>
+
+      <div class="sidebar-section">{% trans "Growth & AI" %}</div>
+      <a href="{% url 'ai_insights' %}" class="sidebar-link {% if request.resolver_match.url_name == 'ai_insights' %}active{% endif %}">
+        <span class="icon">💡</span> {% trans "AI Insights" %}
+      </a>
+      <a href="{% url 'ai_manager_chat' %}" class="sidebar-link {% if 'manager' in request.resolver_match.url_name|default:'' and 'chat' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">🤖</span> {% trans "AI Assistant" %}
+      </a>
+      <a href="{% url 'campaign_list' %}" class="sidebar-link {% if 'campaign' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">🎁</span> {% trans "Campaigns" %}
+      </a>
+      <a href="{% url 'review_list' %}" class="sidebar-link {% if 'review' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <span class="icon">⭐</span> {% trans "Reviews" %}
+      </a>
+
+      <div class="sidebar-section">{% trans "System" %}</div>
+      <a href="{% url 'restaurant_profile' %}" class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_profile' %}active{% endif %}">
+        <span class="icon">⚙️</span> {% trans "Settings" %}
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; background:rgba(255,255,255,0.04); border-radius:10px;">
+        <div class="avatar" style="width:32px; height:32px; font-size:.78rem; flex-shrink:0;">{{ user.username|slice:":1"|upper }}</div>
+        <div style="overflow:hidden; min-width:0;">
+          <div style="font-weight:600; font-size:.82rem; color:#e2e8f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ user.get_full_name|default:user.username }}</div>
+          <div style="font-size:.68rem; color:#64748b;">{{ user.get_role_display }}</div>
+        </div>
+        <a href="{% url 'logout' %}" style="margin-left:auto; color:#64748b; font-size:1rem; flex-shrink:0;" title="{% trans 'Logout' %}">🚪</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <h1 class="topbar-title">{% block page_title %}{% trans "Dashboard" %}{% endblock %}</h1>
+      </div>
+      <div class="topbar-right">
+        {% if request.user.restaurant %}
+        <a href="/en/m/{{ request.user.restaurant.slug }}/" target="_blank"
+           class="btn btn-secondary btn-sm hide-mobile"
+           style="border-radius:8px; gap:6px; font-size:0.78rem;">
+          👁️ {% trans "Live Menu" %}
+        </a>
+        {% endif %}
+        <div style="width:1px; height:20px; background:var(--border);" class="hide-mobile"></div>
+        <div class="avatar" style="width:34px; height:34px; font-size:.78rem; cursor:default;" title="{{ user.get_full_name|default:user.username }}">
+          {{ user.username|slice:":1"|upper }}
+        </div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      {% if messages %}
+      <div style="margin-bottom:20px;">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} fade-in">
+          {{ message }}
+          <button onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('active');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('active');
+}
+</script>
+
+<style>
+@media (max-width: 1024px) { .hide-mobile { display:none !important; } }
+.messages-container { margin-bottom: 20px; }
+</style>
+{% endblock %}

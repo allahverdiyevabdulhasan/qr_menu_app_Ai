@@ -1,0 +1,594 @@
+{% extends 'customer_base.html' %}
+{% load i18n %}
+{% block title %}{{ restaurant.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ── Layout ── */
+  .customer-layout {
+    background: #fafafa;
+    min-height: 100vh;
+  }
+
+  /* ── Hero Section ── */
+  .premium-hero {
+    height: 46vh;
+    min-height: 220px;
+    background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.75)),
+                url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px 20px 28px;
+    color: #fff;
+    border-radius: 0 0 36px 36px;
+    position: relative;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  }
+
+  .restaurant-glass-card {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.22);
+    padding: 18px 20px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    animation: fadeInUp 0.7s ease-out both;
+  }
+
+  /* ── Budget bar ── */
+  .budget-bar {
+    display: none;
+    margin: 12px 16px 0;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border: 1.5px solid #a7f3d0;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #065f46;
+    align-items: center;
+    gap: 10px;
+  }
+  .budget-bar.active { display: flex; }
+  .budget-bar .budget-reset {
+    margin-left: auto; background: none; border: none; cursor: pointer;
+    color: #065f46; font-size: 0.8rem; font-weight: 700; padding: 4px 10px;
+    border-radius: 10px; transition: all 0.2s;
+  }
+  .budget-bar .budget-reset:hover { background: rgba(0,0,0,0.08); }
+
+  /* ── Search ── */
+  .search-container {
+    padding: 16px 16px 4px;
+    background: #fafafa;
+    position: sticky;
+    top: 56px;
+    z-index: 400;
+  }
+
+  .search-wrapper {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    padding: 4px 14px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+  }
+  .search-wrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+  .search-input {
+    border: none;
+    background: transparent;
+    padding: 11px 10px;
+    flex: 1;
+    font-size: 0.9rem;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+
+  /* ── Category Nav ── */
+  .category-nav {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 12px 16px 14px;
+    scrollbar-width: none;
+  }
+  .category-nav::-webkit-scrollbar { display: none; }
+
+  .premium-pill {
+    padding: 9px 18px;
+    border-radius: 30px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    font-weight: 600;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    transition: var(--transition);
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+  }
+  .premium-pill:hover { border-color: var(--primary); color: var(--primary); }
+  .premium-pill.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
+  }
+  .premium-pill.athlete-pill {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border-color: #10b981;
+    box-shadow: 0 6px 16px rgba(16,185,129,0.3);
+  }
+
+  /* ── Product Grid ── */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 8px 16px 140px;
+  }
+
+  .premium-product-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    position: relative;
+  }
+  .premium-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+  }
+  .premium-product-card.budget-locked {
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .product-image-wrapper {
+    height: 130px;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+  .premium-product-card:hover .product-img { transform: scale(1.08); }
+
+  .price-tag {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    padding: 5px 11px;
+    border-radius: 10px;
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 0.88rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .budget-badge-overlay {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--danger);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    z-index: 5;
+    box-shadow: 0 4px 10px rgba(239,68,68,0.3);
+  }
+
+  .product-content { padding: 12px 14px 14px; }
+
+  .product-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--dark);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .product-desc {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    height: 30px;
+    overflow: hidden;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  /* Nutri row shown in athlete mode */
+  .nutri-row {
+    display: none;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  body.athlete-mode .nutri-row { display: flex; }
+
+  .product-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cal-tag {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  body.athlete-mode .cal-tag { color: #ea580c; font-weight: 700; font-size: 0.78rem; }
+
+  .add-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.1rem;
+    font-weight: 900;
+    box-shadow: 0 4px 10px rgba(99,102,241,0.3);
+    flex-shrink: 0;
+  }
+  .add-btn:hover { transform: scale(1.15); box-shadow: 0 6px 14px rgba(99,102,241,0.4); }
+
+  /* ── Budget Modal (Bottom Sheet) ── */
+  #budgetModal {
+    position: fixed; inset: 0;
+    background: rgba(15,23,42,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 3000;
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  #budgetModal.hidden { display: none; }
+
+  .budget-sheet {
+    width: 100%; max-width: 520px;
+    background: #fff;
+    border-radius: 32px 32px 0 0;
+    overflow: hidden;
+    animation: sheetUp 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  .sheet-handle-wrap { padding: 14px 0 0; text-align: center; }
+  .sheet-handle {
+    display: inline-block; width: 40px; height: 4px;
+    background: var(--border); border-radius: 4px;
+  }
+
+  .sheet-inner { padding: 20px 28px 40px; }
+
+  .sheet-title { font-size: 1.4rem; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+  .sheet-sub   { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 28px; }
+
+  .budget-input-row {
+    display: flex; gap: 10px; align-items: center; margin-bottom: 22px;
+  }
+  .budget-amount-input {
+    flex: 1; padding: 14px 18px; border: 2px solid var(--border);
+    border-radius: 14px; font-size: 1.2rem; font-weight: 700; outline: none;
+    font-family: 'Poppins', sans-serif; color: var(--dark); transition: var(--transition);
+  }
+  .budget-amount-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.12); }
+  .budget-currency {
+    padding: 14px 18px; background: var(--bg); border-radius: 14px;
+    font-size: 1.2rem; font-weight: 800; color: var(--dark);
+    border: 2px solid var(--border);
+  }
+
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; background: var(--bg); border-radius: 16px; margin-bottom: 24px;
+    border: 1.5px solid var(--border);
+  }
+  .toggle-row-info { flex: 1; }
+  .toggle-row-title { font-weight: 700; font-size: 0.95rem; color: var(--dark); }
+  .toggle-row-desc  { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+  .sheet-submit-btn {
+    width: 100%; padding: 17px; border: none; border-radius: 18px;
+    background: var(--primary-gradient); color: #fff;
+    font-size: 1.05rem; font-weight: 800; cursor: pointer;
+    font-family: 'Poppins', sans-serif; transition: var(--transition);
+    box-shadow: 0 8px 20px rgba(99,102,241,0.35);
+  }
+  .sheet-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(99,102,241,0.45); }
+
+  .skip-link {
+    display: block; text-align: center; margin-top: 14px;
+    font-size: 0.83rem; color: var(--text-muted); cursor: pointer;
+    font-weight: 600; transition: var(--transition);
+  }
+  .skip-link:hover { color: var(--primary); }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); padding: 4px 16px 8px;
+  }
+
+  @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+</style>
+{% endblock %}
+
+{% block content %}
+{# ── QR Budget + Athlete Modal ── #}
+<div id="budgetModal">
+  <div class="budget-sheet">
+    <div class="sheet-handle-wrap"><span class="sheet-handle"></span></div>
+    <div class="sheet-inner">
+      <h2 class="sheet-title">🍽️ {% trans "Welcome!" %}</h2>
+      <p class="sheet-sub">{% trans "Enter your budget and we'll show what fits. Athlete mode highlights nutrition." %}</p>
+
+      <label style="font-weight:700; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); display:block; margin-bottom:10px;">
+        💰 {% trans "Your budget" %}
+      </label>
+      <div class="budget-input-row">
+        <input type="number" id="budgetInput" class="budget-amount-input" placeholder="50" min="0" step="0.5">
+        <span class="budget-currency">₼</span>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-row-info">
+          <div class="toggle-row-title">💪 {% trans "Athlete Mode" %}</div>
+          <div class="toggle-row-desc">{% trans "Shows Cal · Protein · Carbs on each card" %}</div>
+        </div>
+        <label class="toggle" style="margin-left:16px;">
+          <input type="checkbox" id="athleteToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <button class="sheet-submit-btn" onclick="applyBudget()">
+        ✨ {% trans "Show My Menu" %}
+      </button>
+      <span class="skip-link" onclick="skipBudget()">{% trans "Skip — show everything" %}</span>
+    </div>
+  </div>
+</div>
+
+<div class="customer-layout">
+    {# ── Hero ── #}
+    <div class="premium-hero">
+        <div class="restaurant-glass-card">
+            <h1 style="color:#fff; font-size:1.6rem; font-weight:800; margin-bottom:4px;">{{ restaurant.name }}</h1>
+            <p style="color:rgba(255,255,255,0.78); font-size:0.83rem; margin-bottom:14px;">
+                {{ restaurant.description|default:_("AI-Enhanced Dining Experience") }}
+            </p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:0.72rem;">
+                <span style="background:rgba(255,255,255,0.18); backdrop-filter:blur(6px); padding:5px 12px; border-radius:20px; font-weight:600;">
+                  📍 {{ restaurant.address|default:_("Main Location") }}
+                </span>
+                <span style="background:rgba(255,255,255,0.18); backdrop-filter:blur(6px); padding:5px 12px; border-radius:20px; font-weight:600;">
+                  ⭐ 4.9 (500+)
+                </span>
+            </div>
+        </div>
+        <a href="{% url 'ai_budget_recommendation' %}" class="btn btn-primary pulse" style="border-radius:20px; font-size:0.88rem;">
+            ✨ {% trans "AI Menu Advisor" %}
+        </a>
+    </div>
+
+    {# ── Budget Status Bar ── #}
+    <div class="budget-bar" id="budgetBar">
+      <span>💰</span>
+      <span id="budgetBarText">Budget: — ₼</span>
+      <button class="budget-reset" onclick="resetBudget()">✕ {% trans "Reset" %}</button>
+    </div>
+
+    {# ── Search ── #}
+    <div class="search-container">
+        <div class="search-wrapper">
+            <span style="font-size:1rem;">🔍</span>
+            <input type="text" id="searchInput" class="search-input"
+                   placeholder="{% trans "Search dishes..." %}" onkeyup="searchProducts()">
+        </div>
+    </div>
+
+    {# ── Category Nav ── #}
+    <div class="category-nav" id="categoryBar">
+        <button class="premium-pill active" onclick="filterCategory('all', this)">{% trans "All" %}</button>
+        {% for cat in categories %}
+        <button class="premium-pill" onclick="filterCategory('{{ cat.id }}', this)">{{ cat.name }}</button>
+        {% endfor %}
+        <button class="premium-pill" id="athletePill" onclick="toggleAthleteFilter(this)" style="display:none;">
+          💪 {% trans "Athlete" %}
+        </button>
+    </div>
+
+    {# ── Product Grid ── #}
+    <div class="product-grid" id="productGrid">
+        {% for cat in categories %}
+            {% for p in cat.products.all %}
+                {% if p.is_active %}
+                <div class="premium-product-card fade-in"
+                     data-category="{{ cat.id }}"
+                     data-name="{{ p.name|lower }}"
+                     data-price="{{ p.price }}"
+                     data-calories="{{ p.calories|default:0 }}"
+                     data-protein="{{ p.protein|default:0 }}"
+                     data-carbs="{{ p.carbs|default:0 }}"
+                     data-fat="{{ p.fat|default:0 }}"
+                     onclick="window.location='/m/{{ restaurant.slug }}/p/{{ p.id }}/'">
+
+                    <div class="product-image-wrapper">
+                        {% if p.image %}
+                            <img src="{{ p.image.url }}" alt="{{ p.name }}" class="product-img" loading="lazy">
+                        {% else %}
+                            <div style="height:100%; background:linear-gradient(135deg,#eef2ff,#e0e7ff);
+                                        display:flex; align-items:center; justify-content:center; font-size:2.5rem;">🥗</div>
+                        {% endif %}
+                        <div class="price-tag">{{ p.price }} ₼</div>
+                        {% if p.is_popular %}<div style="position:absolute;top:8px;left:8px;background:#f59e0b;color:#fff;padding:3px 9px;border-radius:20px;font-size:0.65rem;font-weight:700;">🔥 Popular</div>{% endif %}
+                        <div class="budget-badge-overlay" style="display:none;">💰 {% trans "Over Budget" %}</div>
+                    </div>
+
+                    <div class="product-content">
+                        <h3 class="product-title">{{ p.name }}</h3>
+                        <p class="product-desc">{{ p.description|truncatewords:8 }}</p>
+
+                        {# Nutri row — shown only in athlete mode #}
+                        <div class="nutri-row">
+                          <span class="sport-tag sport-tag-cal">🔥 {{ p.calories|default:"—" }} kcal</span>
+                          <span class="sport-tag sport-tag-prot">💪 {{ p.protein|default:"—" }}g prot</span>
+                          <span class="sport-tag sport-tag-carb">🍞 {{ p.carbs|default:"—" }}g carb</span>
+                        </div>
+
+                        <div class="product-bottom">
+                            <span class="cal-tag">🔥 {{ p.calories|default:"—" }} kcal</span>
+                            <form method="post" action="{% url 'cart_add' slug=restaurant.slug %}" onclick="event.stopPropagation();">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ p.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="add-btn" title="{% trans 'Add to cart' %}">+</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+</div>
+
+<script>
+/* ── State ── */
+let activeBudget   = null;
+let athleteMode    = false;
+let activeCategory = 'all';
+let athleteFilter  = false;
+
+/* ── Modal ── */
+function applyBudget() {
+  const val = parseFloat(document.getElementById('budgetInput').value);
+  activeBudget = (!isNaN(val) && val > 0) ? val : null;
+  athleteMode  = document.getElementById('athleteToggle').checked;
+
+  document.getElementById('budgetModal').classList.add('hidden');
+  applyAllFilters();
+
+  if (activeBudget) {
+    const bar = document.getElementById('budgetBar');
+    bar.classList.add('active');
+    document.getElementById('budgetBarText').textContent =
+      '{% trans "Budget" %}: ' + activeBudget.toFixed(2) + ' ₼';
+  }
+
+  if (athleteMode) {
+    document.body.classList.add('athlete-mode');
+    document.getElementById('athletePill').style.display = 'inline-flex';
+  }
+}
+
+function skipBudget() {
+  document.getElementById('budgetModal').classList.add('hidden');
+}
+
+function resetBudget() {
+  activeBudget = null;
+  document.getElementById('budgetBar').classList.remove('active');
+  applyAllFilters();
+}
+
+/* ── Category filter ── */
+function filterCategory(id, el) {
+  document.querySelectorAll('.premium-pill:not(#athletePill)').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  activeCategory = id;
+  applyAllFilters();
+}
+
+/* ── Athlete filter pill ── */
+function toggleAthleteFilter(el) {
+  athleteFilter = !athleteFilter;
+  el.classList.toggle('athlete-pill', athleteFilter);
+  el.classList.toggle('active', !athleteFilter);
+  applyAllFilters();
+}
+
+/* ── Search ── */
+function searchProducts() {
+  applyAllFilters();
+}
+
+/* ── Main filter engine ── */
+function applyAllFilters() {
+  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  document.querySelectorAll('.premium-product-card').forEach(card => {
+    const cat    = card.dataset.category;
+    const name   = card.dataset.name;
+    const price  = parseFloat(card.dataset.price);
+    const protein = parseFloat(card.dataset.protein) || 0;
+    const budgBadge = card.querySelector('.budget-badge-overlay');
+
+    // Category check
+    const catOk = (activeCategory === 'all' || cat === activeCategory);
+    // Search check
+    const searchOk = (!query || name.includes(query));
+    // Athlete filter: show only protein > 15g
+    const athleteOk = (!athleteFilter || protein >= 15);
+
+    const show = catOk && searchOk && athleteOk;
+    card.style.display = show ? 'block' : 'none';
+
+    // Budget check (visual only, don't hide)
+    if (show && activeBudget !== null && price > activeBudget) {
+      card.classList.add('budget-locked');
+      if (budgBadge) budgBadge.style.display = 'block';
+    } else {
+      card.classList.remove('budget-locked');
+      if (budgBadge) budgBadge.style.display = 'none';
+    }
+  });
+}
+
+/* Show modal on load */
+window.addEventListener('DOMContentLoaded', () => {
+  // Only show modal once per session
+  if (!sessionStorage.getItem('budgetSet_{{ restaurant.slug }}')) {
+    document.getElementById('budgetModal').classList.remove('hidden');
+  }
+});
+
+document.querySelector('.sheet-submit-btn') && document.querySelector('.sheet-submit-btn').addEventListener('click', () => {
+  sessionStorage.setItem('budgetSet_{{ restaurant.slug }}', '1');
+});
+document.querySelector('.skip-link') && document.querySelector('.skip-link').addEventListener('click', () => {
+  sessionStorage.setItem('budgetSet_{{ restaurant.slug }}', '1');
+});
+</script>
+{% endblock %}

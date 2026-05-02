@@ -1,0 +1,29 @@
+# ── Django & ASGI ─────────────────────────────────────────────
+Django>=5.0,<6.0
+daphne>=4.1.0
+
+# ── Database ──────────────────────────────────────────────────
+psycopg2-binary>=2.9.9   # PostgreSQL driver (production)
+# psycopg2>=2.9.9         # Build-from-source alternative (CI/CD)
+
+# ── WebSockets / Real-time ────────────────────────────────────
+channels>=4.0.0
+channels-redis>=4.2.0
+redis>=5.0.1
+
+# ── Image processing ──────────────────────────────────────────
+Pillow>=10.2.0
+qrcode[pil]>=7.4.2
+
+# ── API / Networking ──────────────────────────────────────────
+django-cors-headers>=4.3.1
+httpx>=0.27.0            # Used by OpenAICompatibleProvider in ai_engine/providers.py
+
+# ── i18n / Translation ────────────────────────────────────────
+django-modeltranslation>=0.18.11
+
+# ── Environment ───────────────────────────────────────────────
+python-dotenv>=1.0.1
+
+# ── Production server ─────────────────────────────────────────
+gunicorn>=21.2.0

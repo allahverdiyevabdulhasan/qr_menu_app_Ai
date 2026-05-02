@@ -1,0 +1,129 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Super Admin Dashboard" %} — NeyMenu AI{% endblock %}
+{% block page_title %}🛡️ {% trans "Platform Overview" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+  {# ── Summary Header ── #}
+  <div style="background:var(--dark); border-radius:var(--radius-lg); padding:40px; color:#fff; margin-bottom:32px; box-shadow:var(--shadow-lg);">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
+      <div>
+        <h1 style="color:#fff; margin-bottom:8px; font-size:2rem;">{% trans "SaaS Control Center" %}</h1>
+        <p style="opacity:0.7; font-size:1rem;">{% trans "Global platform monitoring and management" %}</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn btn-glass btn-sm">📦 {% trans "Plans" %}</button>
+        <button class="btn btn-glass btn-sm">🎟️ {% trans "Support" %}</button>
+      </div>
+    </div>
+  </div>
+
+  {# ── Global KPIs ── #}
+  <div class="grid grid-4 mb-4">
+    <div class="metric-card metric-primary">
+      <div class="icon">🏢</div>
+      <div class="label">{% trans "Total Clients" %}</div>
+      <div class="value">{{ total_restaurants }}</div>
+      <div class="text-muted text-xs">{% trans "Active across all regions" %}</div>
+    </div>
+    <div class="metric-card metric-success">
+      <div class="icon">💳</div>
+      <div class="label">{% trans "Monthly Revenue" %}</div>
+      <div class="value">{{ total_mrr|default:"0.00"|floatformat:2 }} ₼</div>
+      <div class="text-muted text-xs">{% trans "MRR - Current Month" %}</div>
+    </div>
+    <div class="metric-card metric-info">
+      <div class="icon">🔄</div>
+      <div class="label">{% trans "Subscriptions" %}</div>
+      <div class="value">{{ active_subscriptions }}</div>
+      <div class="text-muted text-xs">{% trans "Paid & Trialing" %}</div>
+    </div>
+    <div class="metric-card metric-danger">
+      <div class="icon">🚨</div>
+      <div class="label">{% trans "Pending Tickets" %}</div>
+      <div class="value">{{ open_tickets }}</div>
+      <div class="text-muted text-xs">{% trans "Requires immediate action" %}</div>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+    {# ── Recent Onboardings ── #}
+    <div class="card">
+      <div class="card-header">
+        <span>✨ {% trans "Newest Restaurants" %}</span>
+        <button class="btn btn-secondary btn-sm">{% trans "Manage" %}</button>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{% trans "Restaurant" %}</th>
+              <th>{% trans "Plan" %}</th>
+              <th>{% trans "Growth" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in recent_restaurants %}
+            <tr>
+              <td>
+                <div class="font-bold">{{ r.name }}</div>
+                <div class="text-xs text-muted">{{ r.created_at|date:"d M Y" }}</div>
+              </td>
+              <td>
+                <span class="badge badge-primary">{{ r.subscription.plan.name|default:"FREE" }}</span>
+              </td>
+              <td>
+                <span class="text-success" style="font-weight:700;">+12%</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {# ── Critical Tickets ── #}
+    <div class="card">
+      <div class="card-header">
+        <span>🔥 {% trans "Urgent Tickets" %}</span>
+        <button class="btn btn-secondary btn-sm">{% trans "Open Queue" %}</button>
+      </div>
+      <div class="card-body" style="padding:0;">
+        {% if recent_tickets %}
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{% trans "Subject" %}</th>
+              <th>{% trans "Priority" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in recent_tickets %}
+            <tr>
+              <td>
+                <div class="font-bold">{{ t.subject }}</div>
+                <div class="text-xs text-muted">{{ t.restaurant.name }}</div>
+              </td>
+              <td>
+                <span class="badge badge-{% if t.priority == 'URGENT' %}danger{% else %}warning{% endif %}">{{ t.priority }}</span>
+              </td>
+              <td>
+                <button class="btn btn-secondary btn-sm">🔧</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+          <div style="font-size:3rem; margin-bottom:12px;">✅</div>
+          <p>{% trans "No critical tickets right now." %}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

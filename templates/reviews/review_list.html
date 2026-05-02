@@ -1,0 +1,125 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Reviews" %} — NeyMenu AI{% endblock %}
+{% block page_title %}⭐ {% trans "Reviews" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.star-display { color: #f59e0b; letter-spacing: 1px; font-size: 0.9rem; }
+.sentiment-positive { color: #059669; font-weight: 700; }
+.sentiment-neutral  { color: #6b7280; font-weight: 700; }
+.sentiment-negative { color: #dc2626; font-weight: 700; }
+.review-summary {
+  max-width: 220px; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; font-size: 0.83rem; color: var(--text-muted);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p class="text-muted text-sm">{% trans "Monitor customer feedback and ratings." %}</p>
+    <a href="{% url 'review_dashboard' %}" class="btn btn-secondary btn-sm">📊 {% trans "Analytics" %}</a>
+  </div>
+
+  {# ── Rating Summary ── #}
+  <div class="grid grid-4 mb-6">
+    <div class="metric-card metric-warning">
+      <div class="icon">⭐</div>
+      <div class="label">{% trans "Avg. Rating" %}</div>
+      <div class="value">{{ avg_rating|default:"4.8" }}</div>
+      <div style="color:#f59e0b; font-size:1rem; margin-top:2px;">★★★★★</div>
+    </div>
+    <div class="metric-card metric-success">
+      <div class="icon">😊</div>
+      <div class="label">{% trans "Positive" %}</div>
+      <div class="value">{{ positive_count|default:reviews|length }}</div>
+    </div>
+    <div class="metric-card metric-info">
+      <div class="icon">😐</div>
+      <div class="label">{% trans "Neutral" %}</div>
+      <div class="value">0</div>
+    </div>
+    <div class="metric-card metric-danger">
+      <div class="icon">😞</div>
+      <div class="label">{% trans "Negative" %}</div>
+      <div class="value">0</div>
+    </div>
+  </div>
+
+  {# ── Filter ── #}
+  <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+    <button class="btn btn-secondary btn-sm active" onclick="filterReviews('', this)">{% trans "All" %}</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterReviews('Positive', this)">😊 {% trans "Positive" %}</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterReviews('Neutral', this)">😐 {% trans "Neutral" %}</button>
+    <button class="btn btn-secondary btn-sm" onclick="filterReviews('Negative', this)">😞 {% trans "Negative" %}</button>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding:0;">
+      <table class="data-table" id="reviewTable">
+        <thead>
+          <tr>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Customer" %}</th>
+            <th>{% trans "Rating" %}</th>
+            <th>{% trans "Sentiment" %}</th>
+            <th>{% trans "Category" %}</th>
+            <th>{% trans "Comment" %}</th>
+            <th style="text-align:right;">{% trans "Action" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for review in reviews %}
+          <tr data-sentiment="{{ review.sentiment }}">
+            <td class="text-muted text-sm" style="white-space:nowrap;">{{ review.created_at|date:"d M" }}</td>
+            <td>
+              <div style="font-weight:600;">{{ review.customer_name|default:"Anonymous" }}</div>
+            </td>
+            <td>
+              <div class="star-display">
+                {% for i in "12345" %}{% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}{% endfor %}
+              </div>
+              <div class="text-xs text-muted">{{ review.rating }}/5</div>
+            </td>
+            <td>
+              <span class="sentiment-{% if review.sentiment == 'POSITIVE' %}positive{% elif review.sentiment == 'NEGATIVE' %}negative{% else %}neutral{% endif %}">
+                {% if review.sentiment == 'POSITIVE' %}😊 {% trans "Positive" %}
+                {% elif review.sentiment == 'NEGATIVE' %}😞 {% trans "Negative" %}
+                {% else %}😐 {% trans "Neutral" %}
+                {% endif %}
+              </span>
+            </td>
+            <td><span class="badge badge-info" style="font-size:0.7rem;">{{ review.get_category_display|default:"General" }}</span></td>
+            <td>
+              <div class="review-summary" title="{{ review.comment }}">
+                {{ review.comment|default:"—"|truncatechars:50 }}
+              </div>
+            </td>
+            <td style="text-align:right;">
+              <a href="{% url 'review_detail' review.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 12px;">{% trans "View" %}</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7">
+            <div class="empty-state"><div style="font-size:3rem; margin-bottom:12px;">⭐</div><h3>{% trans "No reviews yet" %}</h3><p>{% trans "Reviews will appear after customers rate their experience." %}</p></div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+function filterReviews(sentiment, btn) {
+  document.querySelectorAll('.btn-secondary.btn-sm').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#reviewTable tbody tr[data-sentiment]').forEach(r => {
+    r.style.display = (!sentiment || r.dataset.sentiment === sentiment.toUpperCase()) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

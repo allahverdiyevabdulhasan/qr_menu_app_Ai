@@ -1,0 +1,134 @@
+{% extends 'customer_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Track Order" %} #{{ order.order_number|slice:"-6:" }}{% endblock %}
+{% block extra_css %}
+<style>
+  .tracking-steps {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    position: relative; padding: 0 12px;
+  }
+  .tracking-steps::before {
+    content: ''; position: absolute; top: 22px; left: 12%; right: 12%;
+    height: 3px; background: var(--border); border-radius: 3px; z-index: 0;
+  }
+  .tracking-step {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    position: relative; z-index: 1; flex: 1;
+  }
+  .tracking-step-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; transition: var(--transition);
+  }
+  .tracking-step.active .tracking-step-icon {
+    background: var(--primary); border-color: var(--primary);
+    box-shadow: 0 0 0 5px rgba(99,102,241,0.15);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .tracking-step.done .tracking-step-icon {
+    background: var(--success); border-color: var(--success); color: #fff;
+  }
+  .tracking-step-label {
+    font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-align: center;
+  }
+  .tracking-step.active .tracking-step-label { color: var(--primary); }
+  .tracking-step.done   .tracking-step-label { color: var(--success); }
+
+  .data-table {
+    width: 100%; border-collapse: collapse;
+  }
+  .data-table td {
+    padding: 12px 20px; border-bottom: 1px solid var(--border);
+    font-size: 0.9rem; color: var(--dark); vertical-align: middle;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div style="max-width:600px; margin:0 auto; padding:40px 16px; text-align:center;">
+  
+  <div style="font-size:3rem; margin-bottom:12px;">🚚</div>
+  <h2 class="mb-2">{% trans "Order Tracking" %}</h2>
+  <p class="text-muted mb-4">{% trans "Order" %} #{{ order.order_number }}</p>
+
+  {# ── Progress Tracker ── #}
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="tracking-steps">
+        <div class="tracking-step {% if order.status != 'CANCELLED' %}done{% endif %}">
+          <div class="tracking-step-icon">📝</div>
+          <div class="tracking-step-label">{% trans "Received" %}</div>
+        </div>
+        <div class="tracking-step {% if order.status == 'PREPARING' %}active{% elif order.status == 'READY' or order.status == 'SERVED' or order.status == 'COMPLETED' %}done{% endif %}">
+          <div class="tracking-step-icon">🔥</div>
+          <div class="tracking-step-label">{% trans "Preparing" %}</div>
+        </div>
+        <div class="tracking-step {% if order.status == 'READY' %}active{% elif order.status == 'SERVED' or order.status == 'COMPLETED' %}done{% endif %}">
+          <div class="tracking-step-icon">🛎️</div>
+          <div class="tracking-step-label">{% trans "Ready" %}</div>
+        </div>
+        <div class="tracking-step {% if order.status == 'SERVED' or order.status == 'COMPLETED' %}done{% endif %}">
+          <div class="tracking-step-icon">🍽️</div>
+          <div class="tracking-step-label">{% trans "Served" %}</div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; padding:16px; background:var(--bg); border-radius:var(--radius);">
+        <h3 style="font-size:1.1rem; color:var(--primary);">{{ order.get_status_display }}</h3>
+        <p class="text-muted text-sm" style="margin:0;">
+          {% if order.status == 'NEW' %}
+            {% trans "The kitchen has received your order and will start preparing it shortly." %}
+          {% elif order.status == 'PREPARING' %}
+            {% trans "Chef is cooking your delicious meal right now!" %}
+          {% elif order.status == 'READY' %}
+            {% trans "Your order is ready! It will be brought to your table shortly." %}
+          {% elif order.status == 'SERVED' %}
+            {% trans "Enjoy your meal! Let us know if you need anything else." %}
+          {% elif order.status == 'CANCELLED' %}
+            {% trans "This order has been cancelled. Please contact staff for details." %}
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {# ── Order Summary ── #}
+  <div class="card">
+    <div class="card-header">{% trans "Your Order" %}</div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <tbody>
+          {% for item in order.items.all %}
+          <tr>
+            <td><strong>{{ item.quantity }} ×</strong> {{ item.product_name_snapshot }}</td>
+            <td style="text-align:right;">{{ item.total_price }} ₼</td>
+          </tr>
+          {% endfor %}
+          <tr style="background:var(--bg); font-weight:800;">
+            <td>{% trans "Total" %}</td>
+            <td style="text-align:right;">{{ order.total_amount }} ₼</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:32px; display:flex; flex-direction:column; gap:12px;">
+    <a href="{% url 'public_menu' slug=restaurant.slug %}" class="btn btn-secondary btn-block">
+      ➕ {% trans "Order More" %}
+    </a>
+    <a href="{% url 'review_add' order_number=order.order_number %}" class="btn btn-secondary btn-block">
+      ⭐ {% trans "Rate our service" %}
+    </a>
+  </div>
+
+</div>
+
+{# Auto-refresh to see status changes #}
+<script>
+setTimeout(() => location.reload(), 20000);
+</script>
+{% endblock %}

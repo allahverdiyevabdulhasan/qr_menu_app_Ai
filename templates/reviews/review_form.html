@@ -1,0 +1,12 @@
+﻿{% extends 'dashboard_base.html' %}
+{% block content %}
+<h2>Leave a Review</h2>
+<p>Thanks for ordering! How was your experience?</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Submit Review</button>
+</form>
+{% endblock %}
+

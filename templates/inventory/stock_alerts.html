@@ -1,0 +1,63 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Stock Alerts" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Critical Stock Alerts" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h2 style="font-size:1.25rem; color:var(--danger);">⚠️ {% trans "Low Stock Items" %}</h2>
+        <a href="{% url 'inventory_list' %}" class="btn btn-secondary">
+            ← {% trans "Back to Inventory" %}
+        </a>
+    </div>
+
+    <div class="card" style="border-color:var(--danger);">
+        <div class="card-body" style="padding:0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Item" %}</th>
+                        <th>{% trans "Current Quantity" %}</th>
+                        <th>{% trans "Minimum Required" %}</th>
+                        <th>{% trans "Supplier" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th style="text-align:right;">{% trans "Action" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in alerts %}
+                    <tr>
+                        <td><span class="font-bold">{{ a.name }}</span></td>
+                        <td><span class="badge badge-danger" style="font-size:0.9rem;">{{ a.current_quantity }} {{ a.get_unit_display }}</span></td>
+                        <td><span class="badge badge-secondary">{{ a.minimum_quantity }}</span></td>
+                        <td>{{ a.supplier_name }}</td>
+                        <td>
+                            <span class="badge badge-{% if a.status == 'OUT_OF_STOCK' %}danger{% else %}warning{% endif %}">
+                                {{ a.get_status_display }}
+                            </span>
+                        </td>
+                        <td style="text-align:right;">
+                            <a href="{% url 'inventory_edit' a.pk %}" class="btn btn-primary btn-sm">📦 {% trans "Restock" %}</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state" style="padding:60px;">
+                                <div style="font-size:4rem; margin-bottom:20px;">✅</div>
+                                <h3>{% trans "All stock levels are healthy!" %}</h3>
+                                <p class="text-muted">{% trans "There are no low stock alerts at this time." %}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

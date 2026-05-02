@@ -1,0 +1,64 @@
+﻿{% extends 'dashboard_base.html' %}
+{% block title %}Cashier Panel{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>ðŸ’³ Cashier Panel</h2>
+  <a href="{% url 'payment_list' %}" class="btn btn-secondary">View All Payments</a>
+</div>
+
+<div class="grid grid-2 mb-3">
+  <div class="card">
+    <div class="card-header">Unpaid Orders</div>
+    <div class="card-body">
+      {% if unpaid_orders %}
+      <table class="data-table">
+        <thead><tr><th>Order</th><th>Table</th><th>Amount</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for order in unpaid_orders %}
+          <tr>
+            <td>#{{ order.order_number|slice:"-6:" }}</td>
+            <td>{{ order.table.table_name|default:"Takeaway" }}</td>
+            <td><strong>{{ order.total_amount }}</strong></td>
+            <td>
+              <form method="post" action="{% url 'payment_create' order.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <select name="method" style="padding:4px; border-radius:4px; border:1px solid #ccc; margin-right:4px;">
+                  <option value="CASH">Cash</option>
+                  <option value="CARD">Card</option>
+                  <option value="ONLINE">Online</option>
+                </select>
+                <button type="submit" class="btn btn-success btn-sm">Mark Paid</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state"><div class="icon">âœ…</div><p>No unpaid orders.</p></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Today's Summary</div>
+    <div class="card-body">
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="metric-card metric-success">
+          <div class="label">Total Collected</div>
+          <div class="value">{{ today_total|default:"0.00" }}</div>
+        </div>
+        <div class="metric-card metric-info">
+          <div class="label">Cash</div>
+          <div class="value">{{ today_cash|default:"0.00" }}</div>
+        </div>
+        <div class="metric-card metric-primary">
+          <div class="label">Card</div>
+          <div class="value">{{ today_card|default:"0.00" }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

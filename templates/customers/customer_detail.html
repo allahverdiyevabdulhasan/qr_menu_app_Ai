@@ -1,0 +1,87 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Customer Profile" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Customer Insights" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h2 style="font-size:1.25rem;">👤 {{ customer.name|default:_("Anonymous Customer") }}</h2>
+        <a href="{% url 'customer_list' %}" class="btn btn-secondary">
+            ← {% trans "Back to List" %}
+        </a>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:24px;">
+        <!-- Profile Info -->
+        <div class="card">
+            <div class="card-header">
+                <span>📋 {% trans "Profile Information" %}</span>
+            </div>
+            <div class="card-body">
+                <div style="text-align:center; margin-bottom:24px;">
+                    <div style="width:80px; height:80px; border-radius:50%; background:var(--bg); margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:2rem;">👤</div>
+                    <div class="font-bold" style="font-size:1.2rem;">{{ customer.name|default:"-" }}</div>
+                    {% with segment=customer.get_segment %}
+                    <span class="badge badge-{% if segment == 'VIP' %}success{% elif segment == 'Loyal' %}info{% else %}secondary{% endif %}">
+                        {{ segment }}
+                    </span>
+                    {% endwith %}
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div>
+                        <label class="text-xs text-muted" style="display:block;">{% trans "Phone Number" %}</label>
+                        <div class="font-medium">{{ customer.phone|default:"-" }}</div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-muted" style="display:block;">{% trans "Email Address" %}</label>
+                        <div class="font-medium">{{ customer.email|default:"-" }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics & Actions -->
+        <div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
+                <div class="metric-card metric-primary">
+                    <div class="text-xs" style="opacity:0.8;">{% trans "Total Orders" %}</div>
+                    <div style="font-size:1.5rem; font-weight:bold;">{{ customer.order_count }}</div>
+                </div>
+                <div class="metric-card metric-success">
+                    <div class="text-xs" style="opacity:0.8;">{% trans "Total Spent" %}</div>
+                    <div style="font-size:1.5rem; font-weight:bold;">{{ customer.total_spent }} ₼</div>
+                </div>
+                <div class="metric-card metric-warning">
+                    <div class="text-xs" style="opacity:0.8;">{% trans "Loyalty Points" %}</div>
+                    <div style="font-size:1.5rem; font-weight:bold;">{{ customer.loyalty_points }}</div>
+                </div>
+                <div class="metric-card metric-secondary">
+                    <div class="text-xs" style="opacity:0.8;">{% trans "Last Order" %}</div>
+                    <div style="font-size:1.1rem; font-weight:bold;">{{ customer.last_order_at|date:"d M Y"|default:_("Never") }}</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span>🚀 {% trans "Quick Actions" %}</span>
+                </div>
+                <div class="card-body">
+                    <div style="display:flex; gap:12px;">
+                        <a href="{% url 'customer_orders' customer.pk %}" class="btn btn-primary">
+                            🛍️ {% trans "View Order History" %}
+                        </a>
+                        <button class="btn btn-secondary">
+                            📧 {% trans "Send Promotion" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

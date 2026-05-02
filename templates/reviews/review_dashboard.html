@@ -1,0 +1,62 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Reviews Dashboard" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Feedback & Sentiment Analysis" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h2 style="font-size:1.25rem;">💬 {% trans "Guest Experience" %}</h2>
+        <div style="display:flex; gap:12px;">
+            <a href="{% url 'review_list' %}" class="btn btn-secondary">📜 {% trans "All Reviews" %}</a>
+            <a href="{% url 'review_list' %}?sentiment=NEGATIVE" class="btn btn-glass" style="color:var(--danger);">⚠️ {% trans "Negative Only" %}</a>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:24px;">
+        <!-- Stats Card -->
+        <div class="metric-card metric-primary" style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:8px;">📊</div>
+            <div class="text-xs" style="opacity:0.8; text-transform:uppercase; letter-spacing:1px;">{% trans "Total Reviews" %}</div>
+            <div style="font-size:3rem; font-weight:bold;">{{ total_reviews }}</div>
+            <div class="text-sm">{% trans "Submissions" %}</div>
+        </div>
+
+        <!-- Recent Feedbacks -->
+        <div class="card">
+            <div class="card-header">
+                <span>💬 {% trans "Recent Feedbacks" %}</span>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <ul style="list-style:none; padding:0; margin:0;">
+                    {% for r in recent_reviews %}
+                    <li style="padding:16px; border-bottom:1px solid var(--border);">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span style="color:var(--warning); font-weight:bold;">{{ r.rating }} ⭐</span>
+                                <span class="badge badge-{% if r.ai_sentiment == 'POSITIVE' %}success{% elif r.ai_sentiment == 'NEGATIVE' %}danger{% else %}secondary{% endif %}">
+                                    {{ r.ai_sentiment }}
+                                </span>
+                            </div>
+                            <span class="text-xs text-muted">{{ r.created_at|date:"d M, H:i" }}</span>
+                        </div>
+                        <div class="text-sm" style="margin-bottom:8px;">
+                            <span class="badge badge-info text-xs">{{ r.ai_category }}</span>
+                        </div>
+                        <p class="text-sm text-muted" style="margin-bottom:8px;">{{ r.comment|truncatewords:20 }}</p>
+                        <a href="{% url 'review_detail' r.pk %}" class="text-xs font-bold" style="color:var(--primary); text-decoration:none;">{% trans "Read Full Analysis" %} →</a>
+                    </li>
+                    {% empty %}
+                    <li class="p-8 text-center text-muted">
+                        {% trans "No reviews yet." %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

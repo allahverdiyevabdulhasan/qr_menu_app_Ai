@@ -1,0 +1,95 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Settings" %} — NeyMenu AI{% endblock %}
+{% block page_title %}⚙️ {% trans "Settings" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="max-width:760px;">
+
+  <p class="text-muted text-sm" style="margin-bottom:28px;">
+    {% trans "Manage your restaurant profile and preferences." %}
+  </p>
+
+  <div class="card">
+    <div class="card-header">🏪 {% trans "Restaurant Profile" %}</div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="grid grid-2" style="gap:20px; margin-bottom:20px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">{% trans "Restaurant Name" %}</label>
+            {{ form.name }}
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">{% trans "Email" %}</label>
+            {{ form.email }}
+          </div>
+        </div>
+        <div class="grid grid-2" style="gap:20px; margin-bottom:20px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">{% trans "Phone" %}</label>
+            {{ form.phone }}
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">{% trans "Address" %}</label>
+            {{ form.address }}
+          </div>
+        </div>
+        {% if form.description %}
+        <div class="form-group">
+          <label class="form-label">{% trans "Description" %}</label>
+          {{ form.description }}
+        </div>
+        {% endif %}
+
+        {% for field in form %}
+          {% if field.name not in "name,email,phone,address,description" %}
+          <div class="form-group">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="form-hint" style="color:var(--danger);">{{ field.errors|join:", " }}</div>{% endif %}
+          </div>
+          {% endif %}
+        {% endfor %}
+
+        {% if form.errors %}
+        <div class="alert alert-danger mb-4">{% trans "Please fix the errors above." %}</div>
+        {% endif %}
+
+        <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:8px;">
+          <button type="submit" class="btn btn-primary">💾 {% trans "Save Changes" %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {# ── Quick Info Card ── #}
+  <div class="card" style="margin-top:20px;">
+    <div class="card-header">📋 {% trans "Quick Info" %}</div>
+    <div class="card-body">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:0.88rem;">
+        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border);">
+          <span class="text-muted">{% trans "QR Menu URL" %}</span>
+          <a href="/en/m/{{ request.user.restaurant.slug }}/" target="_blank"
+             style="color:var(--primary); font-weight:600;">
+            /m/{{ request.user.restaurant.slug }}/
+          </a>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border);">
+          <span class="text-muted">{% trans "Status" %}</span>
+          <span class="badge badge-success">{% trans "Active" %}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:10px 0;">
+          <span class="text-muted">{% trans "Plan" %}</span>
+          <span class="badge badge-primary">Pro</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:10px 0;">
+          <span class="text-muted">{% trans "AI Engine" %}</span>
+          <span class="badge badge-success">{% trans "Enabled" %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

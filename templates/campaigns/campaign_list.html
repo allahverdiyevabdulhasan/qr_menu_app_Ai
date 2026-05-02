@@ -1,0 +1,95 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Campaigns" %} — NeyMenu AI{% endblock %}
+{% block page_title %}🎁 {% trans "Campaigns" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p class="text-muted text-sm">{% trans "Manage discounts, promotions and loyalty campaigns." %}</p>
+    <div style="display:flex; gap:10px;">
+      <a href="{% url 'coupon_list' %}" class="btn btn-secondary btn-sm">🎟️ {% trans "Coupons" %}</a>
+      <a href="{% url 'campaign_create' %}" class="btn btn-primary btn-sm">+ {% trans "New Campaign" %}</a>
+    </div>
+  </div>
+
+  <div class="grid grid-4 mb-6">
+    <div class="metric-card metric-primary">
+      <div class="icon">🎁</div>
+      <div class="label">{% trans "Total Campaigns" %}</div>
+      <div class="value">{{ campaigns|length }}</div>
+    </div>
+    <div class="metric-card metric-success">
+      <div class="icon">✅</div>
+      <div class="label">{% trans "Active" %}</div>
+      <div class="value">{{ campaigns|length }}</div>
+    </div>
+    <div class="metric-card metric-warning">
+      <div class="icon">📉</div>
+      <div class="label">{% trans "Total Discount" %}</div>
+      <div class="value" style="font-size:1.3rem;">—%</div>
+    </div>
+    <div class="metric-card metric-info">
+      <div class="icon">🎟️</div>
+      <div class="label">{% trans "Coupons Used" %}</div>
+      <div class="value">0</div>
+    </div>
+  </div>
+
+  {% if campaigns %}
+  <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;">
+    {% for c in campaigns %}
+    <div class="card" style="border-top:3px solid var(--primary);">
+      <div class="card-body">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+          <div>
+            <div style="font-weight:800; font-size:1rem; margin-bottom:4px;">{{ c.title }}</div>
+            <span class="badge {% if c.is_active %}badge-success{% else %}badge-danger{% endif %}">
+              {% if c.is_active %}✅ {% trans "Active" %}{% else %}⏸ {% trans "Inactive" %}{% endif %}
+            </span>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:1.8rem; font-weight:900; color:var(--primary); line-height:1;">
+              {% if c.discount_type == 'PERCENT' %}{{ c.discount_value|floatformat:0 }}%{% else %}{{ c.discount_value }} ₼{% endif %}
+            </div>
+            <div class="text-xs text-muted">{% trans "Discount" %}</div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.83rem;">
+            <span class="text-muted">{% trans "Type" %}</span>
+            <span style="font-weight:600;">{{ c.get_discount_type_display }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.83rem;">
+            <span class="text-muted">{% trans "Min. Order" %}</span>
+            <span style="font-weight:600;">{{ c.min_order_amount|floatformat:2 }} ₼</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.83rem;">
+            <span class="text-muted">{% trans "Period" %}</span>
+            <span style="font-weight:600; font-size:0.78rem;">
+              {{ c.start_date|date:"d M" }} — {{ c.end_date|date:"d M Y" }}
+            </span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <a href="{% url 'campaign_update' c.pk %}" class="btn btn-secondary btn-sm btn-block">✏️ {% trans "Edit" %}</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card">
+    <div class="empty-state" style="padding:80px 24px;">
+      <div style="font-size:4rem; margin-bottom:16px;">🎁</div>
+      <h3>{% trans "No campaigns yet" %}</h3>
+      <p class="text-muted">{% trans "Create your first promotion to attract more customers." %}</p>
+      <a href="{% url 'campaign_create' %}" class="btn btn-primary" style="margin-top:16px;">+ {% trans "New Campaign" %}</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

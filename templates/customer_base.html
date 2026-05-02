@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block body %}
+<div dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+
+  {# ── Customer Topbar ── #}
+  <header class="customer-topbar">
+    <div style="display:flex; align-items:center; gap:10px;">
+      {% if restaurant %}
+      <a href="/m/{{ restaurant.slug }}/" style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:1rem; color:var(--dark);">
+        <span style="font-size:1.2rem;">🍽️</span>
+        <span>{{ restaurant.name }}</span>
+      </a>
+      {% endif %}
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px;">
+      {# Language switcher #}
+      <form method="post" action="{% url 'set_language' %}" style="display:flex; gap:4px;">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        <select name="language" onchange="this.form.submit()"
+                style="border:1.5px solid var(--border); background:#fff; border-radius:8px; font-size:.82rem;
+                       cursor:pointer; padding:6px 10px; font-family:'Poppins',sans-serif; font-weight:500; color:var(--dark);">
+          <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🌐 EN</option>
+          <option value="az" {% if LANGUAGE_CODE == 'az' %}selected{% endif %}>🇦🇿 AZ</option>
+          <option value="tr" {% if LANGUAGE_CODE == 'tr' %}selected{% endif %}>🇹🇷 TR</option>
+          <option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>🇷🇺 RU</option>
+          <option value="ar" {% if LANGUAGE_CODE == 'ar' %}selected{% endif %}>🇸🇦 AR</option>
+        </select>
+      </form>
+
+      {# Cart icon in topbar #}
+      {% if cart_count %}
+      <a href="{% url 'cart_view' slug=restaurant.slug %}"
+         style="display:flex; align-items:center; gap:6px; background:var(--dark); color:#fff;
+                padding:8px 14px; border-radius:20px; font-weight:700; font-size:0.85rem; text-decoration:none;">
+        🛒 <span class="cart-badge">{{ cart_count }}</span>
+      </a>
+      {% endif %}
+    </div>
+  </header>
+
+  {# ── Main Page Content ── #}
+  {% block content %}{% endblock %}
+
+  {# ── Sticky Cart (floating bottom) only show if items in cart ── #}
+  {% if cart_count %}
+  <a href="{% url 'cart_view' slug=restaurant.slug %}" class="cart-sticky">
+    <span style="font-size:1.1rem;">🛒</span>
+    <span>{% trans "View Cart" %}</span>
+    <span style="background:rgba(255,255,255,0.18); padding:4px 12px; border-radius:20px; font-size:0.9rem;">
+      {{ cart_total }} ₼
+    </span>
+    <span class="cart-badge">{{ cart_count }}</span>
+  </a>
+  {% endif %}
+
+</div>
+{% endblock %}

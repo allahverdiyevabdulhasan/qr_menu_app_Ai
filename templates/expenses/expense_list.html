@@ -1,0 +1,113 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Expenses" %} — NeyMenu AI{% endblock %}
+{% block page_title %}📉 {% trans "Expenses" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.cat-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.expense-amount { font-weight: 800; font-size: 1rem; color: var(--dark); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p class="text-muted text-sm">{% trans "Monitor and categorize all restaurant costs." %}</p>
+    <div style="display:flex; gap:10px;">
+      <a href="{% url 'expense_report' %}" class="btn btn-secondary btn-sm">📊 {% trans "Report" %}</a>
+      <a href="{% url 'expense_create' %}" class="btn btn-primary btn-sm">+ {% trans "Add Expense" %}</a>
+    </div>
+  </div>
+
+  {# ── Summary Cards ── #}
+  <div class="grid grid-4 mb-6">
+    <div class="metric-card metric-danger">
+      <div class="icon">💸</div>
+      <div class="label">{% trans "This Month" %}</div>
+      <div class="value" style="font-size:1.4rem;">
+        {% with total=expenses|length %}— ₼{% endwith %}
+      </div>
+    </div>
+    <div class="metric-card metric-warning">
+      <div class="icon">🏢</div>
+      <div class="label">{% trans "Salary & Payroll" %}</div>
+      <div class="value" style="font-size:1.4rem;">— ₼</div>
+    </div>
+    <div class="metric-card metric-info">
+      <div class="icon">🛒</div>
+      <div class="label">{% trans "Ingredients" %}</div>
+      <div class="value" style="font-size:1.4rem;">— ₼</div>
+    </div>
+    <div class="metric-card metric-primary">
+      <div class="icon">📋</div>
+      <div class="label">{% trans "Total Entries" %}</div>
+      <div class="value">{{ expenses|length }}</div>
+    </div>
+  </div>
+
+  {# ── Category Color Map ── #}
+  {% with cat_colors="salary:#fee2e2:💼,ingredient:#fef9c3:🥩,utility:#eff6ff:⚡,rent:#f0fdf4:🏠,marketing:#faf5ff:📣,other:#f8fafc:📋" %}
+
+  <div class="card">
+    <div class="card-header">
+      <span>📉 {% trans "Expense List" %}</span>
+      <form method="get" style="display:flex; gap:8px;">
+        <select name="range" class="form-control" style="padding:6px 12px; font-size:0.8rem; border-radius:8px;" onchange="this.form.submit()">
+          <option value="all">{% trans "All Time" %}</option>
+          <option value="this_month" {% if request.GET.range == 'this_month' %}selected{% endif %}>{% trans "This Month" %}</option>
+          <option value="last_30" {% if request.GET.range == 'last_30' %}selected{% endif %}>{% trans "Last 30 Days" %}</option>
+        </select>
+      </form>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Category" %}</th>
+            <th>{% trans "Branch" %}</th>
+            <th style="text-align:right;">{% trans "Amount" %}</th>
+            <th style="text-align:right;">{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for expense in expenses %}
+          <tr>
+            <td class="text-muted text-sm" style="white-space:nowrap;">{{ expense.date|date:"d M Y" }}</td>
+            <td style="font-weight:600;">{{ expense.title }}</td>
+            <td>
+              <span class="badge badge-info" style="font-size:0.72rem;">{{ expense.get_category_display }}</span>
+            </td>
+            <td class="text-muted text-sm">{{ expense.branch.name|default:"—" }}</td>
+            <td style="text-align:right;">
+              <span style="font-weight:800; font-size:1rem; color:var(--dark);">{{ expense.amount|floatformat:2 }} ₼</span>
+            </td>
+            <td style="text-align:right;">
+              <div style="display:flex; gap:6px; justify-content:flex-end;">
+                <a href="{% url 'expense_update' expense.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px;">✏️</a>
+                <a href="{% url 'expense_delete' expense.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 10px; color:var(--danger);">🗑</a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6"><div class="empty-state"><div style="font-size:3rem; margin-bottom:12px;">📉</div><h3>{% trans "No expenses recorded" %}</h3></div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if expenses %}
+    <div class="card-footer" style="justify-content:flex-end;">
+      <span class="text-muted text-sm">{{ expenses|length }} {% trans "records" %}</span>
+    </div>
+    {% endif %}
+  </div>
+  {% endwith %}
+</div>
+{% endblock %}

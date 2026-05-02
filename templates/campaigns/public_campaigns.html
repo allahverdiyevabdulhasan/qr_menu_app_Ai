@@ -1,0 +1,20 @@
+﻿{% extends 'customer_base.html' %}
+{% block content %}
+<h2>Active Campaigns</h2>
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    {% for c in campaigns %}
+    <div style="flex: 1; min-width: 300px; border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+        <h3>{{ c.title }}</h3>
+        <p>{{ c.description }}</p>
+        
+        <p><strong>Discount:</strong> {{ c.discount_value }}</p>
+        <p><strong>Valid Until:</strong> {{ c.end_date|date:"M d, Y" }}</p>
+        <p><small>Min Order: {{ c.min_order_amount }}</small></p>
+    </div>
+    {% empty %}
+    <p>No active campaigns at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,238 @@
+{% extends 'customer_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "AI Budget Helper" %} — {{ restaurant.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .budget-layout {
+    background: #fafafa;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ── Hero ── */
+  .ai-hero {
+    background: var(--primary-gradient);
+    padding: 56px 24px 96px;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 0 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-hero::before {
+    content: '✨';
+    position: absolute; top: 16%; left: 8%;
+    font-size: 5rem; opacity: 0.08;
+    animation: floatBob 6s infinite ease-in-out;
+  }
+  .ai-hero::after {
+    content: '🤖';
+    position: absolute; bottom: 16%; right: 8%;
+    font-size: 4rem; opacity: 0.08;
+    animation: floatBob 8s infinite ease-in-out reverse;
+  }
+  @keyframes floatBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+
+  .ai-hero h1 { font-size: 1.9rem; font-weight: 900; margin-bottom: 8px; }
+  .ai-hero p  { opacity: 0.82; font-size: 0.92rem; }
+
+  /* ── Floating Form Card ── */
+  .floating-card {
+    background: #fff;
+    border-radius: 30px;
+    margin: -60px 18px 28px;
+    padding: 30px 26px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.8);
+    position: relative; z-index: 10;
+  }
+
+  .input-label {
+    display: block; font-size: 0.78rem; font-weight: 800;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 10px; letter-spacing: 0.06em;
+  }
+
+  .premium-input {
+    width: 100%; background: var(--bg);
+    border: 2px solid transparent; border-radius: 14px;
+    padding: 14px 18px; font-size: 1rem; font-weight: 600;
+    transition: var(--transition); margin-bottom: 20px; outline: none;
+    color: var(--dark); font-family: 'Poppins', sans-serif;
+  }
+  .premium-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
+  .premium-input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+  /* Sporcu mode checkbox row */
+  .sport-option-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; background: linear-gradient(135deg,#f0fdf4,#dcfce7);
+    border-radius: 14px; border: 1.5px solid #a7f3d0; margin-bottom: 20px;
+  }
+  .sport-option-row label {
+    font-weight: 700; font-size: 0.9rem; color: #065f46; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .gen-btn {
+    width: 100%; background: var(--dark); color: #fff;
+    padding: 17px; border-radius: 18px; font-size: 1rem; font-weight: 800;
+    border: none; cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .gen-btn:hover { background: var(--primary); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(99,102,241,0.3); }
+
+  /* ── Result Cards ── */
+  .results-section { padding: 0 18px; }
+  .results-title { font-size: 1.1rem; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+
+  .combo-card {
+    background: #fff;
+    border-radius: 22px; padding: 22px 22px 18px;
+    margin-bottom: 18px;
+    border: 1.5px solid var(--border); transition: var(--transition);
+    animation: fadeInUp 0.45s ease-out both;
+  }
+  .combo-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+
+  .combo-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .ai-badge {
+    background: var(--primary-light); color: var(--primary);
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 0.73rem; font-weight: 800;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+
+  .price-pill { font-size: 1.4rem; font-weight: 900; color: var(--primary); }
+
+  .combo-reason {
+    font-size: 0.87rem; font-style: italic; color: var(--text-muted);
+    line-height: 1.65; margin-bottom: 14px; padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .combo-items { background: var(--bg); border-radius: 14px; padding: 12px 16px; margin-bottom: 16px; }
+  .combo-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9px 0; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 0.88rem;
+  }
+  .combo-item:last-child { border-bottom: none; }
+  .combo-item-name { font-weight: 700; color: var(--dark); }
+
+  /* ── Loading Screen ── */
+  #loadingScreen {
+    position: fixed; inset: 0; background: rgba(255,255,255,0.96);
+    z-index: 10000; display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .ai-loader {
+    width: 64px; height: 64px; border: 4px solid var(--primary-light);
+    border-top-color: var(--primary); border-radius: 50%;
+    animation: spin 0.9s linear infinite; margin-bottom: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="budget-layout">
+
+    <div class="ai-hero">
+        <h1>🤖 {% trans "AI Budget Advisor" %}</h1>
+        <p>{% trans "Tell us your budget — we'll design the perfect meal." %}</p>
+    </div>
+
+    <div class="floating-card">
+        <form method="post" id="budgetForm">
+            {% csrf_token %}
+
+            <label class="input-label">💰 {% trans "Your budget" %}</label>
+            <input type="number" name="budget" step="0.5" class="premium-input"
+                   placeholder="{% trans 'e.g. 50' %}" required
+                   value="{% if request.POST.budget %}{{ request.POST.budget }}{% endif %}">
+
+            <label class="input-label">👥 {% trans "Number of people" %}</label>
+            <input type="number" name="people_count" value="{{ request.POST.people_count|default:'1' }}"
+                   min="1" class="premium-input" required>
+
+            <label class="input-label">🍽️ {% trans "Dietary preferences" %}</label>
+            <textarea name="preferences" class="premium-input" rows="2"
+                      placeholder="{% trans 'e.g. High protein, no gluten, vegetarian…' %}">{{ request.POST.preferences }}</textarea>
+
+            {# Sporcu Modu #}
+            <div class="sport-option-row">
+              <label for="sportMode">
+                💪 {% trans "Athlete mode" %}
+                <span style="font-weight:400; font-size:0.78rem; color:#047857;">— {% trans "prioritize high-protein options" %}</span>
+              </label>
+              <label class="toggle">
+                <input type="checkbox" name="athlete_mode" id="sportMode"
+                       {% if request.POST.athlete_mode %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <button type="submit" class="gen-btn">
+                <span>✨</span> <span>{% trans "Generate Perfect Menu" %}</span>
+            </button>
+        </form>
+    </div>
+
+    {% if result.combinations %}
+    <div class="results-section">
+        <h2 class="results-title">🎯 {% trans "AI Recommended Meals" %}</h2>
+
+        {% for combo in result.combinations %}
+        <div class="combo-card" style="animation-delay:{{ forloop.counter0 }}00ms;">
+            <div class="combo-top">
+                <span class="ai-badge">✨ {% trans "AI Pick" %} #{{ forloop.counter }}</span>
+                <span class="price-pill">{{ combo.total_price }} ₼</span>
+            </div>
+
+            <p class="combo-reason">"{{ combo.reason }}"</p>
+
+            <div class="combo-items">
+                {% for p_name in combo.products %}
+                <div class="combo-item">
+                    <span class="combo-item-name">🍽️ {{ p_name }}</span>
+                    <span style="color:var(--success); font-weight:700;">✓</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <form method="post" action="{% url 'cart_add' slug=restaurant.slug %}">
+                {% csrf_token %}
+                {% for p_name in combo.products %}
+                <input type="hidden" name="product_names" value="{{ p_name }}">
+                {% endfor %}
+                <button type="submit" class="btn btn-primary btn-block" style="border-radius:14px; height:52px; font-size:0.95rem; font-weight:800;">
+                    🛒 {% trans "Add all to Cart" %}
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+{# Loading overlay #}
+<div id="loadingScreen">
+    <div class="ai-loader"></div>
+    <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:8px;">{% trans "AI is thinking..." %}</h3>
+    <p style="color:var(--text-muted); font-size:0.88rem;">{% trans "Crafting your perfect meal combination." %}</p>
+</div>
+
+<script>
+document.getElementById('budgetForm').addEventListener('submit', function() {
+    document.getElementById('loadingScreen').style.display = 'flex';
+});
+</script>
+{% endblock %}

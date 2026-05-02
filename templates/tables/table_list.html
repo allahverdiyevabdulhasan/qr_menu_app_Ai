@@ -1,0 +1,75 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Tables" %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% trans "Tables" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:1.25rem;">🪑 {% trans "Restaurant Tables" %}</h2>
+        {% if user.is_owner or user.is_manager %}
+        <a href="{% url 'table_add' %}" class="btn btn-primary">
+            <span>+</span> {% trans "Add New Table" %}
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body" style="padding:0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Table Number" %}</th>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "QR Code" %}</th>
+                        <th style="text-align:right;">{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for table in tables %}
+                    <tr>
+                        <td><span class="font-bold">#{{ table.table_number }}</span></td>
+                        <td>{{ table.table_name }}</td>
+                        <td>
+                            <span class="badge badge-{% if table.status == 'AVAILABLE' %}success{% elif table.status == 'OCCUPIED' %}danger{% else %}warning{% endif %}">
+                                {{ table.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if table.qr_code_image %}
+                                <a href="{% url 'table_qr_detail' table.pk %}" class="btn btn-secondary btn-sm">
+                                    📷 {% trans "View QR" %}
+                                </a>
+                            {% else %}
+                                <span class="text-muted text-xs">{% trans "Not Generated" %}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:right;">
+                            <div style="display:flex; gap:8px; justify-content:flex-end;">
+                                {% if user.is_owner or user.is_manager %}
+                                    <a href="{% url 'table_edit' table.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Edit' %}">✏️</a>
+                                    <a href="{% url 'table_delete' table.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Delete' %}" style="color:var(--danger);">🗑️</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <div style="font-size:3rem; margin-bottom:12px;">🪑</div>
+                                <p>{% trans "No tables found." %}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

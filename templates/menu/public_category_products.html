@@ -1,0 +1,26 @@
+﻿{% extends 'customer_base.html' %}
+{% block content %}
+<h2>{{ restaurant.name }} - Products</h2>
+
+<form method="get" style="margin-bottom: 20px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+    <h4>Filter Options</h4>
+    {{ filter_form.as_p }}
+    <button type="submit" class="btn">Apply Filters</button>
+</form>
+
+<div class="products">
+    {% for prod in products %}
+        <div class="product-card" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 10px;">
+            <h3><a href="{% url 'public_product' restaurant.slug prod.pk %}">{{ prod.name }}</a></h3>
+            <p>{{ prod.description }}</p>
+            <strong>Price: {{ prod.price }}</strong>
+            {% if prod.stock_status == 'out_of_stock' %}
+                <span style="color:red;">(Out of Stock)</span>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No products found for the selected filters.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
