@@ -2,51 +2,73 @@
 {% load i18n %}
 
 {% block title %}{% trans "Categories" %} — NeyMenu AI{% endblock %}
-{% block page_title %}{% trans "Menu Categories" %}{% endblock %}
+{% block page_title %}📂 {% trans "Menu Categories" %}{% endblock %}
 
 {% block content %}
 <div class="fade-in">
-    <div class="flex justify-between items-center mb-4">
-        <h2 style="font-size:1.25rem;">📂 {% trans "Categories" %}</h2>
-        <a href="{% url 'category_add' %}" class="btn btn-primary">
-            <span>+</span> {% trans "Add New Category" %}
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h2 style="font-size:1.5rem; font-weight:800; margin-bottom:4px;">📂 {% trans "Categories" %}</h2>
+            <p class="text-muted text-sm">{% trans "Manage your menu sections and their display order." %}</p>
+        </div>
+        <a href="{% url 'category_add' %}" class="btn btn-primary btn-lg" style="border-radius:16px;">
+            <span>➕</span> {% trans "Add Category" %}
         </a>
     </div>
 
-    <div class="card">
-        <div class="card-body" style="padding:0;">
+    <div class="premium-card">
+        <div class="p-card-body" style="padding:0;">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>{% trans "Name" %}</th>
+                        <th style="padding-left:32px;">{% trans "Category Name" %}</th>
                         <th>{% trans "Sort Order" %}</th>
                         <th>{% trans "Status" %}</th>
-                        <th style="text-align:right;">{% trans "Actions" %}</th>
+                        <th style="text-align:right; padding-right:32px;">{% trans "Actions" %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for cat in categories %}
                     <tr>
-                        <td><span class="font-bold">{{ cat.name }}</span></td>
-                        <td><span class="badge badge-info">{{ cat.sort_order }}</span></td>
+                        <td style="padding-left:32px;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div style="width:36px; height:36px; border-radius:10px; background:var(--primary-light); display:flex; align-items:center; justify-content:center; font-size:1.2rem;">
+                                    📂
+                                </div>
+                                <span style="font-weight:700; font-size:0.95rem; color:var(--text);">{{ cat.name }}</span>
+                            </div>
+                        </td>
                         <td>
-                            <span class="badge badge-{% if cat.is_active %}success{% else %}danger{% endif %}">
-                                {{ cat.is_active|yesno:_("Active,Inactive") }}
+                            <span class="badge badge-info" style="font-size:0.7rem; padding:4px 10px;">
+                                #{{ cat.sort_order }}
                             </span>
                         </td>
-                        <td style="text-align:right;">
+                        <td>
+                            {% if cat.is_active %}
+                                <span class="badge badge-success">● {% trans "Active" %}</span>
+                            {% else %}
+                                <span class="badge badge-danger">○ {% trans "Hidden" %}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:right; padding-right:32px;">
                             <div style="display:flex; gap:8px; justify-content:flex-end;">
-                                <a href="{% url 'category_edit' cat.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Edit' %}">✏️</a>
-                                <a href="{% url 'category_delete' cat.pk %}" class="btn btn-secondary btn-sm" title="{% trans 'Delete' %}" style="color:var(--danger);">🗑️</a>
+                                <a href="{% url 'category_edit' cat.pk %}" class="btn btn-secondary btn-sm" style="border-radius:10px;" title="{% trans 'Edit' %}">
+                                    ✏️
+                                </a>
+                                <a href="{% url 'category_delete' cat.pk %}" class="btn btn-secondary btn-sm" style="border-radius:10px; color:var(--danger);" title="{% trans 'Delete' %}">
+                                    🗑️
+                                </a>
                             </div>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
                         <td colspan="4">
-                            <div class="empty-state">
-                                <div style="font-size:3rem; margin-bottom:12px;">📂</div>
-                                <p>{% trans "No categories found." %}</p>
+                            <div class="empty-state" style="padding:80px 0;">
+                                <div style="font-size:4rem; margin-bottom:16px; opacity:0.3;">📂</div>
+                                <h3 style="margin-bottom:8px;">{% trans "No categories yet" %}</h3>
+                                <p class="text-muted">{% trans "Create categories to organize your menu items." %}</p>
+                                <a href="{% url 'category_add' %}" class="btn btn-primary mt-6">{% trans "Create First Category" %}</a>
                             </div>
                         </td>
                     </tr>
@@ -56,6 +78,13 @@
         </div>
     </div>
 </div>
+
+<style>
+    .premium-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { background: rgba(0,0,0,0.02); padding: 16px 20px; text-align: left; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    .data-table td { padding: 16px 20px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover { background: rgba(99,102,241,0.02); }
+</style>
 {% endblock %}
-
-

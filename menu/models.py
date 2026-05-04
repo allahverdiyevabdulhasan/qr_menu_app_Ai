@@ -43,21 +43,34 @@ class Product(models.Model):
     preparation_time = models.IntegerField(_("Preparation Time (mins)"), null=True, blank=True)
     
     # Toggles
-    is_active = models.BooleanField(_("Is Active"), default=True)
-    is_popular = models.BooleanField(_("Is Popular"), default=False)
-    is_featured = models.BooleanField(_("Is Featured"), default=False)
-    is_discounted = models.BooleanField(_("Is Discounted"), default=False)
-    stock_status = models.CharField(_("Stock Status"), max_length=20, choices=STOCK_STATUS_CHOICES, default='in_stock')
+    is_active = models.BooleanField(_("Is Active"), default=True, blank=True)
+    is_popular = models.BooleanField(_("Is Popular"), default=False, blank=True)
+    is_featured = models.BooleanField(_("Is Featured"), default=False, blank=True)
+    is_discounted = models.BooleanField(_("Is Discounted"), default=False, blank=True)
+    stock_status = models.CharField(_("Stock Status"), max_length=20, choices=STOCK_STATUS_CHOICES, default='in_stock', blank=True)
     
     # Dietary info
-    spicy_level = models.IntegerField(_("Spicy Level (0-5)"), default=0)
-    is_vegetarian = models.BooleanField(_("Is Vegetarian"), default=False)
-    is_vegan = models.BooleanField(_("Is Vegan"), default=False)
-    is_gluten_free = models.BooleanField(_("Is Gluten Free"), default=False)
-    is_diet = models.BooleanField(_("Is Diet"), default=False)
+    spicy_level = models.IntegerField(_("Spicy Level (0-5)"), default=0, blank=True)
+    is_vegetarian = models.BooleanField(_("Is Vegetarian"), default=False, blank=True)
+    is_vegan = models.BooleanField(_("Is Vegan"), default=False, blank=True)
+    is_gluten_free = models.BooleanField(_("Is Gluten Free"), default=False, blank=True)
+    is_diet = models.BooleanField(_("Is Diet"), default=False, blank=True)
     
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
+
+    @property
+    def average_rating(self):
+        from reviews.models import ProductReview
+        reviews = ProductReview.objects.filter(product=self, is_active=True)
+        if not reviews.exists():
+            return 0
+        return sum(r.rating for r in reviews) / reviews.count()
+
+    @property
+    def review_count(self):
+        from reviews.models import ProductReview
+        return ProductReview.objects.filter(product=self, is_active=True).count()
 
     class Meta:
         verbose_name = _("Product")
@@ -84,3 +97,11 @@ class ProductOption(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.name} (+{self.price})"
+
+class ProductIngredient(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='display_ingredients')
+    name = models.CharField(_("Ingredient Name"), max_length=100)
+    is_removable = models.BooleanField(_("Is Removable"), default=True)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.name}"

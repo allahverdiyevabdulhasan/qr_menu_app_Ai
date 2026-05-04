@@ -49,24 +49,48 @@
     <div class="grid grid-4 mb-8">
         <div class="metric-card metric-primary">
             <div class="label">{% trans "Total Revenue" %}</div>
-            <div class="value">{{ today_revenue.total|default:"0.00"|floatformat:2 }} ₼ <span class="stat-trend trend-up">↑ 12%</span></div>
-            <div class="text-muted text-xs">{% trans "Target" %}: 1,500.00 ₼</div>
+            <div class="value">{{ revenue|default:"0.00"|floatformat:2 }} ₼</div>
+            <div class="text-muted text-xs">{% trans "Selected Period" %}</div>
         </div>
         <div class="metric-card metric-success">
             <div class="label">{% trans "Net Profit" %}</div>
             <div class="value" style="color:var(--success);">{{ net_profit|default:"0.00"|floatformat:2 }} ₼</div>
-            <div class="text-muted text-xs">{% trans "Margin" %}: 24.5%</div>
+            <div class="text-muted text-xs">{% trans "After Expenses & Payroll" %}</div>
         </div>
         <div class="metric-card metric-info">
-            <div class="label">{% trans "Active Orders" %}</div>
-            <div class="value">{{ completed_orders|default:"0" }}</div>
-            <div class="text-muted text-xs">{% trans "Avg. Prep Time" %}: 14m</div>
+            <div class="label">{% trans "Active Tables" %}</div>
+            <div class="value">{{ active_tables_count|default:"0" }}</div>
+            <div class="text-muted text-xs">{% trans "Currently Occupied" %}</div>
         </div>
         <div class="metric-card metric-warning">
-            <div class="icon" style="position:absolute; right:20px; top:20px; opacity:0.1; font-size:3rem;">🤖</div>
-            <div class="label">{% trans "AI Accuracy" %}</div>
-            <div class="value">94%</div>
-            <div class="text-muted text-xs">{% trans "Recommendation Success" %}</div>
+            <div class="label">{% trans "Preparing Orders" %}</div>
+            <div class="value">{{ preparing_orders_count|default:"0" }}</div>
+            <div class="text-muted text-xs">{% trans "In Kitchen" %}</div>
+        </div>
+    </div>
+
+    {# ── Quick Operations Summary ── #}
+    <div class="grid grid-3 mb-8" style="gap:24px;">
+        <div style="background:#fff; border-radius:16px; padding:20px; border:1px solid var(--border); display:flex; align-items:center; gap:16px;">
+            <div style="width:48px; height:48px; border-radius:12px; background:rgba(99,102,241,0.1); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:1.25rem;">📅</div>
+            <div>
+                <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">{% trans "Pending Reservations" %}</div>
+                <div style="font-size:1.25rem; font-weight:900;">{{ pending_reservations_count|default:"0" }}</div>
+            </div>
+        </div>
+        <div style="background:#fff; border-radius:16px; padding:20px; border:1px solid var(--border); display:flex; align-items:center; gap:16px;">
+            <div style="width:48px; height:48px; border-radius:12px; background:rgba(16,185,129,0.1); color:var(--success); display:flex; align-items:center; justify-content:center; font-size:1.25rem;">📦</div>
+            <div>
+                <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">{% trans "Completed Orders" %}</div>
+                <div style="font-size:1.25rem; font-weight:900;">{{ completed_orders|default:"0" }}</div>
+            </div>
+        </div>
+        <div style="background:#fff; border-radius:16px; padding:20px; border:1px solid var(--border); display:flex; align-items:center; gap:16px;">
+            <div style="width:48px; height:48px; border-radius:12px; background:rgba(245,158,11,0.1); color:var(--warning); display:flex; align-items:center; justify-content:center; font-size:1.25rem;">⏳</div>
+            <div>
+                <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">{% trans "Avg. Preparation" %}</div>
+                <div style="font-size:1.25rem; font-weight:900;">14 <span style="font-size:0.8rem; font-weight:500;">mins</span></div>
+            </div>
         </div>
     </div>
 

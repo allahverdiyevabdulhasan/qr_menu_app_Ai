@@ -6,51 +6,173 @@
 
 {% block content %}
 <div class="fade-in" style="max-width: 600px; margin: 0 auto;">
-    <div class="card">
-        <div class="card-header">
-            <span>📂 {% if object %}{% trans "Update Category Details" %}{% else %}{% trans "Create New Category" %}{% endif %}</span>
+    <form method="post" class="premium-card">
+        {% csrf_token %}
+        
+        <div class="p-card-header">
+            <h3 class="p-card-title">📂 {% if object %}{% trans "Edit Category" %}{% else %}{% trans "New Category" %}{% endif %}</h3>
+            <p class="p-card-subtitle">{% trans "Organize your menu items into logical groups for your customers." %}</p>
         </div>
-        <div class="card-body">
-            <form method="post">
-                {% csrf_token %}
-                
-                {% for field in form %}
-                <div class="form-group">
-                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    <div class="field-wrapper">
-                        {{ field }}
-                        {% if field.errors %}
-                        <div class="text-danger text-xs mt-1">{{ field.errors }}</div>
-                        {% endif %}
-                        {% if field.help_text %}
-                        <div class="text-muted text-xs mt-1">{{ field.help_text }}</div>
-                        {% endif %}
+
+        <div class="p-card-body" style="padding:32px;">
+            {# --- Tabs --- #}
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <label class="p-label" style="margin:0;">🌍 {% trans "Languages" %}</label>
+                <div class="lang-tabs" style="display:flex; gap:4px; background:var(--bg); padding:4px; border-radius:12px; border:1px solid var(--border);">
+                    <button type="button" class="lang-tab active" data-lang="default">GLOBAL</button>
+                    <button type="button" class="lang-tab" data-lang="tr">TR</button>
+                    <button type="button" class="lang-tab" data-lang="en">EN</button>
+                    <button type="button" class="lang-tab" data-lang="ar">AR</button>
+                    <button type="button" class="lang-tab" data-lang="az">AZ</button>
+                </div>
+            </div>
+
+            <div class="lang-content mt-4">
+                {# --- Default Tab --- #}
+                <div class="lang-pane active" id="pane-default">
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Category Name" %}</label>
+                        <div class="p-input-wrap">
+                            <span class="p-input-icon">🏷️</span>
+                            {{ form.name }}
+                        </div>
+                    </div>
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Description" %}</label>
+                        {{ form.description }}
                     </div>
                 </div>
-                {% endfor %}
 
-                <div style="display:flex; gap:12px; margin-top:32px;">
-                    <button type="submit" class="btn btn-primary btn-block">
-                        💾 {% trans "Save Category" %}
-                    </button>
-                    <a href="{% url 'category_list' %}" class="btn btn-secondary btn-block">
-                        {% trans "Cancel" %}
-                    </a>
+                {# --- TR Tab --- #}
+                <div class="lang-pane" id="pane-tr">
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Category Name (Turkish)" %}</label>
+                        <div class="p-input-wrap">
+                            <span class="p-input-icon">🇹🇷</span>
+                            {{ form.name_tr }}
+                        </div>
+                    </div>
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Description (Turkish)" %}</label>
+                        {{ form.description_tr }}
+                    </div>
                 </div>
-            </form>
+
+                {# --- EN Tab --- #}
+                <div class="lang-pane" id="pane-en">
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Category Name (English)" %}</label>
+                        <div class="p-input-wrap">
+                            <span class="p-input-icon">🇬🇧</span>
+                            {{ form.name_en }}
+                        </div>
+                    </div>
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Description (English)" %}</label>
+                        {{ form.description_en }}
+                    </div>
+                </div>
+
+                {# --- AR Tab --- #}
+                <div class="lang-pane" id="pane-ar">
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Category Name (Arabic)" %}</label>
+                        <div class="p-input-wrap">
+                            <span class="p-input-icon">🇸🇦</span>
+                            {{ form.name_ar }}
+                        </div>
+                    </div>
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Description (Arabic)" %}</label>
+                        {{ form.description_ar }}
+                    </div>
+                </div>
+
+                {# --- AZ Tab --- #}
+                <div class="lang-pane" id="pane-az">
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Category Name (Azerbaijani)" %}</label>
+                        <div class="p-input-wrap">
+                            <span class="p-input-icon">🇦🇿</span>
+                            {{ form.name_az }}
+                        </div>
+                    </div>
+                    <div class="p-field mb-4">
+                        <label class="p-label">{% trans "Description (Azerbaijani)" %}</label>
+                        {{ form.description_az }}
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:24px; border-top:1px solid var(--border); padding-top:24px;">
+                <div class="p-field">
+                    <label class="p-label">{% trans "Sort Order" %}</label>
+                    <div class="p-input-wrap">
+                        <span class="p-input-icon">🔢</span>
+                        {{ form.sort_order }}
+                    </div>
+                </div>
+                <div class="p-field">
+                    <label class="p-label">{% trans "Status" %}</label>
+                    <div style="display:flex; align-items:center; gap:12px; height:50px;">
+                        <label class="toggle">
+                            {{ form.is_active }}
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span style="font-size:0.9rem; font-weight:600;">{% trans "Visible" %}</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <div class="p-card-footer" style="gap:16px;">
+            <a href="{% url 'category_list' %}" class="btn btn-secondary" style="flex:1; display:flex; align-items:center; justify-content:center;">{% trans "Cancel" %}</a>
+            <button type="submit" class="btn btn-primary" style="flex:2; font-weight:800; height:56px; border-radius:16px;">
+                💾 {% trans "Save Category" %}
+            </button>
+        </div>
+    </form>
 </div>
 
+<script>
+    document.querySelectorAll('.lang-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const lang = tab.dataset.lang;
+            tab.parentElement.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            const panes = tab.closest('.p-card-body').querySelectorAll('.lang-pane');
+            panes.forEach(p => p.classList.remove('active'));
+            document.getElementById(`pane-${lang}`).classList.add('active');
+        });
+    });
+</script>
+
 <style>
-    input, select, textarea {
-        width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-        font-size: 0.95rem; transition: all var(--transition); background: #fff;
+    .premium-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
+    .p-card-header { padding: 24px 32px; border-bottom: 1px solid var(--border); }
+    .p-card-title { font-size: 1.2rem; font-weight: 800; color: var(--text); margin: 0 0 4px; }
+    .p-card-subtitle { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+    .p-card-footer { padding: 24px 32px; background: rgba(0,0,0,0.02); border-top: 1px solid var(--border); display: flex; }
+    
+    .p-field { display: flex; flex-direction: column; gap: 8px; }
+    .p-label { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .p-input-wrap { display: flex; align-items: center; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 0 16px; transition: var(--transition); }
+    .p-input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
+    .p-input-icon { font-size: 1.1rem; margin-right: 12px; }
+    
+    input[type="text"], input[type="number"], select { flex: 1; background: transparent; border: none; padding: 14px 0; font-size: 0.95rem; font-family: 'Poppins', sans-serif; color: var(--text); outline: none; }
+    textarea { width: 100%; padding: 14px 20px; border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg); font-family: inherit; font-size: 0.95rem; min-height: 100px; resize: vertical; }
+
+    .lang-tab {
+        background: transparent; border: none; padding: 6px 12px; border-radius: 8px;
+        font-size: 0.7rem; font-weight: 800; cursor: pointer; color: var(--text-muted);
+        transition: all 0.2s;
     }
-    input:focus, select:focus, textarea:focus {
-        outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-    }
+    .lang-tab.active { background: #fff; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .lang-pane { display: none; }
+    .lang-pane.active { display: block; animation: fadeIn 0.3s; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 {% endblock %}
-
-

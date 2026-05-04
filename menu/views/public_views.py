@@ -10,7 +10,7 @@ class PublicMenuView(ListView):
     context_object_name = 'categories'
 
     def get_queryset(self):
-        self.restaurant = get_object_or_404(Restaurant, slug=self.kwargs['slug'], status='active')
+        self.restaurant = get_object_or_404(Restaurant, slug=self.kwargs['restaurant_slug'], status='active')
         return Category.objects.filter(restaurant=self.restaurant, is_active=True)
 
     def get_context_data(self, **kwargs):
@@ -25,7 +25,7 @@ class PublicCategoryProductsView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        self.restaurant = get_object_or_404(Restaurant, slug=self.kwargs['slug'], status='active')
+        self.restaurant = get_object_or_404(Restaurant, slug=self.kwargs['restaurant_slug'], status='active')
         qs = Product.objects.filter(restaurant=self.restaurant, is_active=True)
         
         # Apply filters
@@ -62,7 +62,7 @@ class PublicProductDetailView(DetailView):
     context_object_name = 'product'
 
     def get_queryset(self):
-        restaurant = get_object_or_404(Restaurant, slug=self.kwargs['slug'], status='active')
+        restaurant = get_object_or_404(Restaurant, slug=self.kwargs['restaurant_slug'], status='active')
         return Product.objects.filter(restaurant=restaurant, is_active=True)
 
     def get_context_data(self, **kwargs):

@@ -177,6 +177,24 @@
                     </div>
                 </div>
 
+                {% if not table %}
+                <div style="margin-bottom: 24px;">
+                    <label class="text-xs font-black uppercase text-muted">{% trans "Table Number" %}</label>
+                    <select name="table_id" class="input-field" required>
+                        <option value="">{% trans "Select your table..." %}</option>
+                        {% for t in restaurant.tables.all %}
+                        <option value="{{ t.id }}">{% trans "Table" %} {{ t.table_number }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% else %}
+                <div style="margin-bottom: 24px; padding: 16px; background: rgba(99, 102, 241, 0.05); border-radius: 16px; border: 1px dashed var(--primary);">
+                    <div class="text-xs font-black uppercase text-primary">{% trans "Ordering for Table" %}</div>
+                    <div class="text-lg font-black">#{{ table.table_number }}</div>
+                    <input type="hidden" name="table_id" value="{{ table.id }}">
+                </div>
+                {% endif %}
+
                 <div>
                     <label class="text-xs font-black uppercase text-muted">{% trans "Order Note (Optional)" %}</label>
                     <textarea name="note" class="input-field" rows="3" placeholder="{% trans "No onions, extra spicy..." %}"></textarea>

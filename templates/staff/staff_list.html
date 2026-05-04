@@ -1,0 +1,94 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Staff & Payroll" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="mb-1">{% trans "Staff Management" %}</h2>
+            <p class="text-muted text-sm">{% trans "Manage employee profiles and salary details" %}</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'payroll_list' %}" class="btn btn-secondary">
+                <span>🧾</span> {% trans "Payroll History" %}
+            </a>
+            <a href="{% url 'staff_profile_add' %}" class="btn btn-primary">
+                <span>+</span> {% trans "Add Staff Member" %}
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Employee" %}</th>
+                            <th>{% trans "Role" %}</th>
+                            <th>{% trans "Salary" %}</th>
+                            <th>{% trans "Hired Date" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th class="text-right">{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in staff_list %}
+                        <tr>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div class="avatar" style="width: 36px; height: 36px;">
+                                        {{ profile.user.username|slice:":1"|upper }}
+                                    </div>
+                                    <div>
+                                        <div class="font-bold">{{ profile.user.get_full_name|default:profile.user.username }}</div>
+                                        <div class="text-xs text-muted">{{ profile.user.email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-dark">{{ profile.user.get_role_display }}</span>
+                            </td>
+                            <td>
+                                <div class="font-bold text-success">{{ profile.salary_amount }} ₺</div>
+                                <div class="text-xs text-muted">{{ profile.get_salary_type_display }}</div>
+                            </td>
+                            <td>{{ profile.hire_date|date:"d M Y" }}</td>
+                            <td>
+                                {% if profile.is_active %}
+                                    <span class="badge badge-success">{% trans "Active" %}</span>
+                                {% else %}
+                                    <span class="badge badge-danger">{% trans "Inactive" %}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                <div class="flex justify-end gap-2">
+                                    <a href="{% url 'staff_profile_edit' profile.pk %}" class="btn btn-sm btn-secondary">
+                                        {% trans "Edit Profile" %}
+                                    </a>
+                                    <a href="{% url 'payroll_add' %}?staff={{ profile.id }}" class="btn btn-sm btn-dark">
+                                        {% trans "Pay Salary" %}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍💼</div>
+                                    <h3>{% trans "No staff profiles found" %}</h3>
+                                    <p>{% trans "Click 'Add Staff Member' to link a user to a salary profile." %}</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -50,3 +50,17 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.customer} - {self.rating} stars"
+
+class ProductReview(models.Model):
+    product = models.ForeignKey('menu.Product', on_delete=models.CASCADE, related_name='reviews')
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, related_name='product_reviews')
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    comment = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.product.name} - {self.rating} stars"

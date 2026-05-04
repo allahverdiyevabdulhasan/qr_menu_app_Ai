@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, TemplateView
+from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
@@ -25,6 +25,12 @@ class CampaignCreateView(RestaurantAccessMixin, CreateView):
         form.instance.restaurant = self.request.user.restaurant
         return super().form_valid(form)
 
+class CampaignUpdateView(RestaurantAccessMixin, UpdateView):
+    model = Campaign
+    template_name = 'campaigns/campaign_form.html'
+    fields = ['title', 'description', 'campaign_type', 'discount_value', 'start_date', 'end_date', 'min_order_amount', 'is_active']
+    success_url = reverse_lazy('campaign_list')
+
 class CouponListView(RestaurantAccessMixin, ListView):
     model = Coupon
     template_name = 'campaigns/coupon_list.html'
@@ -42,6 +48,12 @@ class CouponCreateView(RestaurantAccessMixin, CreateView):
     def form_valid(self, form):
         form.instance.restaurant = self.request.user.restaurant
         return super().form_valid(form)
+
+class CouponUpdateView(RestaurantAccessMixin, UpdateView):
+    model = Coupon
+    template_name = 'campaigns/coupon_form.html'
+    fields = ['code', 'discount_type', 'discount_value', 'usage_limit', 'start_date', 'end_date', 'is_active']
+    success_url = reverse_lazy('coupon_list')
 
 class PublicCampaignsView(TemplateView):
     template_name = 'campaigns/public_campaigns.html'

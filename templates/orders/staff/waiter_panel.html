@@ -40,65 +40,185 @@
       <h2 style="font-size:1.1rem; margin-bottom:4px;">{% trans "Orders ready to be served" %}</h2>
       <p class="text-muted text-sm">{% trans "Tap 'Served' when the order reaches the customer." %}</p>
     </div>
-    <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Refresh" %}</button>
-  </div>
-
-  <div class="grid grid-4 mb-6">
-    <div class="metric-card metric-success">
-      <div class="icon">✅</div>
-      <div class="label">{% trans "Ready to Serve" %}</div>
-      <div class="value">{{ orders|length }}</div>
-    </div>
-    <div class="metric-card metric-primary">
-      <div class="icon">🛎️</div>
-      <div class="label">{% trans "Tables Active" %}</div>
-      <div class="value">{{ orders|length }}</div>
+    <div style="display:flex; gap:10px;">
+      <a href="{% url 'staff_order_create' %}" class="btn btn-primary btn-sm">➕ {% trans "New Order" %}</a>
+      <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Refresh" %}</button>
     </div>
   </div>
 
-  {% if orders %}
-  <div class="waiter-grid">
-    {% for order in orders %}
-    <div class="waiter-card">
-      <div class="waiter-card-head">
+  <div class="grid grid-3 mb-8" style="gap:20px;">
+    <div class="metric-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color:#fff; border:none; padding:20px; position:relative; overflow:hidden;">
+      <div style="position:absolute; right:-15px; top:-15px; font-size:6rem; opacity:0.1;">✅</div>
+      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">{% trans "Ready to Serve" %}</div>
+      <div class="value" style="font-size:2.4rem; font-weight:900;">{{ orders|length }}</div>
+    </div>
+    <div class="metric-card" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color:#fff; border:none; padding:20px; position:relative; overflow:hidden;">
+      <div style="position:absolute; right:-15px; top:-15px; font-size:6rem; opacity:0.1;">🛎️</div>
+      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">{% trans "Waiter Calls" %}</div>
+      <div class="value" style="font-size:2.4rem; font-weight:900;">{{ waiter_calls|length }}</div>
+    </div>
+    <div class="metric-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color:#fff; border:none; padding:20px; position:relative; overflow:hidden;">
+      <div style="position:absolute; right:-15px; top:-15px; font-size:6rem; opacity:0.1;">📅</div>
+      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">{% trans "Pending Reservations" %}</div>
+      <div class="value" style="font-size:2.4rem; font-weight:900;">{{ reservations|length }}</div>
+    </div>
+  </div>
+
+  {# ── Waiter Calls Section ── #}
+  {% if waiter_calls %}
+  <div class="mb-8">
+    <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--danger); margin-bottom:12px;">🚨 {% trans "Active Waiter Calls" %}</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:12px;">
+      {% for call in waiter_calls %}
+      <div class="card" style="padding:16px; border-left:4px solid var(--danger); display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <div class="table-number">
-            {% if order.table %}🪑 #{{ order.table.table_number }}{% else %}🥡{% endif %}
-          </div>
-          <div class="text-xs text-muted">#{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
+          <div style="font-weight:800; font-size:1.1rem;">🪑 {% trans "Table" %} #{{ call.table.table_number }}</div>
+          <div class="text-xs text-muted">{{ call.created_at|timesince }} {% trans "ago" %}</div>
         </div>
-        <span class="ready-badge">✅ {% trans "Ready" %}</span>
+        <form method="post" action="{% url 'waiter_call_clear' call.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-secondary btn-xs">✕</button>
+        </form>
       </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 
-      <div class="waiter-items">
-        {% for item in order.items.all %}
-        <div class="waiter-item">
-          <span><span class="waiter-item-qty">{{ item.quantity }}×</span>{{ item.product_name_snapshot }}</span>
-          <span class="text-muted text-sm">{{ item.total_price }} ₼</span>
-        </div>
-        {% endfor %}
-      </div>
-
-      {% if order.note %}
-      <div style="margin: 0 20px 12px; padding: 10px 12px; background:#fffbeb; border-radius:8px; border:1px solid #fef3c7; font-size:0.82rem; color:#92400e;">
-        💬 {{ order.note }}
-      </div>
-      {% endif %}
-
-      <div class="waiter-card-foot">
+  {# ── Reservations Section ── #}
+  {% if reservations %}
+  <div class="mb-8">
+    <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--primary); margin-bottom:12px;">📅 {% trans "Upcoming Reservations" %}</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:12px;">
+      {% for res in reservations %}
+      <div class="card" style="padding:16px; border-left:4px solid var(--primary);">
+        <div style="font-weight:700;">{{ res.customer_name }}</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">📞 {{ res.customer_phone }}</div>
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-weight:800; color:var(--dark);">{{ order.total_amount }} ₼</span>
+            <div style="font-size:0.85rem; font-weight:600; color:var(--primary);">🕒 {{ res.reservation_time|date:"H:i" }} ({{ res.number_of_people }} {% trans "pers." %})</div>
+            <div style="display:flex; gap:4px; align-items:center;">
+                <form action="{% url 'reservation_status_update' res.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="ARRIVED">
+                    <button type="submit" class="btn btn-xs btn-primary" title="{% trans 'Guest Arrived' %}">🏃</button>
+                </form>
+                <form action="{% url 'reservation_status_update' res.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="SEATED">
+                    <button type="submit" class="btn btn-xs btn-success" title="{% trans 'Guest Seated' %}">🪑</button>
+                </form>
+                <span class="badge badge-primary">{{ res.get_status_display }}</span>
+            </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ── Ready to Serve Section ── #}
+  <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--success); margin-bottom:12px;">✅ {% trans "Ready to Serve" %}</h3>
+  <div class="waiter-grid mb-8">
+    {% for order in orders %}
+      {% if order.status == 'READY' %}
+      <div class="waiter-card" style="border-top:4px solid var(--success);">
+        <div class="waiter-card-head">
+          <div>
+            <div class="table-number">{% if order.table %}🪑 #{{ order.table.table_number }}{% else %}🥡{% endif %}</div>
+            <div class="text-xs text-muted">#{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
+          </div>
+          <span class="ready-badge">✅ {% trans "Ready" %}</span>
+        </div>
+        <div class="waiter-items">
+          {% for item in order.items.all %}
+          <div class="waiter-item-group" style="margin-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.03); padding-bottom:8px;">
+            <div class="waiter-item">
+              <span><span class="waiter-item-qty">{{ item.quantity }}×</span>{{ item.product_name_snapshot }}</span>
+              <button onclick="toggleEdit('{{ item.id }}')" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:0.8rem;">✏️</button>
+            </div>
+            
+            {# Inline Edit Form #}
+            <div id="edit-form-{{ item.id }}" style="display:none; margin-top:8px; background:var(--bg); padding:10px; border-radius:10px; border:1px solid var(--border);">
+              <form method="post" action="{% url 'order_item_update' item.pk %}">
+                {% csrf_token %}
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                  <label class="text-xs">{% trans "Qty" %}:</label>
+                  <input type="number" name="quantity" value="{{ item.quantity }}" style="width:50px; padding:4px; border-radius:6px; border:1px solid var(--border);">
+                </div>
+                {% if item.product.display_ingredients.all %}
+                <div class="text-xs font-bold mb-2">{% trans "Remove" %}:</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-bottom:8px;">
+                  {% for ing in item.product.display_ingredients.all %}
+                  <label style="font-size:0.65rem; display:flex; align-items:center; gap:4px;">
+                    <input type="checkbox" name="removed_ingredients" value="{{ ing.name }}" 
+                           {% if ing.name in item.selected_options.removed_ingredients %}checked{% endif %}>
+                    {{ ing.name }}
+                  </label>
+                  {% endfor %}
+                </div>
+                {% endif %}
+                <textarea name="note" placeholder="{% trans 'Item note...' %}" style="width:100%; font-size:0.7rem; padding:6px; border-radius:6px; border:1px solid var(--border); margin-bottom:8px;">{{ item.note }}</textarea>
+                <div style="display:flex; gap:4px;">
+                  <button type="submit" class="btn btn-primary btn-xs" style="flex:1;">✅</button>
+                  <button type="button" onclick="toggleEdit('{{ item.id }}')" class="btn btn-secondary btn-xs">✕</button>
+                </div>
+              </form>
+              <form method="post" action="{% url 'order_item_delete' item.pk %}" style="margin-top:4px;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary btn-block btn-xs" style="color:var(--danger); border-color:#fecaca; background:#fff1f1;">🗑️ {% trans "Remove Item" %}</button>
+              </form>
+            </div>
+
+            {% if item.selected_options.removed_ingredients or item.note %}
+            <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px; padding-left:24px; font-style:italic;">
+              {% if item.selected_options.removed_ingredients %}
+                <span style="color:var(--danger);">❌ {{ item.selected_options.removed_ingredients|join:", " }}</span>
+              {% endif %}
+              {% if item.note %}<div>📝 {{ item.note }}</div>{% endif %}
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        <div class="waiter-card-foot">
           <form method="post" action="{% url 'order_status_update' order.pk %}">
             {% csrf_token %}
             <input type="hidden" name="status" value="SERVED">
-            <button type="submit" class="btn btn-success btn-sm">🍽️ {% trans "Mark Served" %}</button>
+            <button type="submit" class="btn btn-success btn-block">🍽️ {% trans "Mark Served" %}</button>
           </form>
         </div>
       </div>
-    </div>
+      {% endif %}
     {% endfor %}
   </div>
-  {% else %}
+
+  {# ── Pending Orders Section ── #}
+  <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--primary); margin-bottom:12px;">⏳ {% trans "Pending Orders" %}</h3>
+  <div class="waiter-grid">
+    {% for order in orders %}
+      {% if order.status in 'NEW,ACCEPTED,PREPARING' %}
+      <div class="waiter-card" style="opacity:0.85;">
+        <div class="waiter-card-head" style="background:#f8fafc;">
+          <div>
+            <div style="font-weight:700;">{% if order.table %}🪑 #{{ order.table.table_number }}{% else %}🥡{% endif %}</div>
+            <div class="text-xs text-muted">#{{ order.id }}</div>
+          </div>
+          <span class="badge" style="background:#e0e7ff; color:#4338ca; font-size:0.65rem;">{{ order.get_status_display }}</span>
+        </div>
+        <div class="waiter-items" style="max-height:100px; overflow:hidden;">
+            {% for item in order.items.all|slice:":2" %}
+            <div class="waiter-item" style="font-size:0.75rem;">
+                <span>{{ item.quantity }}× {{ item.product_name_snapshot }}</span>
+            </div>
+            {% endfor %}
+            {% if order.items.count > 2 %}<div class="text-xs text-muted">...</div>{% endif %}
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if not orders and not waiter_calls and not reservations %}
   <div class="card">
     <div class="empty-state" style="padding:80px 24px;">
       <div style="font-size:4rem; margin-bottom:16px;">🎉</div>
@@ -107,5 +227,113 @@
     </div>
   </div>
   {% endif %}
+</div>
+
+<script>
+function toggleEdit(id) {
+    const el = document.getElementById('edit-form-' + id);
+    if (el.style.display === 'none') {
+        el.style.display = 'block';
+    } else {
+        el.style.display = 'none';
+    }
+}
+
+// WebSocket for Real-time updates
+const restaurantSlug = "{{ request.user.restaurant.slug }}";
+const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const socketUrl = `${protocol}//${window.location.host}/ws/orders/${restaurantSlug}/`;
+const orderSocket = new WebSocket(socketUrl);
+
+// Sound setup
+const sounds = {
+    waiter_call: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'),
+    bill_request: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
+    new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
+    status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
+};
+
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+    Object.values(sounds).forEach(s => {
+        s.play().then(() => {
+            s.pause();
+            s.currentTime = 0;
+        }).catch(e => console.log("Audio unlock failed:", e));
+    });
+    audioUnlocked = true;
+    document.getElementById('sound-unlocked-badge').style.display = 'none';
+}
+
+// Add unlock listener
+document.addEventListener('click', unlockAudio, { once: true });
+
+if ("Notification" in window && Notification.permission !== "granted") {
+    Notification.requestPermission();
+}
+
+orderSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log("WebSocket message:", data);
+
+    // Play appropriate sound
+    const sound = sounds[data.call_type] || sounds.status_update;
+    sound.play().catch(e => console.log("Audio blocked:", e));
+
+    if (Notification.permission === "granted") {
+        new Notification("NeyMenu AI: {% trans 'Staff Update' %}", { body: data.message });
+    }
+
+    showNotification(data.message, data.call_type);
+    
+    // Auto-refresh for UI update
+    setTimeout(() => location.reload(), 2000);
+};
+
+function showNotification(msg, type) {
+    const toast = document.createElement('div');
+    const isUrgent = type === 'waiter_call' || type === 'reservation' || type === 'bill_request';
+    const icon = type === 'bill_request' ? '💳' : (type === 'waiter_call' ? '🚨' : '🛎️');
+    
+    toast.style.cssText = `
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        background: ${isUrgent ? '#ef4444' : 'var(--primary)'}; 
+        color: #fff; padding: 18px 32px; border-radius: 20px; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        z-index: 99999; font-weight: 800; font-size: 1.1rem;
+        display: flex; align-items: center; gap: 16px;
+        animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid rgba(255,255,255,0.2);
+    `;
+    
+    toast.innerHTML = `
+        <span style="font-size:1.8rem;">${icon}</span>
+        <span>${msg}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transition = 'all 0.5s';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(-20px)';
+        setTimeout(() => toast.remove(), 500);
+    }, 8000);
+}
+
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInDown {
+        from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+{# Floating Audio Unlock Hint #}
+<div id="sound-unlocked-badge" onclick="unlockAudio()" style="position:fixed; bottom:20px; right:20px; background:var(--warning); color:#fff; padding:12px 20px; border-radius:30px; font-weight:800; font-size:0.85rem; cursor:pointer; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:1000; animation: pulse 2s infinite;">
+    🔊 {% trans "Click to Enable Sounds" %}
 </div>
 {% endblock %}

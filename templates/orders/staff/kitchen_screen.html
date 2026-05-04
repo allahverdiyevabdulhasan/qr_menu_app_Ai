@@ -188,8 +188,32 @@
           <li class="kds-item">
             <div class="kds-item-qty">{{ item.quantity }}</div>
             <div class="kds-item-name">
-              {{ item.product_name_snapshot }}
-              {% if item.note %}<div class="text-xs" style="color:var(--warning); margin-top:6px; background:rgba(245,158,11,0.1); padding:4px 8px; border-radius:4px;">📝 {{ item.note }}</div>{% endif %}
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span>{{ item.product_name_snapshot }}</span>
+                {% if item.product.preparation_time %}
+                  <span style="font-size:0.65rem; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; opacity:0.6;">
+                    ⏱ {{ item.product.preparation_time }}m
+                  </span>
+                {% endif %}
+              </div>
+              
+              {# --- Special Instructions (Removed Ingredients & Note) --- #}
+              {% if item.selected_options.removed_ingredients %}
+                <div class="text-xs" style="color:#ef4444; margin-top:4px; font-weight:900; background:rgba(239,68,68,0.1); padding:4px 8px; border-radius:6px; border-left:3px solid #ef4444;">
+                  ❌ {% trans "NO" %}: {{ item.selected_options.removed_ingredients|join:", " }}
+                </div>
+              {% endif %}
+              {% if item.note %}<div class="text-xs" style="color:#f59e0b; margin-top:6px; background:rgba(245,158,11,0.1); padding:4px 8px; border-radius:6px; border-left:3px solid #f59e0b;">📝 {{ item.note }}</div>{% endif %}
+
+              {# --- Standard Recipe / Allergens (Hidden by default, click to see) --- #}
+              <div class="recipe-info" style="margin-top:8px; font-size:0.75rem; opacity:0.6; display:none;">
+                <div style="border-top:1px solid var(--kds-border); padding-top:4px;">
+                  {{ item.product.description|truncatewords:20 }}
+                </div>
+                {% if item.product.allergens %}
+                  <div style="color:#ef4444; font-weight:700; margin-top:4px;">⚠️ {% trans "Allergens" %}: {{ item.product.allergens|join:", " }}</div>
+                {% endif %}
+              </div>
             </div>
           </li>
           {% endfor %}
@@ -244,45 +268,112 @@ function updateTimers() {
 setInterval(updateTimers, 1000);
 updateTimers();
 
+// Fallback: Refresh page every 30 seconds to ensure no orders are missed
+setInterval(() => {
+    console.log("Auto-refreshing kitchen screen...");
+    location.reload();
+}, 30000);
+
+// Toggle recipe info
+document.querySelectorAll('.kds-item-name').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', () => {
+        const info = el.querySelector('.recipe-info');
+        if (info) info.style.display = info.style.display === 'none' ? 'block' : 'none';
+    });
+});
+
 // WebSocket for Real-time updates
 const restaurantSlug = "{{ request.user.restaurant.slug }}";
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 const socketUrl = `${protocol}//${window.location.host}/ws/orders/${restaurantSlug}/`;
 const orderSocket = new WebSocket(socketUrl);
 
-orderSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    console.log("Order update received:", data);
-    
-    // For now, we reload to get the fresh state from DB
-    // In a more advanced version, we would append the new order card dynamically
-    showNotification(data.message);
-    setTimeout(() => location.reload(), 1000);
+// Sound setup
+const sounds = {
+    new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
+    status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
 };
 
-function showNotification(msg) {
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+    Object.values(sounds).forEach(s => {
+        s.play().then(() => {
+            s.pause();
+            s.currentTime = 0;
+        }).catch(e => console.log("Audio unlock failed:", e));
+    });
+    audioUnlocked = true;
+    const badge = document.getElementById('sound-unlocked-badge');
+    if (badge) badge.style.display = 'none';
+}
+
+document.addEventListener('click', unlockAudio, { once: true });
+
+if ("Notification" in window && Notification.permission !== "granted") {
+    Notification.requestPermission();
+}
+
+orderSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log("WebSocket message:", data);
+
+    // Play appropriate sound
+    const sound = sounds[data.call_type] || sounds.status_update;
+    sound.play().catch(e => console.log("Audio blocked:", e));
+
+    if (Notification.permission === "granted") {
+        new Notification("NeyMenu AI: {% trans 'Kitchen Update' %}", { body: data.message });
+    }
+
+    showNotification(data.message, data.call_type);
+    setTimeout(() => location.reload(), 500);
+};
+
+function showNotification(msg, type) {
     const toast = document.createElement('div');
+    const isUrgent = type === 'new_order';
+    
     toast.style.cssText = `
-        position: fixed; top: 20px; right: 20px; 
-        background: var(--primary); color: #fff; 
-        padding: 16px 24px; border-radius: 12px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        z-index: 9999; font-weight: 800;
-        animation: slideInRight 0.3s ease-out;
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        background: ${isUrgent ? '#ef4444' : 'var(--primary)'}; 
+        color: #fff; padding: 18px 32px; border-radius: 20px; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        z-index: 99999; font-weight: 800; font-size: 1.1rem;
+        display: flex; align-items: center; gap: 16px;
+        animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid rgba(255,255,255,0.2);
     `;
-    toast.innerText = msg;
+    
+    toast.innerHTML = `
+        <span style="font-size:1.8rem;">${isUrgent ? '🔥' : '👨‍🍳'}</span>
+        <span>${msg}</span>
+    `;
+    
     document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 5000);
+    setTimeout(() => {
+        toast.style.transition = 'all 0.5s';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(-20px)';
+        setTimeout(() => toast.remove(), 500);
+    }, 8000);
 }
 
 const style = document.createElement('style');
 style.textContent = `
-    @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+    @keyframes slideInDown {
+        from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
     }
 `;
 document.head.appendChild(style);
 </script>
+
+{# Floating Audio Unlock Hint #}
+<div id="sound-unlocked-badge" onclick="unlockAudio()" style="position:fixed; bottom:20px; right:20px; background:var(--warning); color:#fff; padding:12px 20px; border-radius:30px; font-weight:800; font-size:0.85rem; cursor:pointer; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:1000; animation: pulse 2s infinite;">
+    🔊 {% trans "Click to Enable Sounds" %}
+</div>
 {% endblock %}
 

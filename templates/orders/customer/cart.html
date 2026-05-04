@@ -172,14 +172,14 @@
                 {% endif %}
 
                 <div class="qty-control">
-                    <form method="post" action="{% url 'cart_update' slug=restaurant.slug %}">
+                    <form method="post" action="{% url 'cart_update' restaurant_slug=restaurant.slug %}">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ item.product.id }}">
                         <input type="hidden" name="quantity" value="{{ item.quantity|add:'-1' }}">
                         <button type="submit" class="qty-btn">−</button>
                     </form>
                     <span class="qty-num">{{ item.quantity }}</span>
-                    <form method="post" action="{% url 'cart_update' slug=restaurant.slug %}">
+                    <form method="post" action="{% url 'cart_update' restaurant_slug=restaurant.slug %}">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ item.product.id }}">
                         <input type="hidden" name="quantity" value="{{ item.quantity|add:'1' }}">
@@ -232,13 +232,13 @@
         {# ── Sticky Footer ── #}
         <div class="sticky-footer">
             <div class="sticky-footer-inner">
-                <form method="post" action="{% url 'cart_clear' slug=restaurant.slug %}">
+                <form method="post" action="{% url 'cart_clear' restaurant_slug=restaurant.slug %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-secondary"
                             style="height:56px; width:56px; border-radius:16px; font-size:1.2rem; padding:0;"
                             title="{% trans 'Clear cart' %}">🗑️</button>
                 </form>
-                <a href="{% url 'checkout' slug=restaurant.slug %}"
+                <a href="{% url 'checkout' restaurant_slug=restaurant.slug %}"
                    class="btn btn-primary btn-block"
                    style="flex:1; height:56px; border-radius:16px; font-size:1rem; font-weight:800;">
                     {% trans "Continue to Checkout" %} →
@@ -251,7 +251,7 @@
             <div class="empty-state-emoji">🍱</div>
             <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:12px;">{% trans "Your basket is empty" %}</h2>
             <p class="text-muted mb-8">{% trans "Hungry? Browse our menu and find something delicious!" %}</p>
-            <a href="{% url 'public_menu' slug=restaurant.slug %}" class="btn btn-primary btn-lg" style="border-radius:20px;">
+            <a href="{% url 'public_menu' restaurant_slug=restaurant.slug %}" class="btn btn-primary btn-lg" style="border-radius:20px;">
                 🍽️ {% trans "Explore Menu" %}
             </a>
         </div>

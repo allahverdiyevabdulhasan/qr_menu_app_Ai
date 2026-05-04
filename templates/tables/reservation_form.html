@@ -1,0 +1,83 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block page_title %}
+    {% if object %}{% trans "Edit Reservation" %}{% else %}{% trans "New Reservation" %}{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="fade-in max-w-lg mx-auto">
+    <div class="mb-6">
+        <a href="{% url 'reservation_list' %}" class="text-primary text-sm font-bold">← {% trans "Back to list" %}</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            {% if object %}{% trans "Edit Reservation Details" %}{% else %}{% trans "Create New Reservation" %}{% endif %}
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Customer Name" %}</label>
+                        {{ form.customer_name }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Phone Number" %}</label>
+                        {{ form.customer_phone }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">{% trans "Email Address" %}</label>
+                    {{ form.customer_email }}
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Reservation Date" %}</label>
+                        {{ form.reservation_date }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Time" %}</label>
+                        {{ form.reservation_time_only }}
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Branch" %}</label>
+                        {{ form.branch }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Table" %}</label>
+                        {{ form.table }}
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Number of People" %}</label>
+                        {{ form.number_of_people }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{% trans "Status" %}</label>
+                        {{ form.status }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">{% trans "Note" %}</label>
+                    {{ form.note }}
+                </div>
+
+                <div class="mt-8 flex gap-4">
+                    <button type="submit" class="btn btn-primary flex-1">{% trans "Save Reservation" %}</button>
+                    <a href="{% url 'reservation_list' %}" class="btn btn-secondary flex-1">{% trans "Cancel" %}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

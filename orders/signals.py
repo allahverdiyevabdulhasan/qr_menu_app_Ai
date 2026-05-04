@@ -10,26 +10,31 @@ def broadcast_order_update(sender, instance, created, **kwargs):
     try:
         channel_layer = get_channel_layer()
         if channel_layer is not None:
-            group_name = f'orders_{instance.restaurant.slug}'
-            async_to_sync(channel_layer.group_send)(
-                group_name,
-                {
-                    'type': 'order_status_update',
-                    'order_id': instance.id,
-                    'order_number': instance.order_number,
-                    'status': instance.status,
-                    'message': f"Order {instance.order_number} is now {instance.status}"
-                }
-            )
+            # 1. Staff Notification (Restaurant Group)
+            restaurant_group = f'orders_{instance.restaurant.slug}'
+            # 2. Customer Notification (Order Group)
+            order_group = f'order_{instance.order_number}'
+            
+            message_data = {
+                'type': 'order_status_update',
+                'order_id': instance.id,
+                'order_number': instance.order_number,
+                'status': instance.status,
+                'estimated_prep_time': instance.estimated_prep_time,
+                'message': f"Order {instance.order_number} is now {instance.status}",
+                'call_type': 'new_order' if created else 'status_update'
+            }
+
+            async_to_sync(channel_layer.group_send)(restaurant_group, message_data)
+            async_to_sync(channel_layer.group_send)(order_group, message_data)
     except Exception:
-        pass  # Never let WebSocket errors crash a database write
+        pass
 
     # Loyalty Integration: Earn points on COMPLETED order
     if instance.status == 'COMPLETED' and instance.customer:
         from loyalty.models import LoyaltyRule, LoyaltyTransaction
         rule = LoyaltyRule.objects.filter(restaurant=instance.restaurant, is_active=True).first()
         if rule and rule.amount_step > 0:
-            # Check if this order already earned points to prevent double counting
             if not LoyaltyTransaction.objects.filter(order=instance, transaction_type='EARN').exists():
                 points_to_earn = int((instance.total_amount // rule.amount_step) * rule.points_per_amount)
                 if points_to_earn > 0:
@@ -47,24 +52,15 @@ def broadcast_order_update(sender, instance, created, **kwargs):
     # Inventory Integration: Deduct stock on COMPLETED order
     if instance.status == 'COMPLETED':
         from inventory.models import StockMovement
-        # Check if we already deducted stock for this order to prevent double-deduction
-        # We can use a unique note or check if any movement exists with this order string
-        # A more robust way is to add an 'is_stock_deducted' field to Order, but here we check movements:
         movement_note = f"Order #{instance.order_number}"
         if not StockMovement.objects.filter(restaurant=instance.restaurant, note=movement_note).exists():
-            # For every item in order
             for item in instance.items.all():
-                # For every ingredient in the product
                 for ingredient in item.product.ingredients.all():
                     inventory_item = ingredient.inventory_item
                     quantity_to_deduct = ingredient.quantity_used * item.quantity
-                    
-                    # Deduct from current quantity
                     inventory_item.current_quantity -= quantity_to_deduct
                     inventory_item.save()
                     inventory_item.update_status()
-                    
-                    # Log movement
                     StockMovement.objects.create(
                         restaurant=instance.restaurant,
                         inventory_item=inventory_item,
@@ -73,23 +69,18 @@ def broadcast_order_update(sender, instance, created, **kwargs):
                         note=movement_note
                     )
 
-    # Inventory Integration: Revert stock on CANCELLED order if it was previously deducted
+    # Inventory Integration: Revert stock on CANCELLED order
     if instance.status == 'CANCELLED':
         from inventory.models import StockMovement
         movement_note = f"Order #{instance.order_number}"
-        # Find usage movements for this order
         movements = StockMovement.objects.filter(restaurant=instance.restaurant, note=movement_note, movement_type='ORDER_USAGE')
-        
         if movements.exists():
             for movement in movements:
                 inventory_item = movement.inventory_item
-                # Revert the quantity (movement.quantity is negative, so we subtract it to add back)
                 revert_qty = abs(movement.quantity)
                 inventory_item.current_quantity += revert_qty
                 inventory_item.save()
                 inventory_item.update_status()
-                
-                # Log the revert
                 StockMovement.objects.create(
                     restaurant=instance.restaurant,
                     inventory_item=inventory_item,
@@ -97,6 +88,24 @@ def broadcast_order_update(sender, instance, created, **kwargs):
                     quantity=revert_qty,
                     note=f"Revert: {movement_note} cancelled"
                 )
+
+from .models import OrderItem
+@receiver(post_save, sender=OrderItem)
+def broadcast_order_item_update(sender, instance, created, **kwargs):
+    """When an item is added to an order, notify the kitchen."""
+    try:
+        channel_layer = get_channel_layer()
+        if channel_layer is not None:
+            restaurant_group = f'orders_{instance.order.restaurant.slug}'
+            message_data = {
+                'type': 'order_status_update',
+                'order_id': instance.order.id,
+                'message': f"New items added to Order #{instance.order.order_number}",
+                'call_type': 'status_update'
+            }
+            async_to_sync(channel_layer.group_send)(restaurant_group, message_data)
+    except Exception:
+        pass
             # Delete original usage notes to prevent double revert if status changes again
             # Or better, rename them. Here we just mark them as reverted in our logic by the existence of 'Revert:' notes.
             # Actually, the simplest is to just not revert twice.

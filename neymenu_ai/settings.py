@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'subscriptions',
     'support',
     'core',
+    'staff',
+    'invoices',
 ]
 
 MIDDLEWARE = [
@@ -159,11 +161,10 @@ LANGUAGE_CODE = 'tr'
 
 from django.utils.translation import gettext_lazy as _
 LANGUAGES = [
-    ('az', _('Azerbaijani')),
     ('tr', _('Turkish')),
     ('en', _('English')),
-    ('ru', _('Russian')),
     ('ar', _('Arabic')),
+    ('az', _('Azerbaijani')),
 ]
 
 LOCALE_PATHS = [

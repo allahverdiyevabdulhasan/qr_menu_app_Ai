@@ -1,0 +1,97 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Reservations" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="mb-1">{% trans "Reservation Management" %}</h2>
+            <p class="text-muted text-sm">{% trans "View and manage guest bookings" %}</p>
+        </div>
+        <a href="{% url 'reservation_add' %}" class="btn btn-primary">
+            <span>+</span> {% trans "New Reservation" %}
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Customer" %}</th>
+                            <th>{% trans "Date & Time" %}</th>
+                            <th>{% trans "Guests" %}</th>
+                            <th>{% trans "Table" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th class="text-right">{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for res in reservations %}
+                        <tr>
+                            <td>
+                                <div class="font-bold">{{ res.customer_name }}</div>
+                                <div class="text-xs text-muted">{{ res.customer_phone }}</div>
+                            </td>
+                            <td>
+                                <div>{{ res.reservation_date|date:"d M Y" }}</div>
+                                <div class="text-xs font-bold text-primary">{{ res.reservation_time_only|time:"H:i" }}</div>
+                            </td>
+                            <td>
+                                <span class="badge badge-info">{{ res.number_of_people }} {% trans "Pax" %}</span>
+                            </td>
+                            <td>
+                                {% if res.table %}
+                                    <span class="badge badge-dark">T-{{ res.table.table_number }}</span>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge 
+                                    {% if res.status == 'PENDING' %}badge-warning
+                                    {% elif res.status == 'CONFIRMED' %}badge-info
+                                    {% elif res.status == 'ARRIVED' or res.status == 'SEATED' %}badge-primary
+                                    {% elif res.status == 'COMPLETED' %}badge-success
+                                    {% else %}badge-danger{% endif %}">
+                                    {{ res.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="text-right">
+                                <div class="flex justify-end gap-2">
+                                    <a href="{% url 'reservation_edit' res.pk %}" class="btn btn-sm btn-secondary">
+                                        {% trans "Edit" %}
+                                    </a>
+                                    <form action="{% url 'reservation_status_update' res.pk %}" method="post" class="inline-form">
+                                        {% csrf_token %}
+                                        <select name="status" onchange="this.form.submit()" class="btn btn-sm btn-dark" style="padding-right: 24px;">
+                                            <option value="" disabled selected>{% trans "Status" %}</option>
+                                            {% for code, label in res.STATUS_CHOICES %}
+                                            <option value="{{ code }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗓️</div>
+                                    <h3>{% trans "No reservations found" %}</h3>
+                                    <p>{% trans "When guests book a table, they will appear here." %}</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

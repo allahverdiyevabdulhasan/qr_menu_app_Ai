@@ -1,31 +1,86 @@
-﻿{% extends 'dashboard_base.html' %}
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Coupons" %} — NeyMenu AI{% endblock %}
+{% block page_title %}🎟️ {% trans "Coupons" %}{% endblock %}
+
 {% block content %}
-<h2>Coupons</h2>
-<p><a href="{% url 'coupon_add' %}" class="btn">Add Coupon</a></p>
+<div class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <p class="text-muted text-sm">{% trans "Create and manage unique discount codes for your customers." %}</p>
+        <div style="display:flex; gap:12px;">
+            <a href="{% url 'campaign_list' %}" class="btn btn-secondary btn-sm">🎁 {% trans "Campaigns" %}</a>
+            <a href="{% url 'coupon_add' %}" class="btn btn-primary btn-sm">+ {% trans "Add Coupon" %}</a>
+        </div>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Code</th>
-            <th>Type</th>
-            <th>Value</th>
-            <th>Usage</th>
-            <th>Dates</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for c in coupons %}
-        <tr>
-            <td><strong>{{ c.code }}</strong></td>
-            <td>{{ c.get_discount_type_display }}</td>
-            <td>{{ c.discount_value }}</td>
-            <td>{{ c.used_count }} / {{ c.usage_limit }}</td>
-            <td>{{ c.start_date|date:"M d" }} - {{ c.end_date|date:"M d" }}</td>
-            <td>{% if c.is_active %}Active{% else %}Inactive{% endif %}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <div class="premium-card">
+        <div class="table-responsive">
+            <table class="p-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Coupon Code" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Value" %}</th>
+                        <th>{% trans "Usage" %}</th>
+                        <th>{% trans "Valid Until" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th style="text-align:right;">{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in coupons %}
+                    <tr>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div style="background:var(--primary-light); color:var(--primary); padding:6px 12px; border-radius:8px; font-family:monospace; font-weight:800; font-size:1rem;">
+                                    {{ c.code }}
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="text-muted" style="font-weight:600;">{{ c.get_discount_type_display }}</span></td>
+                        <td><span style="font-weight:800; color:var(--dark);">{{ c.discount_value }}{% if c.discount_type == 'PERCENT' %}%{% else %} ₼{% endif %}</span></td>
+                        <td>
+                            <div style="font-size:0.8rem; font-weight:700;">
+                                {{ c.used_count }} / <span class="text-muted">{{ c.usage_limit }}</span>
+                            </div>
+                            <div style="width:60px; height:4px; background:#f1f5f9; border-radius:2px; margin-top:4px; overflow:hidden;">
+                                <div style="width:{% widthratio c.used_count c.usage_limit 100 %}%; height:100%; background:var(--primary);"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="font-size:0.85rem; font-weight:600;">{{ c.end_date|date:"d M Y" }}</div>
+                        </td>
+                        <td>
+                            {% if c.is_active %}
+                                <span class="badge badge-success">{% trans "Active" %}</span>
+                            {% else %}
+                                <span class="badge badge-danger">{% trans "Inactive" %}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:right;">
+                            <a href="{% url 'coupon_edit' c.pk %}" class="btn btn-secondary btn-xs">✏️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:48px; color:var(--text-muted);">
+                            {% trans "No coupons created yet." %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.premium-card { background: #fff; border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+.p-table { width: 100%; border-collapse: collapse; }
+.p-table th { background: #f8fafc; padding: 16px 24px; text-align: left; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.p-table td { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; vertical-align: middle; }
+.p-table tr:last-child td { border-bottom: none; }
+.p-table tr:hover td { background: #fdfdfd; }
+</style>
 {% endblock %}
-

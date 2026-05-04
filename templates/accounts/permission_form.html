@@ -1,0 +1,95 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Manage Permissions" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in max-w-lg mx-auto">
+    <div class="mb-6">
+        <a href="{% url 'role_permission_list' %}" class="text-primary text-sm font-bold">← {% trans "Back to list" %}</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            {% trans "Permissions for" %} {{ object.get_full_name|default:object.username }}
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <h4 class="mb-4">{% trans "Financial Visibility" %}</h4>
+                
+                <div class="space-y-4">
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Daily Revenue" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing daily sales totals" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_daily_revenue }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Monthly Revenue" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing monthly performance" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_monthly_revenue }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Yearly Revenue" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing annual growth" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_yearly_revenue }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Net Profit" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing final profit after all costs" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_net_profit }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Expenses" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing operational costs" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_expenses }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Payroll" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing staff salary records" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_payroll }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Advanced Analytics" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow access to detailed reports and charts" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_analytics }}<span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex gap-4">
+                    <button type="submit" class="btn btn-primary flex-1">{% trans "Update Permissions" %}</button>
+                    <a href="{% url 'role_permission_list' %}" class="btn btn-secondary flex-1">{% trans "Cancel" %}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.space-y-4 > * + * { margin-top: 16px; }
+input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
+input[type="checkbox"]:checked + .toggle-slider { background: var(--primary); }
+input[type="checkbox"]:checked + .toggle-slider::before { transform: translateX(22px); }
+</style>
+{% endblock %}

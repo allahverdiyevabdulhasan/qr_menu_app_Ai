@@ -18,6 +18,16 @@ class User(AbstractUser):
     branch = models.ForeignKey('restaurants.Branch', on_delete=models.CASCADE, null=True, blank=True, related_name='staff', verbose_name=_("Branch"))
     avatar = models.ImageField(_("Avatar"), upload_to='avatars/', blank=True, null=True)
     is_verified = models.BooleanField(_("Is Verified"), default=False)
+    
+    # Cashier Financial Permissions
+    can_view_daily_revenue = models.BooleanField(_("Can View Daily Revenue"), default=False)
+    can_view_monthly_revenue = models.BooleanField(_("Can View Monthly Revenue"), default=False)
+    can_view_yearly_revenue = models.BooleanField(_("Can View Yearly Revenue"), default=False)
+    can_view_net_profit = models.BooleanField(_("Can View Net Profit"), default=False)
+    can_view_expenses = models.BooleanField(_("Can View Expenses"), default=False)
+    can_view_payroll = models.BooleanField(_("Can View Payroll"), default=False)
+    can_view_analytics = models.BooleanField(_("Can View Analytics"), default=False)
+
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
 

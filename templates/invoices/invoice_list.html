@@ -1,0 +1,76 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Invoices" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="mb-1">{% trans "Invoice & Billing" %}</h2>
+            <p class="text-muted text-sm">{% trans "View all generated sales and payroll invoices" %}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Invoice #" %}</th>
+                            <th>{% trans "Type" %}</th>
+                            <th>{% trans "Total Amount" %}</th>
+                            <th>{% trans "Date" %}</th>
+                            <th>{% trans "Linked To" %}</th>
+                            <th class="text-right">{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invoice in invoices %}
+                        <tr>
+                            <td>
+                                <div class="font-bold text-primary">{{ invoice.invoice_number }}</div>
+                            </td>
+                            <td>
+                                <span class="badge {% if invoice.invoice_type == 'SALES' %}badge-success{% else %}badge-info{% endif %}">
+                                    {{ invoice.get_invoice_type_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="font-bold">{{ invoice.total_amount }} ₺</div>
+                            </td>
+                            <td>{{ invoice.created_at|date:"d M Y H:i" }}</td>
+                            <td>
+                                {% if invoice.order %}
+                                    <div class="text-xs">{% trans "Order" %} #{{ invoice.order.order_number }}</div>
+                                {% elif invoice.payroll %}
+                                    <div class="text-xs">{% trans "Payroll" %} - {{ invoice.payroll.staff.user.username }}</div>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                <a href="{% url 'invoice_detail' invoice.pk %}" class="btn btn-sm btn-secondary">
+                                    👁️ {% trans "View Detail" %}
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🧾</div>
+                                    <h3>{% trans "No invoices generated" %}</h3>
+                                    <p>{% trans "Invoices are created automatically when orders are completed or payroll is recorded." %}</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

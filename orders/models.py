@@ -48,7 +48,11 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     
     note = models.TextField(blank=True)
+    estimated_prep_time = models.PositiveIntegerField(null=True, blank=True, help_text=_("Estimated preparation time in minutes"))
     pickup_time = models.DateTimeField(null=True, blank=True)
+    
+    # User-friendly tracking code (e.g. TRK-A1B2C3)
+    tracking_code = models.CharField(max_length=12, unique=True, blank=True, null=True)
     
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_orders')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -59,6 +63,15 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order #{self.order_number}"
+
+    def save(self, *args, **kwargs):
+        if not self.tracking_code:
+            import random
+            import string
+            chars = string.ascii_uppercase + string.digits
+            code = ''.join(random.choice(chars) for _ in range(6))
+            self.tracking_code = f"TRK-{code}"
+        super().save(*args, **kwargs)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -72,3 +85,16 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity}x {self.product_name_snapshot}"
+
+class OrderStageHistory(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='status_history')
+    old_status = models.CharField(max_length=20, choices=Order.STATUS_CHOICES, null=True, blank=True)
+    new_status = models.CharField(max_length=20, choices=Order.STATUS_CHOICES)
+    changed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    note = models.TextField(blank=True)
+    changed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("Order Stage History")
+        verbose_name_plural = _("Order Stage Histories")
+        ordering = ['-changed_at']

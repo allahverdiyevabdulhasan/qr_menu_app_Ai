@@ -1,8 +1,9 @@
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
-from reviews.models import Review
+from reviews.models import Review, ProductReview
 from orders.models import Order
+from menu.models import Product
 from reviews.services import analyze_review_text
 
 class ReviewCreateView(CreateView):
@@ -19,7 +20,11 @@ class ReviewCreateView(CreateView):
         
         form.instance.restaurant = order.restaurant
         form.instance.order = order
-        form.instance.customer = order.customer
+        # Order.customer is a User, but Review.customer is a Customer profile
+        from customers.models import Customer
+        if order.customer:
+             customer = Customer.objects.filter(restaurant=order.restaurant, email=order.customer.email).first()
+             form.instance.customer = customer
         
         # AI Enrichment
         if form.instance.comment:
@@ -29,3 +34,29 @@ class ReviewCreateView(CreateView):
             form.instance.ai_summary = analysis['summary']
             
         return super().form_valid(form)
+
+class ProductReviewCreateView(CreateView):
+    model = ProductReview
+    template_name = 'reviews/product_review_form.html'
+    fields = ['rating', 'comment']
+
+    def form_valid(self, form):
+        product_id = self.kwargs.get('product_id')
+        product = get_object_or_404(Product, id=product_id)
+        form.instance.product = product
+        
+        if self.request.user.is_authenticated:
+            try:
+                from customers.models import Customer
+                # Match by email since user field is missing on Customer model
+                customer = Customer.objects.filter(
+                    restaurant=product.restaurant, 
+                    email=self.request.user.email
+                ).first()
+                form.instance.customer = customer
+            except:
+                pass
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER', '/')

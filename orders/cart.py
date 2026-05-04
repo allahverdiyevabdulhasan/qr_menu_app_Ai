@@ -14,20 +14,26 @@ class Cart:
         #   "item_id_1": {"product_id": 1, "quantity": 2, "options": [1, 2], "price": "10.00"},
         # }
 
-    def add(self, product, quantity=1, options=None):
+    def add(self, product, quantity=1, options=None, removed_ingredients=None, note=""):
         if options is None:
             options = []
+        if removed_ingredients is None:
+            removed_ingredients = []
             
-        # Create a unique key for product + options combination
+        # Create a unique key for product + options + removed ingredients + note combination
         option_key = '_'.join(str(opt) for opt in sorted(options))
-        item_id = f"{product.id}_{option_key}"
+        removed_key = '_'.join(sorted(removed_ingredients))
+        # Note also makes it a unique item in cart
+        item_id = f"{product.id}_{option_key}_{removed_key}_{hash(note)}"
         
         if item_id not in self.cart:
             self.cart[item_id] = {
                 'product_id': product.id,
                 'quantity': 0,
                 'options': options,
-                'price': str(product.price) # We store initial price but always recalculate during checkout
+                'removed_ingredients': removed_ingredients,
+                'note': note,
+                'price': str(product.price)
             }
         
         self.cart[item_id]['quantity'] += int(quantity)

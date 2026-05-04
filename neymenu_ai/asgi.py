@@ -8,13 +8,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'neymenu_ai.settings')
 
 django_asgi_app = get_asgi_application()
 
-from orders.consumers import OrderConsumer
+from orders.consumers import OrderConsumer, OrderTrackingConsumer
 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
     "websocket": AuthMiddlewareStack(
         URLRouter([
             path("ws/orders/<slug:slug>/", OrderConsumer.as_asgi()),
+            path("ws/tracking/<str:order_number>/", OrderTrackingConsumer.as_asgi()),
         ])
     ),
 })

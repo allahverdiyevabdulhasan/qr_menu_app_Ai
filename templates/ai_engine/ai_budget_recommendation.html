@@ -207,7 +207,7 @@
                 {% endfor %}
             </div>
 
-            <form method="post" action="{% url 'cart_add' slug=restaurant.slug %}">
+            <form method="post" action="{% url 'cart_add' restaurant_slug=restaurant.slug %}">
                 {% csrf_token %}
                 {% for p_name in combo.products %}
                 <input type="hidden" name="product_names" value="{{ p_name }}">

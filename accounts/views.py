@@ -71,3 +71,24 @@ class StaffUpdateView(OwnerRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return User.objects.filter(restaurant=self.request.user.restaurant)
+
+class RolePermissionListView(OwnerRequiredMixin, ListView):
+    model = User
+    template_name = 'accounts/permission_list.html'
+    context_object_name = 'users'
+
+    def get_queryset(self):
+        # CEO can manage permissions for all staff
+        return User.objects.filter(restaurant=self.request.user.restaurant).exclude(id=self.request.user.id)
+
+class RolePermissionUpdateView(OwnerRequiredMixin, UpdateView):
+    model = User
+    fields = [
+        'can_view_daily_revenue', 'can_view_monthly_revenue', 'can_view_yearly_revenue',
+        'can_view_net_profit', 'can_view_expenses', 'can_view_payroll', 'can_view_analytics'
+    ]
+    template_name = 'accounts/permission_form.html'
+    success_url = reverse_lazy('role_permission_list')
+
+    def get_queryset(self):
+        return User.objects.filter(restaurant=self.request.user.restaurant)

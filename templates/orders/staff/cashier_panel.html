@@ -44,66 +44,233 @@
       <h2 style="font-size:1.1rem; margin-bottom:4px;">{% trans "Active orders & payments" %}</h2>
       <p class="text-muted text-sm">{% trans "Process payments and manage order status." %}</p>
     </div>
-    <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Refresh" %}</button>
+    <div style="display:flex; gap:10px;">
+      <a href="{% url 'staff_order_create' %}" class="btn btn-primary btn-sm">➕ {% trans "New Order" %}</a>
+      <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Refresh" %}</button>
+    </div>
   </div>
 
-  <div class="grid grid-4 mb-6">
-    <div class="metric-card metric-primary">
-      <div class="icon">📋</div>
-      <div class="label">{% trans "Active Orders" %}</div>
-      <div class="value">{{ orders|length }}</div>
+  <div class="grid grid-2 mb-6" style="gap:24px;">
+    <div class="metric-card" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color:#fff; border:none; padding:24px; position:relative; overflow:hidden;">
+      <div style="position:absolute; right:-20px; top:-20px; font-size:8rem; opacity:0.1;">📋</div>
+      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.75rem; letter-spacing:1px;">{% trans "Active Orders" %}</div>
+      <div class="value" style="font-size:2.8rem; font-weight:900;">{{ orders|length }}</div>
+      <div style="margin-top:10px; font-size:0.8rem; background:rgba(255,255,255,0.2); display:inline-block; padding:4px 12px; border-radius:20px;">
+        {% trans "Live tracking enabled" %}
+      </div>
     </div>
-    <div class="metric-card metric-success">
-      <div class="icon">💰</div>
-      <div class="label">{% trans "Total Value" %}</div>
-      <div class="value" style="font-size:1.4rem;">
-        {% with total=0 %}
-        0.00 ₼
-        {% endwith %}
+    <div class="metric-card" style="background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); color:#fff; border:none; padding:24px; position:relative; overflow:hidden;">
+      <div style="position:absolute; right:-20px; top:-20px; font-size:8rem; opacity:0.1;">💰</div>
+      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.75rem; letter-spacing:1px;">{% trans "Total Value" %}</div>
+      <div class="value" style="font-size:2.8rem; font-weight:900;">
+        {{ total_active_value|floatformat:2|default:"0.00" }} <span style="font-size:1.5rem; font-weight:400;">₼</span>
+      </div>
+      <div style="margin-top:10px; font-size:0.8rem; background:rgba(255,255,255,0.2); display:inline-block; padding:4px 12px; border-radius:20px;">
+        {% trans "Updated just now" %}
       </div>
     </div>
   </div>
+
+  {% if pending_reservations %}
+  <div class="card mb-8" style="border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 24px; overflow: hidden;">
+    <div class="card-header" style="background: #fff; padding: 24px 30px; border-bottom: 1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h3 style="font-size:1.1rem; font-weight:800; margin:0; display:flex; align-items:center; gap:10px;">
+          <span style="background: #fff9db; padding: 8px; border-radius: 12px; font-size:1.2rem;">📅</span>
+          {% trans "Pending Reservations" %}
+        </h3>
+      </div>
+      <span class="badge" style="background:var(--warning); color:#fff; padding:6px 16px; border-radius:30px; font-weight:800; font-size:0.8rem;">
+        {{ pending_reservations|length }} {% trans "Waitlist" %}
+      </span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <div class="table-responsive">
+        <table class="res-table" style="width:100%; border-collapse: collapse;">
+          <thead style="background: #f8fafc;">
+            <tr>
+              <th style="padding:16px 30px; text-align:left; font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:800; letter-spacing:0.5px;">{% trans "Customer" %}</th>
+              <th style="padding:16px 20px; text-align:left; font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:800; letter-spacing:0.5px;">{% trans "Details" %}</th>
+              <th style="padding:16px 20px; text-align:left; font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:800; letter-spacing:0.5px;">{% trans "Note" %}</th>
+              <th style="padding:16px 30px; text-align:right; font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:800; letter-spacing:0.5px;">{% trans "Action" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for res in pending_reservations %}
+            <tr style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s;">
+              <td style="padding:20px 30px;">
+                <div style="font-weight:800; color:#1e293b; font-size:0.95rem;">{{ res.customer_name }}</div>
+                <div style="color:#64748b; font-size:0.8rem; margin-top:2px;">📱 {{ res.customer_phone }}</div>
+              </td>
+              <td style="padding:20px 20px;">
+                <div style="display:flex; gap:16px; align-items:center;">
+                  <div style="background:#f1f5f9; padding:6px 12px; border-radius:10px; font-size:0.85rem; font-weight:700; color:#334155;">
+                    🕒 {{ res.reservation_time|date:"H:i" }}
+                  </div>
+                  <div style="background:#f1f5f9; padding:6px 12px; border-radius:10px; font-size:0.85rem; font-weight:700; color:#334155;">
+                    👥 {{ res.number_of_people }} {% trans "Pers." %}
+                  </div>
+                </div>
+              </td>
+              <td style="padding:20px 20px;">
+                <div style="max-width:200px; font-size:0.85rem; color:#64748b; font-style:italic;">
+                  {{ res.note|default:"—" }}
+                </div>
+              </td>
+              <td style="padding:20px 30px; text-align:right;">
+                <a href="{% url 'waiter_panel' %}" class="btn btn-primary" style="padding:10px 24px; border-radius:14px; font-weight:800; font-size:0.85rem; box-shadow: 0 4px 15px rgba(99,102,241,0.2);">
+                  🚀 {% trans "Manage" %}
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
   {% if orders %}
   <div class="cashier-grid">
     {% for order in orders %}
     <div class="cashier-card">
-      <div class="cashier-card-head">
+      <div class="cashier-card-head" style="{% if order.status == 'NEW' %}background:rgba(239,68,68,0.05);{% endif %}">
         <div>
           <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">
             {% if order.table %}🪑 {% trans "Table" %} {{ order.table.table_number }}{% else %}🥡 {% trans "Takeaway" %}{% endif %}
           </div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">#{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">#{{ order.order_number|slice:"-6:" }} · {{ order.created_at|date:"H:i" }}</div>
         </div>
         <div style="text-align:right;">
-          <div class="cashier-total">{{ order.total_amount }} ₼</div>
-          <span class="status-chip chip-{{ order.status|lower }}">{{ order.get_status_display }}</span>
+          <div class="cashier-total">{{ order.total_amount|floatformat:2 }} ₼</div>
+          <span class="status-chip chip-{{ order.status|lower }}">
+            {% if order.status == 'NEW' %}⏳ {% trans "Pending Approval" %}{% else %}{{ order.get_status_display }}{% endif %}
+          </span>
         </div>
       </div>
 
       <div class="cashier-items">
         {% for item in order.items.all %}
-        <div class="cashier-item">
-          <span style="color:var(--text-muted);">{{ item.quantity }}× {{ item.product_name_snapshot }}</span>
-          <span style="font-weight:600;">{{ item.total_price }} ₼</span>
+        <div class="cashier-item-group" style="margin-bottom:8px; border-bottom:1px solid rgba(0,0,0,0.03); padding-bottom:8px;">
+          <div class="cashier-item">
+            <span style="font-weight:700;">{{ item.quantity }}× {{ item.product_name_snapshot }}</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-weight:600;">{{ item.total_price|floatformat:2 }} ₼</span>
+              <button onclick="toggleEdit('{{ item.id }}')" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:0.8rem;">✏️</button>
+            </div>
+          </div>
+
+          {# Inline Edit Form #}
+          <div id="edit-form-{{ item.id }}" style="display:none; margin-top:8px; background:var(--bg); padding:10px; border-radius:10px; border:1px solid var(--border);">
+            <form method="post" action="{% url 'order_item_update' item.pk %}">
+              {% csrf_token %}
+              <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                <label class="text-xs">{% trans "Qty" %}:</label>
+                <input type="number" name="quantity" value="{{ item.quantity }}" style="width:50px; padding:4px; border-radius:6px; border:1px solid var(--border);">
+              </div>
+              {% if item.product.display_ingredients.all %}
+              <div class="text-xs font-bold mb-2">{% trans "Remove" %}:</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-bottom:8px;">
+                {% for ing in item.product.display_ingredients.all %}
+                <label style="font-size:0.65rem; display:flex; align-items:center; gap:4px;">
+                  <input type="checkbox" name="removed_ingredients" value="{{ ing.name }}" 
+                         {% if ing.name in item.selected_options.removed_ingredients %}checked{% endif %}>
+                  {{ ing.name }}
+                </label>
+                {% endfor %}
+              </div>
+              {% endif %}
+              <textarea name="note" placeholder="{% trans 'Item note...' %}" style="width:100%; font-size:0.7rem; padding:6px; border-radius:6px; border:1px solid var(--border); margin-bottom:8px;">{{ item.note }}</textarea>
+              <div style="display:flex; gap:4px;">
+                <button type="submit" class="btn btn-primary btn-xs" style="flex:1;">✅</button>
+                <button type="button" onclick="toggleEdit('{{ item.id }}')" class="btn btn-secondary btn-xs">✕</button>
+              </div>
+            </form>
+            <form method="post" action="{% url 'order_item_delete' item.pk %}" style="margin-top:4px;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary btn-block btn-xs" style="color:var(--danger); border-color:#fecaca; background:#fff1f1;">🗑️ {% trans "Remove Item" %}</button>
+            </form>
+          </div>
+
+          {% if item.selected_options.options or item.selected_options.removed_ingredients or item.note %}
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; padding-left:24px;">
+            {% if item.selected_options.removed_ingredients %}
+              <div style="color:var(--danger);">❌ {% trans "NO" %}: {{ item.selected_options.removed_ingredients|join:", " }}</div>
+            {% endif %}
+            {% if item.selected_options.options %}
+              <div style="color:var(--primary);">➕ {{ item.selected_options.options|join:", " }}</div>
+            {% endif %}
+            {% if item.note %}<div style="font-style:italic;">📝 {{ item.note }}</div>{% endif %}
+          </div>
+          {% endif %}
         </div>
         {% endfor %}
       </div>
 
+      <div style="padding:0 20px 10px;">
+        <form method="post" action="{% url 'order_status_update' order.pk %}" style="display:flex; gap:8px; align-items:center; background:var(--bg); padding:8px; border-radius:12px; border:1px dashed var(--border);">
+          {% csrf_token %}
+          <label style="font-size:0.7rem; font-weight:800; white-space:nowrap;">⏱ {% trans "Prep Time (min)" %}:</label>
+          <input type="number" name="estimated_prep_time" value="{{ order.estimated_prep_time|default:'' }}" placeholder="15" style="width:50px; padding:4px; border-radius:6px; border:1px solid var(--border); font-size:0.8rem;">
+          <input type="hidden" name="status" value="{{ order.status }}">
+          <button type="submit" class="btn btn-secondary btn-xs" style="padding:4px 8px;">💾</button>
+        </form>
+      </div>
+
+      {% if order.note %}
+      <div style="padding:10px 20px; font-size:0.8rem; background:rgba(245,158,11,0.05); color:#854d0e; border-top:1px solid rgba(245,158,11,0.1);">
+        <strong>💬 {% trans "Order Note" %}:</strong> {{ order.note }}
+      </div>
+      {% endif %}
+
       <div class="cashier-foot">
-        <form method="post" action="{% url 'order_status_update' order.pk %}" style="flex:1;">
-          {% csrf_token %}
-          <input type="hidden" name="status" value="COMPLETED">
-          <button type="submit" class="btn btn-success btn-block btn-sm">✅ {% trans "Completed & Paid" %}</button>
-        </form>
-        <form method="post" action="{% url 'order_status_update' order.pk %}">
-          {% csrf_token %}
-          <input type="hidden" name="status" value="CANCELLED">
-          <button type="submit" class="btn btn-secondary btn-sm">✗</button>
-        </form>
+        <button type="button" class="btn btn-primary btn-block btn-sm" onclick="openOrderModal('{{ order.id }}', '{{ order.order_number|slice:'-6:' }}', '{{ order.total_amount }}')">
+          🚀 {% trans "Manage Order" %}
+        </button>
       </div>
     </div>
     {% endfor %}
+  </div>
+
+  {# ── Order Management Modal ── #}
+  <div id="orderModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; display:none; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+    <div class="modal-content" style="background:#fff; width:95%; max-width:500px; border-radius:24px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.2); animation: modalIn 0.3s ease-out;">
+        <div class="modal-header" style="padding:20px 24px; background:var(--primary); color:#fff; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; font-weight:900;">{% trans "Order" %} #<span id="modalOrderNum"></span></h3>
+            <button onclick="closeOrderModal()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <div class="modal-body" style="padding:24px;">
+            <div style="margin-bottom:20px;">
+                <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">{% trans "Current Status" %}</div>
+                <div id="modalStatus" style="font-size:1.1rem; font-weight:900; color:var(--primary); margin-top:4px;"></div>
+            </div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+                <form method="post" id="acceptForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="ACCEPTED">
+                    <button type="submit" class="btn btn-primary btn-block" style="padding:14px;">✅ {% trans "Accept Order" %}</button>
+                </form>
+                <form method="post" id="completeForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="COMPLETED">
+                    <button type="submit" class="btn btn-success btn-block" style="padding:14px;">💰 {% trans "Paid & Close" %}</button>
+                </form>
+            </div>
+
+            <div style="border-top:1px solid #f1f5f9; padding-top:20px;">
+                <h4 style="margin:0 0 12px 0;">{% trans "Quick Actions" %}</h4>
+                <div style="display:flex; gap:10px;">
+                    <form method="post" id="cancelForm" style="flex:1;">
+                        {% csrf_token %}
+                        <input type="hidden" name="status" value="CANCELLED">
+                        <button type="submit" class="btn btn-secondary btn-block" style="background:#fee2e2; color:#ef4444; border:none;">❌ {% trans "Cancel" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
   {% else %}
   <div class="card">
@@ -114,5 +281,132 @@
     </div>
   </div>
   {% endif %}
+</div>
+
+<script>
+function toggleEdit(id) {
+    const el = document.getElementById('edit-form-' + id);
+    if (el.style.display === 'none') {
+        el.style.display = 'block';
+    } else {
+        el.style.display = 'none';
+    }
+}
+
+function openOrderModal(id, num, total) {
+    document.getElementById('modalOrderNum').innerText = num;
+    
+    // Get the current language prefix (e.g., 'tr', 'az', 'en') from the URL
+    const lang = window.location.pathname.split('/')[1];
+    const finalUrl = `/${lang}/orders/${id}/status/`;
+    
+    document.getElementById('acceptForm').action = finalUrl;
+    document.getElementById('completeForm').action = finalUrl;
+    document.getElementById('cancelForm').action = finalUrl;
+    
+    document.getElementById('orderModal').style.display = 'flex';
+}
+
+function closeOrderModal() {
+    document.getElementById('orderModal').style.display = 'none';
+}
+
+// WebSocket for Real-time updates
+const restaurantSlug = "{{ request.user.restaurant.slug }}";
+const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const socketUrl = `${protocol}//${window.location.host}/ws/orders/${restaurantSlug}/`;
+const orderSocket = new WebSocket(socketUrl);
+
+// Sound setup
+const sounds = {
+    waiter_call: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'),
+    bill_request: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
+    new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
+    status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
+};
+
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+    Object.values(sounds).forEach(s => {
+        s.play().then(() => {
+            s.pause();
+            s.currentTime = 0;
+        }).catch(e => console.log("Audio unlock failed:", e));
+    });
+    audioUnlocked = true;
+    const badge = document.getElementById('sound-unlocked-badge');
+    if (badge) badge.style.display = 'none';
+}
+
+// Add unlock listener
+document.addEventListener('click', unlockAudio, { once: true });
+
+if ("Notification" in window && Notification.permission !== "granted") {
+    Notification.requestPermission();
+}
+
+orderSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log("WebSocket message:", data);
+
+    // Play appropriate sound
+    const sound = sounds[data.call_type] || sounds.status_update;
+    sound.play().catch(e => console.log("Audio blocked:", e));
+
+    if (Notification.permission === "granted") {
+        new Notification("NeyMenu AI: {% trans 'Cashier Update' %}", { body: data.message });
+    }
+
+    showNotification(data.message, data.call_type);
+    
+    // Auto-refresh for UI update
+    setTimeout(() => location.reload(), 2000);
+};
+
+function showNotification(msg, type) {
+    const toast = document.createElement('div');
+    const isUrgent = type === 'waiter_call' || type === 'reservation' || type === 'bill_request';
+    const icon = type === 'bill_request' ? '💳' : (type === 'waiter_call' ? '🚨' : '🛎️');
+    
+    toast.style.cssText = `
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        background: ${isUrgent ? '#ef4444' : 'var(--primary)'}; 
+        color: #fff; padding: 18px 32px; border-radius: 20px; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        z-index: 99999; font-weight: 800; font-size: 1.1rem;
+        display: flex; align-items: center; gap: 16px;
+        animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid rgba(255,255,255,0.2);
+    `;
+    
+    toast.innerHTML = `
+        <span style="font-size:1.8rem;">${icon}</span>
+        <span>${msg}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transition = 'all 0.5s';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(-20px)';
+        setTimeout(() => toast.remove(), 500);
+    }, 8000);
+}
+
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInDown {
+        from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+{# Floating Audio Unlock Hint #}
+<div id="sound-unlocked-badge" onclick="unlockAudio()" style="position:fixed; bottom:20px; right:20px; background:var(--warning); color:#fff; padding:12px 20px; border-radius:30px; font-weight:800; font-size:0.85rem; cursor:pointer; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:1000; animation: pulse 2s infinite;">
+    🔊 {% trans "Click to Enable Sounds" %}
 </div>
 {% endblock %}

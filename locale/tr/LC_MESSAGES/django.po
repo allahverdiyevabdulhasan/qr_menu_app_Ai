@@ -1,0 +1,1026 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NeyMenu AI\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-03 00:00+0300\n"
+"PO-Revision-Date: 2026-05-03 00:00+0300\n"
+"Last-Translator: NeyMenu AI Team\n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Overview"
+msgstr "Genel Bakış"
+
+msgid "Analytics"
+msgstr "Analitik"
+
+msgid "Operations"
+msgstr "Operasyonlar"
+
+msgid "Orders"
+msgstr "Siparişler"
+
+msgid "Kitchen"
+msgstr "Mutfak"
+
+msgid "Waiter"
+msgstr "Garson"
+
+msgid "Cashier"
+msgstr "Kasiyer"
+
+msgid "Management"
+msgstr "Yönetim"
+
+msgid "Menu Items"
+msgstr "Menü Öğeleri"
+
+msgid "Inventory"
+msgstr "Envanter"
+
+msgid "Expenses"
+msgstr "Giderler"
+
+msgid "CRM"
+msgstr "Müşteri Yönetimi"
+
+msgid "Growth & AI"
+msgstr "Büyüme ve Yapay Zeka"
+
+msgid "AI Insights"
+msgstr "Yapay Zeka Öngörüleri"
+
+msgid "AI Assistant"
+msgstr "Yapay Zeka Asistanı"
+
+msgid "Campaigns"
+msgstr "Kampanyalar"
+
+msgid "Reviews"
+msgstr "Değerlendirmeler"
+
+msgid "System"
+msgstr "Sistem"
+
+msgid "Settings"
+msgstr "Ayarlar"
+
+msgid "Logout"
+msgstr "Çıkış Yap"
+
+msgid "Dashboard"
+msgstr "Pano"
+
+msgid "Live Menu"
+msgstr "Canlı Menü"
+
+msgid "View Cart"
+msgstr "Sepeti Görüntüle"
+
+msgid "Login"
+msgstr "Giriş Yap"
+
+msgid "Username"
+msgstr "Kullanıcı Adı"
+
+msgid "Password"
+msgstr "Şifre"
+
+msgid "Welcome back"
+msgstr "Hoş geldiniz"
+
+msgid "Welcome back,"
+msgstr "Hoş geldiniz,"
+
+msgid "Welcome!"
+msgstr "Hoş geldiniz!"
+
+msgid "Restaurant Dashboard"
+msgstr "Restoran Panosu"
+
+msgid "Today Revenue"
+msgstr "Bugünkü Gelir"
+
+msgid "Total Revenue"
+msgstr "Toplam Gelir"
+
+msgid "Total Orders"
+msgstr "Toplam Sipariş"
+
+msgid "Total Customers"
+msgstr "Toplam Müşteri"
+
+msgid "Sales Today"
+msgstr "Bugünkü Satışlar"
+
+msgid "This Month"
+msgstr "Bu Ay"
+
+msgid "Today"
+msgstr "Bugün"
+
+msgid "Yesterday"
+msgstr "Dün"
+
+msgid "Recent Orders"
+msgstr "Son Siparişler"
+
+msgid "Recent Activity"
+msgstr "Son Aktivite"
+
+msgid "Quick Actions"
+msgstr "Hızlı İşlemler"
+
+msgid "Top Performing Dishes"
+msgstr "En İyi Yemekler"
+
+msgid "Top Selling Products"
+msgstr "En Çok Satan Ürünler"
+
+msgid "Revenue"
+msgstr "Gelir"
+
+msgid "Revenue Breakdown"
+msgstr "Gelir Dağılımı"
+
+msgid "Revenue by Type"
+msgstr "Türe Göre Gelir"
+
+msgid "Revenue Distribution Chart"
+msgstr "Gelir Dağılım Grafiği"
+
+msgid "Revenue Dynamics"
+msgstr "Gelir Dinamikleri"
+
+msgid "Revenue Insights"
+msgstr "Gelir Öngörüleri"
+
+msgid "Revenue Report"
+msgstr "Gelir Raporu"
+
+msgid "Sales Analytics"
+msgstr "Satış Analitiği"
+
+msgid "Sales by Category"
+msgstr "Kategoriye Göre Satışlar"
+
+msgid "Order List"
+msgstr "Sipariş Listesi"
+
+msgid "Order Detail"
+msgstr "Sipariş Detayı"
+
+msgid "Order History"
+msgstr "Sipariş Geçmişi"
+
+msgid "Order Info"
+msgstr "Sipariş Bilgisi"
+
+msgid "Order Items"
+msgstr "Sipariş Kalemleri"
+
+msgid "Order More"
+msgstr "Daha Fazla Sipariş Ver"
+
+msgid "Order Note (Optional)"
+msgstr "Sipariş Notu (İsteğe Bağlı)"
+
+msgid "Order Number"
+msgstr "Sipariş Numarası"
+
+msgid "Order Placed!"
+msgstr "Sipariş Alındı!"
+
+msgid "Order Served"
+msgstr "Sipariş Servis Edildi"
+
+msgid "Order Summary"
+msgstr "Sipariş Özeti"
+
+msgid "Order Tracking"
+msgstr "Sipariş Takibi"
+
+msgid "Order"
+msgstr "Sipariş"
+
+msgid "Orders Pending"
+msgstr "Bekleyen Siparişler"
+
+msgid "Orders ready to be served"
+msgstr "Servis edilmeye hazır siparişler"
+
+msgid "Orders will appear here when customers scan the QR code."
+msgstr "Müşteriler QR kodu tararken siparişler burada görünecek."
+
+msgid "Kitchen Screen"
+msgstr "Mutfak Ekranı"
+
+msgid "Waiter Panel"
+msgstr "Garson Paneli"
+
+msgid "Cashier Panel"
+msgstr "Kasiyer Paneli"
+
+msgid "Process payments and manage order status."
+msgstr "Ödemeleri işleyin ve sipariş durumunu yönetin."
+
+msgid "Place Order Now"
+msgstr "Siparişi Ver"
+
+msgid "Track My Order"
+msgstr "Siparişimi Takip Et"
+
+msgid "Track Order"
+msgstr "Siparişi Takip Et"
+
+msgid "View Order History"
+msgstr "Sipariş Geçmişini Görüntüle"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Pending"
+msgstr "Bekliyor"
+
+msgid "Preparing"
+msgstr "Hazırlanıyor"
+
+msgid "Ready"
+msgstr "Hazır"
+
+msgid "Ready to Serve"
+msgstr "Servis'e Hazır"
+
+msgid "Served"
+msgstr "Servis Edildi"
+
+msgid "Cancelled"
+msgstr "İptal Edildi"
+
+msgid "Received"
+msgstr "Alındı"
+
+msgid "Start Preparing"
+msgstr "Hazırlamaya Başla"
+
+msgid "Mark as Ready"
+msgstr "Hazır Olarak İşaretle"
+
+msgid "Update Status"
+msgstr "Durumu Güncelle"
+
+msgid "Product Management"
+msgstr "Ürün Yönetimi"
+
+msgid "Product Name"
+msgstr "Ürün Adı"
+
+msgid "Product Options"
+msgstr "Ürün Seçenekleri"
+
+msgid "Product Performance"
+msgstr "Ürün Performansı"
+
+msgid "Product Reports"
+msgstr "Ürün Raporları"
+
+msgid "Product"
+msgstr "Ürün"
+
+msgid "products across"
+msgstr "ürünler genelinde"
+
+msgid "Total Products"
+msgstr "Toplam Ürün"
+
+msgid "Add Product"
+msgstr "Ürün Ekle"
+
+msgid "Edit Product"
+msgstr "Ürün Düzenle"
+
+msgid "Save Item"
+msgstr "Öğeyi Kaydet"
+
+msgid "Save Product Changes"
+msgstr "Ürün Değişikliklerini Kaydet"
+
+msgid "Delete Product"
+msgstr "Ürünü Sil"
+
+msgid "Price"
+msgstr "Fiyat"
+
+msgid "Price (?)"
+msgstr "Fiyat (?)"
+
+msgid "Total Price"
+msgstr "Toplam Fiyat"
+
+msgid "Total Amount"
+msgstr "Toplam Tutar"
+
+msgid "Subtotal"
+msgstr "Ara Toplam"
+
+msgid "Total"
+msgstr "Toplam"
+
+msgid "Service Charge"
+msgstr "Hizmet Bedeli"
+
+msgid "Total Discount"
+msgstr "Toplam İndirim"
+
+msgid "Discount"
+msgstr "İndirim"
+
+msgid "Category"
+msgstr "Kategori"
+
+msgid "Add Category"
+msgstr "Kategori Ekle"
+
+msgid "Save Category"
+msgstr "Kategoriyi Kaydet"
+
+msgid "Update Category Details"
+msgstr "Kategori Detaylarını Güncelle"
+
+msgid "Description"
+msgstr "Açıklama"
+
+msgid "Availability"
+msgstr "Müsaitlik"
+
+msgid "Available"
+msgstr "Mevcut"
+
+msgid "Out of Stock"
+msgstr "Stokta Yok"
+
+msgid "Visibility & Stock"
+msgstr "Görünürlük ve Stok"
+
+msgid "Popular Item"
+msgstr "Popüler Ürün"
+
+msgid "Popular"
+msgstr "Popüler"
+
+msgid "Spicy"
+msgstr "Baharatlı"
+
+msgid "Vegan"
+msgstr "Vegan"
+
+msgid "Vegetarian"
+msgstr "Vejeteryan"
+
+msgid "Gluten-Free"
+msgstr "Glutensiz"
+
+msgid "Calories"
+msgstr "Kalori"
+
+msgid "Protein"
+msgstr "Protein"
+
+msgid "Carbs"
+msgstr "Karbonhidrat"
+
+msgid "Fat"
+msgstr "Yağ"
+
+msgid "Allergens"
+msgstr "Alerjenler"
+
+msgid "Prep Time"
+msgstr "Hazırlama Süresi"
+
+msgid "Sort Order"
+msgstr "Sıralama"
+
+msgid "Image"
+msgstr "Görsel"
+
+msgid "Inventory Management"
+msgstr "Envanter Yönetimi"
+
+msgid "Stock"
+msgstr "Stok"
+
+msgid "Stock Alerts"
+msgstr "Stok Uyarıları"
+
+msgid "Stock Needs"
+msgstr "Stok İhtiyaçları"
+
+msgid "Stock Status"
+msgstr "Stok Durumu"
+
+msgid "Start tracking your stock."
+msgstr "Stoğunuzu takip etmeye başlayın."
+
+msgid "Track all stock levels and supplier info."
+msgstr "Tüm stok seviyelerini ve tedarikçi bilgilerini takip edin."
+
+msgid "There are no low stock alerts at this time."
+msgstr "Şu anda düşük stok uyarısı bulunmuyor."
+
+msgid "Restock"
+msgstr "Yeniden Stokla"
+
+msgid "Unit Cost"
+msgstr "Birim Maliyet"
+
+msgid "Supplier"
+msgstr "Tedarikçi"
+
+msgid "Update Inventory Details"
+msgstr "Envanter Detaylarını Güncelle"
+
+msgid "In"
+msgstr "Giriş"
+
+msgid "Out"
+msgstr "Çıkış"
+
+msgid "Expense Management"
+msgstr "Gider Yönetimi"
+
+msgid "Add Expense"
+msgstr "Gider Ekle"
+
+msgid "Save Expense"
+msgstr "Gideri Kaydet"
+
+msgid "Update Expense Details"
+msgstr "Gider Detaylarını Güncelle"
+
+msgid "Expense"
+msgstr "Gider"
+
+msgid "Over Budget"
+msgstr "Bütçeyi Aştı"
+
+msgid "Budget"
+msgstr "Bütçe"
+
+msgid "Amount"
+msgstr "Tutar"
+
+msgid "Date"
+msgstr "Tarih"
+
+msgid "Month"
+msgstr "Ay"
+
+msgid "Period"
+msgstr "Dönem"
+
+msgid "Salary & Payroll"
+msgstr "Maaş ve Bordro"
+
+msgid "Customer Management"
+msgstr "Müşteri Yönetimi"
+
+msgid "Customer List"
+msgstr "Müşteri Listesi"
+
+msgid "Customer"
+msgstr "Müşteri"
+
+msgid "Total Clients"
+msgstr "Toplam Müşteri"
+
+msgid "Total Spent"
+msgstr "Toplam Harcama"
+
+msgid "Total Entries"
+msgstr "Toplam Kayıt"
+
+msgid "Segment"
+msgstr "Segment"
+
+msgid "Segmentation"
+msgstr "Segmentasyon"
+
+msgid "Segments"
+msgstr "Segmentler"
+
+msgid "Segment Distribution"
+msgstr "Segment Dağılımı"
+
+msgid "VIP / Gold"
+msgstr "VIP / Gold"
+
+msgid "Returning"
+msgstr "Geri Dönen"
+
+msgid "Negative"
+msgstr "Negatif"
+
+msgid "Positive"
+msgstr "Pozitif"
+
+msgid "Send Promotion"
+msgstr "Promosyon Gönder"
+
+msgid "Loyalty Program"
+msgstr "Sadakat Programı"
+
+msgid "Program Overview"
+msgstr "Program Genel Bakış"
+
+msgid "Points"
+msgstr "Puan"
+
+msgid "Points Required"
+msgstr "Gereken Puan"
+
+msgid "Redeemable Rewards"
+msgstr "Kullanılabilir Ödüller"
+
+msgid "Rewards"
+msgstr "Ödüller"
+
+msgid "Reward Definition"
+msgstr "Ödül Tanımı"
+
+msgid "Save Reward"
+msgstr "Ödülü Kaydet"
+
+msgid "Tier"
+msgstr "Seviye"
+
+msgid "Campaign Management"
+msgstr "Kampanya Yönetimi"
+
+msgid "Total Campaigns"
+msgstr "Toplam Kampanya"
+
+msgid "Suggest Campaign"
+msgstr "Kampanya Öner"
+
+msgid "Review Management"
+msgstr "Değerlendirme Yönetimi"
+
+msgid "Reviews Dashboard"
+msgstr "Değerlendirmeler Panosu"
+
+msgid "Reviews will appear after customers rate their experience."
+msgstr "Müşteriler deneyimlerini puanladıktan sonra değerlendirmeler görünecek."
+
+msgid "Total Reviews"
+msgstr "Toplam Değerlendirme"
+
+msgid "Rating"
+msgstr "Puan"
+
+msgid "Sentiment"
+msgstr "Duygu"
+
+msgid "Recent Feedbacks"
+msgstr "Son Geri Bildirimler"
+
+msgid "Rate our service"
+msgstr "Hizmetimizi değerlendirin"
+
+msgid "AI Engine"
+msgstr "Yapay Zeka Motoru"
+
+msgid "View All Insights"
+msgstr "Tüm Öngörüleri Görüntüle"
+
+msgid "Read Full Analysis"
+msgstr "Tam Analizi Oku"
+
+msgid "Refresh Data"
+msgstr "Verileri Yenile"
+
+msgid "Refresh"
+msgstr "Yenile"
+
+msgid "Run Deep Scan"
+msgstr "Derin Tarama Yap"
+
+msgid "Peak Hour Alert"
+msgstr "Yoğun Saat Uyarısı"
+
+msgid "Staffing Tip"
+msgstr "Personel İpucu"
+
+msgid "Upsell Opportunity"
+msgstr "Ek Satış Fırsatı"
+
+msgid "Pro Tip"
+msgstr "Profesyonel İpucu"
+
+msgid "Recommended Items"
+msgstr "Önerilen Ürünler"
+
+msgid "Recommendation Success"
+msgstr "Öneri Başarısı"
+
+msgid "Predicted peak at 7:30 PM. Ensure 3 waiters are on the floor."
+msgstr "19:30'da yoğun saat bekleniyor. 3 garsonun hazır olduğundan emin olun."
+
+msgid "Salmon stock is depleting faster than usual. AI suggests ordering by 4 PM."
+msgstr "Somon stoğu normalden hızlı azalıyor. Yapay Zeka, saat 16:00'a kadar sipariş vermenizi öneriyor."
+
+msgid "The 'Inactive' segment represents 15% of your database. A re-engagement coupon could recover lost revenue."
+msgstr "'Pasif' segmenti veritabanınızın %15'ini oluşturuyor. Yeniden katılım kuponu kayıp geliri geri kazandırabilir."
+
+msgid "Your current net margin is healthy. To improve further, consider bundling high-margin side dishes with popular main courses."
+msgstr "Mevcut net marjınız sağlıklı. Daha fazla iyileştirmek için yüksek marjlı yan yemekleri popüler ana yemeklerle birleştirin."
+
+msgid "Your 'VIP' segment has grown by 12% this month. Consider launching a dedicated loyalty campaign to maintain this momentum."
+msgstr "'VIP' segmentiniz bu ay %12 büyüdü. Bu ivmeyi korumak için özel bir sadakat kampanyası başlatmayı düşünün."
+
+msgid "What should I order for stock tomorrow?"
+msgstr "Yarın stok için ne sipariş etmeliyim?"
+
+msgid "Which products are performing poorly?"
+msgstr "Hangi ürünler düşük performans gösteriyor?"
+
+msgid "prioritize high-protein options"
+msgstr "yüksek protein seçeneklerini önceleyin"
+
+msgid "Restaurant Profile"
+msgstr "Restoran Profili"
+
+msgid "Restaurant Name"
+msgstr "Restoran Adı"
+
+msgid "Restaurant Branches"
+msgstr "Restoran Şubeleri"
+
+msgid "Restaurant Tables"
+msgstr "Restoran Masaları"
+
+msgid "Restaurant"
+msgstr "Restoran"
+
+msgid "Profile Information"
+msgstr "Profil Bilgileri"
+
+msgid "Update Settings"
+msgstr "Ayarları Güncelle"
+
+msgid "Save Changes"
+msgstr "Değişiklikleri Kaydet"
+
+msgid "These settings affect all branches and customer-facing menus globally. Changes are applied instantly."
+msgstr "Bu ayarlar tüm şubeleri ve müşteriye yönelik menüleri global olarak etkiler. Değişiklikler anında uygulanır."
+
+msgid "Tables"
+msgstr "Masalar"
+
+msgid "Table"
+msgstr "Masa"
+
+msgid "Table Number"
+msgstr "Masa Numarası"
+
+msgid "Tables Active"
+msgstr "Aktif Masalar"
+
+msgid "Add Table"
+msgstr "Masa Ekle"
+
+msgid "Save Table"
+msgstr "Masayı Kaydet"
+
+msgid "Update Table Details"
+msgstr "Masa Detaylarını Güncelle"
+
+msgid "QR Code"
+msgstr "QR Kod"
+
+msgid "QR Code Details"
+msgstr "QR Kod Detayları"
+
+msgid "QR Code for"
+msgstr "için QR Kodu"
+
+msgid "QR Menu URL"
+msgstr "QR Menü URL'si"
+
+msgid "View QR"
+msgstr "QR'ı Görüntüle"
+
+msgid "Print Version"
+msgstr "Yazdır"
+
+msgid "Please wait while we prepare the digital menu link for this table."
+msgstr "Bu masa için dijital menü bağlantısı hazırlanırken lütfen bekleyin."
+
+msgid "Branch"
+msgstr "Şube"
+
+msgid "Add Branch"
+msgstr "Şube Ekle"
+
+msgid "Save Branch"
+msgstr "Şubeyi Kaydet"
+
+msgid "Update Branch Details"
+msgstr "Şube Detaylarını Güncelle"
+
+msgid "Our Branches"
+msgstr "Şubelerimiz"
+
+msgid "Profitability Analysis"
+msgstr "Karlılık Analizi"
+
+msgid "Profitability Report"
+msgstr "Karlılık Raporu"
+
+msgid "Purchase Records"
+msgstr "Satın Alma Kayıtları"
+
+msgid "Transaction History"
+msgstr "İşlem Geçmişi"
+
+msgid "Report"
+msgstr "Rapor"
+
+msgid "Rank"
+msgstr "Sıralama"
+
+msgid "Sold"
+msgstr "Satıldı"
+
+msgid "View"
+msgstr "Görüntüle"
+
+msgid "View All"
+msgstr "Tümünü Görüntüle"
+
+msgid "Action"
+msgstr "İşlem"
+
+msgid "Add"
+msgstr "Ekle"
+
+msgid "Edit"
+msgstr "Düzenle"
+
+msgid "Delete"
+msgstr "Sil"
+
+msgid "Cancel"
+msgstr "İptal"
+
+msgid "Confirm"
+msgstr "Onayla"
+
+msgid "Submit"
+msgstr "Gönder"
+
+msgid "Search"
+msgstr "Ara"
+
+msgid "Search dishes..."
+msgstr "Yemek ara..."
+
+msgid "Filter"
+msgstr "Filtrele"
+
+msgid "Reset"
+msgstr "Sıfırla"
+
+msgid "Export"
+msgstr "Dışa Aktar"
+
+msgid "Import"
+msgstr "İçe Aktar"
+
+msgid "Print"
+msgstr "Yazdır"
+
+msgid "Download"
+msgstr "İndir"
+
+msgid "Upload"
+msgstr "Yükle"
+
+msgid "Save"
+msgstr "Kaydet"
+
+msgid "Close"
+msgstr "Kapat"
+
+msgid "Back"
+msgstr "Geri"
+
+msgid "Next"
+msgstr "İleri"
+
+msgid "Previous"
+msgstr "Önceki"
+
+msgid "Required"
+msgstr "Zorunlu"
+
+msgid "Optional"
+msgstr "İsteğe Bağlı"
+
+msgid "Loading..."
+msgstr "Yükleniyor..."
+
+msgid "No data available"
+msgstr "Veri mevcut değil"
+
+msgid "No records found"
+msgstr "Kayıt bulunamadı"
+
+msgid "records"
+msgstr "kayıt"
+
+msgid "Name"
+msgstr "Ad"
+
+msgid "Email"
+msgstr "E-posta"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Phone Number"
+msgstr "Telefon Numarası"
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Notes"
+msgstr "Notlar"
+
+msgid "Subject"
+msgstr "Konu"
+
+msgid "Message"
+msgstr "Mesaj"
+
+msgid "Type"
+msgstr "Tür"
+
+msgid "Time"
+msgstr "Süre"
+
+msgid "Title"
+msgstr "Başlık"
+
+msgid "Target"
+msgstr "Hedef"
+
+msgid "Priority"
+msgstr "Öncelik"
+
+msgid "Paid & Trialing"
+msgstr "Ödendi ve Deneme"
+
+msgid "Plans"
+msgstr "Planlar"
+
+msgid "Plan"
+msgstr "Plan"
+
+msgid "Subscriptions"
+msgstr "Abonelikler"
+
+msgid "Support"
+msgstr "Destek"
+
+msgid "Pending Tickets"
+msgstr "Bekleyen Talepler"
+
+msgid "Urgent Tickets"
+msgstr "Acil Talepler"
+
+msgid "SaaS Control Center"
+msgstr "SaaS Kontrol Merkezi"
+
+msgid "Super Admin Dashboard"
+msgstr "Süper Yönetici Panosu"
+
+msgid "Platform Overview"
+msgstr "Platform Genel Bakış"
+
+msgid "System Configuration"
+msgstr "Sistem Yapılandırması"
+
+msgid "System Fully Optimized"
+msgstr "Sistem Tamamen Optimize Edildi"
+
+msgid "System Live"
+msgstr "Sistem Canlı"
+
+msgid "Sync Screen"
+msgstr "Ekranı Senkronize Et"
+
+msgid "Requires immediate action"
+msgstr "Acil müdahale gerektirir"
+
+msgid "Submission"
+msgstr "Gönderim"
+
+msgid "Submissions"
+msgstr "Gönderilenler"
+
+msgid "The Future of Restaurant Management"
+msgstr "Restoran Yönetiminin Geleceği"
+
+msgid "Show My Menu"
+msgstr "Menümü Göster"
+
+msgid "Shows Cal · Protein · Carbs on each card"
+msgstr "Her kartta Kalori · Protein · Karbonhidrat gösterir"
+
+msgid "Shows Cal · Protein · Carbs on each card"
+msgstr "Her kartta Kalori · Protein · Karbonhidrat gösterir"
+
+msgid "Skip - show everything"
+msgstr "Atla - her şeyi göster"
+
+msgid "Your basket is empty"
+msgstr "Sepetiniz boş"
+
+msgid "Your Basket"
+msgstr "Sepetiniz"
+
+msgid "Your Cart"
+msgstr "Sepetiniz"
+
+msgid "Your Order"
+msgstr "Siparişiniz"
+
+msgid "Your Information"
+msgstr "Bilgileriniz"
+
+msgid "Your budget"
+msgstr "Bütçeniz"
+
+msgid "Tell us your budget - we'll design the perfect meal."
+msgstr "Bütçenizi söyleyin - mükemmel yemeği tasarlayalım."
+
+msgid "Review your details and place your order."
+msgstr "Bilgilerinizi gözden geçirin ve siparişinizi verin."
+
+msgid "The kitchen has received your order and will start preparing it shortly."
+msgstr "Mutfak siparişinizi aldı ve kısa süre içinde hazırlamaya başlayacak."
+
+msgid "Your order has been received by the kitchen."
+msgstr "Siparişiniz mutfak tarafından alındı."
+
+msgid "Your order is ready! It will be brought to your table shortly."
+msgstr "Siparişiniz hazır! Kısa süre içinde masanıza getirilecek."
+
+msgid "This order has been cancelled. Please contact staff for details."
+msgstr "Bu sipariş iptal edildi. Detaylar için personelle iletişime geçin."
+
+msgid "Tap 'Served' when the order reaches the customer."
+msgstr "Sipariş müşteriye ulaştığında 'Servis Edildi'ye basın."
+
+msgid "Pre-Order"
+msgstr "Ön Sipariş"
+
+msgid "Takeaway"
+msgstr "Paket"
+
+msgid "Dine-in"
+msgstr "Restoranda"
+
+msgid "Total Today"
+msgstr "Bugün Toplam"
+
+msgid "Total Value"
+msgstr "Toplam Değer"
+
+msgid "Total Volume"
+msgstr "Toplam Hacim"
+
+msgid "Total Items"
+msgstr "Toplam Öğe"
+
+msgid "Suggested"
+msgstr "Önerilen"
+
+msgid "Please enter a product name first."
+msgstr "Lütfen önce bir ürün adı girin."
+
+msgid "Please fix the errors above."
+msgstr "Lütfen yukarıdaki hataları düzeltin."
+
+msgid "Stock Alerts"
+msgstr "Stok Uyarıları"

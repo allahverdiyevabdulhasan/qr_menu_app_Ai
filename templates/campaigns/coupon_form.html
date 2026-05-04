@@ -1,11 +1,111 @@
-﻿{% extends 'dashboard_base.html' %}
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}{% if object %}{% trans "Edit Coupon" %}{% else %}{% trans "Add Coupon" %}{% endif %} — NeyMenu AI{% endblock %}
+{% block page_title %}{% if object %}{% trans "Edit Coupon" %}{% else %}{% trans "Add Coupon" %}{% endif %}{% endblock %}
+
 {% block content %}
-<h2>Create Coupon</h2>
+<div class="fade-in" style="max-width: 600px; margin: 0 auto;">
+    <form method="post" class="premium-card">
+        {% csrf_token %}
+        
+        <div class="p-card-header">
+            <h3 class="p-card-title">🎫 {% if object %}{% trans "Edit Coupon" %}{% else %}{% trans "New Coupon" %}{% endif %}</h3>
+            <p class="p-card-subtitle">{% trans "Create discount codes for marketing campaigns." %}</p>
+        </div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn">Save</button>
-</form>
+        <div class="p-card-body" style="padding:32px;">
+            <div class="p-field mb-6">
+                <label class="p-label">{% trans "Coupon Code" %}</label>
+                <div class="p-input-wrap">
+                    <span class="p-input-icon">🎟️</span>
+                    {{ form.code }}
+                </div>
+                {% if form.code.errors %}<div class="p-error">{{ form.code.errors|join:", " }}</div>{% endif %}
+            </div>
+
+            <div class="p-form-grid mb-6">
+                <div class="p-field">
+                    <label class="p-label">{% trans "Discount Type" %}</label>
+                    <div class="p-input-wrap">
+                        <span class="p-input-icon">🎯</span>
+                        {{ form.discount_type }}
+                    </div>
+                </div>
+                <div class="p-field">
+                    <label class="p-label">{% trans "Discount Value" %}</label>
+                    <div class="p-input-wrap">
+                        <span class="p-input-icon">💰</span>
+                        {{ form.discount_value }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-form-grid mb-6">
+                <div class="p-field">
+                    <label class="p-label">{% trans "Usage Limit" %}</label>
+                    <div class="p-input-wrap">
+                        <span class="p-input-icon">🔢</span>
+                        {{ form.usage_limit }}
+                    </div>
+                </div>
+                <div class="p-field">
+                    <label class="p-label">{% trans "Status" %}</label>
+                    <div style="display:flex; align-items:center; gap:12px; height:50px;">
+                        <label class="toggle">
+                            {{ form.is_active }}
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span style="font-size:0.9rem; font-weight:600;">{% trans "Active" %}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-form-grid">
+                <div class="p-field">
+                    <label class="p-label">{% trans "Start Date" %}</label>
+                    <div class="p-input-wrap">
+                        <span class="p-input-icon">📅</span>
+                        {{ form.start_date }}
+                    </div>
+                </div>
+                <div class="p-field">
+                    <label class="p-label">{% trans "End Date" %}</label>
+                    <div class="p-input-wrap">
+                        <span class="p-input-icon">🏁</span>
+                        {{ form.end_date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-card-footer" style="gap:16px;">
+            <a href="{% url 'coupon_list' %}" class="btn btn-secondary" style="flex:1;">{% trans "Cancel" %}</a>
+            <button type="submit" class="btn btn-primary" style="flex:2; font-weight:800;">
+                💾 {% trans "Save Coupon" %}
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .premium-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
+    .p-card-header { padding: 24px 32px; border-bottom: 1px solid var(--border); }
+    .p-card-title { font-size: 1.2rem; font-weight: 800; color: var(--text); margin: 0 0 4px; }
+    .p-card-subtitle { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+    .p-card-footer { padding: 24px 32px; background: rgba(0,0,0,0.02); border-top: 1px solid var(--border); display: flex; }
+    
+    .p-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .p-field { display: flex; flex-direction: column; gap: 8px; }
+    .p-label { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .p-input-wrap { display: flex; align-items: center; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 0 16px; transition: var(--transition); }
+    .p-input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
+    .p-input-icon { font-size: 1.1rem; margin-right: 12px; }
+    
+    .premium-card input, .premium-card select { 
+        flex: 1; background: transparent; border: none; padding: 14px 0; 
+        font-size: 0.95rem; font-family: 'Poppins', sans-serif; color: var(--text); outline: none; 
+    }
+    .p-error { font-size: 0.75rem; color: var(--danger); margin-top: 4px; font-weight: 600; }
+</style>
 {% endblock %}
-

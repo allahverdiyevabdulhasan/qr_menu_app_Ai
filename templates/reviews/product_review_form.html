@@ -1,0 +1,70 @@
+{% extends 'customer_base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Rate Product" %} — NeyMenu AI{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="padding: 24px; max-width: 500px; margin: 0 auto;">
+    <div style="text-align:center; margin-bottom:32px;">
+        <h2 style="font-weight:900; color:var(--dark); margin-bottom:8px;">{% trans "Rate this Dish" %}</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">{% trans "How was your meal? Your feedback helps others choose!" %}</p>
+    </div>
+
+    <form method="post" class="card" style="padding:32px; border-radius:24px;">
+        {% csrf_token %}
+        
+        <div style="text-align:center; margin-bottom:24px;">
+            <div class="star-rating" style="display:flex; justify-content:center; gap:12px; font-size:2.5rem; color:#e2e8f0; cursor:pointer;">
+                <span data-val="1">★</span>
+                <span data-val="2">★</span>
+                <span data-val="3">★</span>
+                <span data-val="4">★</span>
+                <span data-val="5">★</span>
+            </div>
+            <input type="hidden" name="rating" id="id_rating" value="5" required>
+        </div>
+
+        <div style="margin-bottom:24px;">
+            <label style="display:block; font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">{% trans "Your Comment" %}</label>
+            <textarea name="comment" rows="4" style="width:100%; border:2px solid var(--border); border-radius:16px; padding:16px; font-family:inherit; outline:none; transition:0.3s;" placeholder="{% trans 'What did you like or dislike?' %}"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" style="border-radius:18px; padding:16px; font-weight:800;">
+            🚀 {% trans "Submit Review" %}
+        </button>
+        
+        <a href="javascript:history.back()" style="display:block; text-align:center; margin-top:20px; font-size:0.9rem; color:var(--text-muted); text-decoration:none; font-weight:600;">
+            {% trans "Cancel" %}
+        </a>
+    </form>
+</div>
+
+<script>
+const stars = document.querySelectorAll('.star-rating span');
+const ratingInput = document.getElementById('id_rating');
+
+stars.forEach(star => {
+    star.addEventListener('click', () => {
+        const val = star.getAttribute('data-val');
+        ratingInput.value = val;
+        updateStars(val);
+    });
+});
+
+function updateStars(val) {
+    stars.forEach(star => {
+        if (star.getAttribute('data-val') <= val) {
+            star.style.color = '#f59e0b';
+        } else {
+            star.style.color = '#e2e8f0';
+        }
+    });
+}
+updateStars(5);
+</script>
+
+<style>
+textarea:focus { border-color: var(--primary) !important; box-shadow: 0 10px 20px rgba(99,102,241,0.05); }
+.star-rating span:hover { transform: scale(1.1); }
+</style>
+{% endblock %}

@@ -5,6 +5,7 @@ from django.core.files import File
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 from restaurants.models import Restaurant, Branch
 
 class RestaurantTable(models.Model):
@@ -22,6 +23,7 @@ class RestaurantTable(models.Model):
     qr_code_image = models.ImageField(_("QR Code"), upload_to='qr_codes/', blank=True, null=True)
     qr_code_url = models.URLField(_("QR Code URL"), blank=True)
     status = models.CharField(_("Status"), max_length=20, choices=STATUS_CHOICES, default='AVAILABLE')
+    capacity = models.PositiveIntegerField(_("Capacity"), default=2)
     is_active = models.BooleanField(_("Is Active"), default=True)
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
@@ -66,3 +68,47 @@ class RestaurantTable(models.Model):
             self.qr_code_image.save(file_name, File(buffer), save=False)
 
         super().save(*args, **kwargs)
+
+class TableReservation(models.Model):
+    STATUS_CHOICES = [
+        ('PENDING', _('Pending')),
+        ('CONFIRMED', _('Confirmed')),
+        ('ARRIVED', _('Arrived')),
+        ('SEATED', _('Seated')),
+        ('CANCELLED', _('Cancelled')),
+        ('NOSHOW', _('No Show')),
+        ('COMPLETED', _('Completed')),
+    ]
+
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reservations')
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name='reservations')
+    table = models.ForeignKey(RestaurantTable, on_delete=models.SET_NULL, null=True, blank=True, related_name='reservations')
+    customer_name = models.CharField(_("Customer Name"), max_length=100)
+    customer_phone = models.CharField(_("Customer Phone"), max_length=20)
+    customer_email = models.EmailField(_("Customer Email"), blank=True, null=True)
+    
+    reservation_date = models.DateField(_("Reservation Date"), null=True, blank=True)
+    reservation_time_only = models.TimeField(_("Reservation Time"), null=True, blank=True)
+    reservation_time = models.DateTimeField(_("Reservation Full Date/Time")) # Legacy/Full field
+    
+    number_of_people = models.PositiveIntegerField(_("Number of People"), default=1)
+    note = models.TextField(_("Note"), blank=True)
+    status = models.CharField(_("Status"), max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    
+    linked_preorder = models.OneToOneField('orders.Order', on_delete=models.SET_NULL, null=True, blank=True, related_name='reservation')
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_reservations')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-reservation_time']
+
+class WaiterCall(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='waiter_calls')
+    table = models.ForeignKey(RestaurantTable, on_delete=models.CASCADE, related_name='waiter_calls')
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']

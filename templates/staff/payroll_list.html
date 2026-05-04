@@ -1,0 +1,75 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Payroll History" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="mb-1">{% trans "Salary & Payments" %}</h2>
+            <p class="text-muted text-sm">{% trans "Track all payroll payments to staff" %}</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'staff_profile_list' %}" class="btn btn-secondary">
+                ← {% trans "Back to Staff" %}
+            </a>
+            <a href="{% url 'payroll_add' %}" class="btn btn-primary">
+                <span>+</span> {% trans "New Payment" %}
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Employee" %}</th>
+                            <th>{% trans "Amount" %}</th>
+                            <th>{% trans "Period" %}</th>
+                            <th>{% trans "Payment Date" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Created By" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in payrolls %}
+                        <tr>
+                            <td>
+                                <div class="font-bold">{{ p.staff.user.get_full_name|default:p.staff.user.username }}</div>
+                                <div class="text-xs text-muted">{{ p.staff.user.get_role_display }}</div>
+                            </td>
+                            <td>
+                                <div class="font-bold">{{ p.amount }} ₺</div>
+                            </td>
+                            <td>{{ p.salary_period }}</td>
+                            <td>{{ p.payment_date|date:"d M Y" }}</td>
+                            <td>
+                                <span class="badge {% if p.payment_status == 'PAID' %}badge-success{% else %}badge-warning{% endif %}">
+                                    {{ p.get_payment_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="text-xs">{{ p.created_by.username }}</div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🧾</div>
+                                    <h3>{% trans "No payroll records" %}</h3>
+                                    <p>{% trans "Record your first salary payment to see it here." %}</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

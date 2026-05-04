@@ -48,6 +48,14 @@
         align-items: center;
         gap: 8px;
     }
+    .lang-tab {
+        background: transparent; border: none; padding: 6px 12px; border-radius: 8px;
+        font-size: 0.7rem; font-weight: 800; cursor: pointer; color: var(--text-muted);
+        transition: all 0.2s;
+    }
+    .lang-tab.active { background: #fff; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .lang-pane { display: none; }
+    .lang-pane.active { display: block; animation: fadeIn 0.3s; }
 </style>
 {% endblock %}
 
@@ -58,19 +66,111 @@
         
         <div class="form-grid">
             <div class="main-fields">
-                {# --- Basic Info --- #}
+                {# --- Multi-language Name & Description --- #}
                 <div class="field-group">
-                    <div class="field-group-title"><span>📝</span> {% trans "Basic Information" %}</div>
+                    <div class="field-group-title" style="justify-content: space-between; margin-bottom: 0;">
+                        <span>🌍 {% trans "Product Content & Languages" %}</span>
+                        <div class="lang-tabs" style="display:flex; gap:4px; background:var(--bg); padding:4px; border-radius:12px;">
+                            <button type="button" class="lang-tab active" data-lang="default">GLOBAL</button>
+                            <button type="button" class="lang-tab" data-lang="tr">TR</button>
+                            <button type="button" class="lang-tab" data-lang="en">EN</button>
+                            <button type="button" class="lang-tab" data-lang="ar">AR</button>
+                            <button type="button" class="lang-tab" data-lang="az">AZ</button>
+                        </div>
+                    </div>
                     
-                    <div class="form-group">
-                        <label class="form-label">{% trans "Product Name" %}</label>
-                        {{ form.name }}
-                        {% if form.name.errors %}<div class="text-danger text-xs mt-1">{{ form.name.errors }}</div>{% endif %}
+                    <div class="lang-content-wrap mt-6">
+                        {# --- Default/Global Tab --- #}
+                        <div class="lang-pane active" id="pane-default">
+                            <div class="form-group">
+                                <label class="form-label">{% trans "Product Name (Primary)" %}</label>
+                                {{ form.name }}
+                                <p class="text-xs text-muted mt-1">{% trans "This name will be used as a fallback for all languages if they are left blank." %}</p>
+                            </div>
+                            <div class="form-group mt-6">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <label class="form-label mb-0">{% trans "Description" %}</label>
+                                    <button type="button" class="aiDescBtn btn btn-glass btn-xs" data-target="description" style="color:var(--primary); font-weight:800;">✨ {% trans "AI Generate" %}</button>
+                                </div>
+                                {{ form.description }}
+                            </div>
+                        </div>
+
+                        {# --- TR Tab --- #}
+                        <div class="lang-pane" id="pane-tr">
+                            <div class="form-group">
+                                <label class="form-label">{% trans "Product Name (Turkish)" %}</label>
+                                {{ form.name_tr }}
+                            </div>
+                            <div class="form-group mt-6">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <label class="form-label mb-0">{% trans "Description (Turkish)" %}</label>
+                                    <button type="button" class="aiDescBtn btn btn-glass btn-xs" data-target="description_tr" style="color:var(--primary); font-weight:800;">✨ {% trans "AI Generate" %}</button>
+                                </div>
+                                {{ form.description_tr }}
+                            </div>
+                        </div>
+
+                        {# --- EN Tab --- #}
+                        <div class="lang-pane" id="pane-en">
+                            <div class="form-group">
+                                <label class="form-label">{% trans "Product Name (English)" %}</label>
+                                {{ form.name_en }}
+                            </div>
+                            <div class="form-group mt-6">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <label class="form-label mb-0">{% trans "Description (English)" %}</label>
+                                    <button type="button" class="aiDescBtn btn btn-glass btn-xs" data-target="description_en" style="color:var(--primary); font-weight:800;">✨ {% trans "AI Generate" %}</button>
+                                </div>
+                                {{ form.description_en }}
+                            </div>
+                        </div>
+
+                        {# --- AR Tab --- #}
+                        <div class="lang-pane" id="pane-ar">
+                            <div class="form-group">
+                                <label class="form-label">{% trans "Product Name (Arabic)" %}</label>
+                                {{ form.name_ar }}
+                            </div>
+                            <div class="form-group mt-6">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <label class="form-label mb-0">{% trans "Description (Arabic)" %}</label>
+                                    <button type="button" class="aiDescBtn btn btn-glass btn-xs" data-target="description_ar" style="color:var(--primary); font-weight:800;">✨ {% trans "AI Generate" %}</button>
+                                </div>
+                                {{ form.description_ar }}
+                            </div>
+                        </div>
+
+                        {# --- AZ Tab --- #}
+                        <div class="lang-pane" id="pane-az">
+                            <div class="form-group">
+                                <label class="form-label">{% trans "Product Name (Azerbaijani)" %}</label>
+                                {{ form.name_az }}
+                            </div>
+                            <div class="form-group mt-6">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <label class="form-label mb-0">{% trans "Description (Azerbaijani)" %}</label>
+                                    <button type="button" class="aiDescBtn btn btn-glass btn-xs" data-target="description_az" style="color:var(--primary); font-weight:800;">✨ {% trans "AI Generate" %}</button>
+                                </div>
+                                {{ form.description_az }}
+                            </div>
+                        </div>
                     </div>
 
+                    <div id="aiLoading" style="display:none; font-size:0.75rem; color:var(--primary); margin-top:8px;" class="fade-in">
+                        ⏳ {% trans "AI is writing a premium description for the selected language..." %}
+                    </div>
+                </div>
+
+                {# --- Category & Price --- #}
+                <div class="field-group">
+                    <div class="field-group-title"><span>💰</span> {% trans "Category & Pricing" %}</div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
                         <div class="form-group">
-                            <label class="form-label">{% trans "Category" %}</label>
+                            <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+                                {% trans "Category" %}
+                                <a href="{% url 'category_add' %}" class="btn btn-glass btn-xs" style="color:var(--primary); font-size:0.65rem;">+ {% trans "Quick Add" %}</a>
+                            </label>
                             {{ form.category }}
                         </div>
                         <div class="form-group">
@@ -79,18 +179,7 @@
                         </div>
                     </div>
                 </div>
-
-                {# --- Description with AI --- #}
-                <div class="field-group">
-                    <div class="field-group-title" style="justify-content: space-between;">
-                        <span>📖 {% trans "Description" %}</span>
-                        <button type="button" id="aiDescBtn" class="btn btn-glass btn-sm" style="color:var(--primary); font-weight:800;">✨ {% trans "AI Generate" %}</button>
-                    </div>
-                    {{ form.description }}
-                    <div id="aiLoading" style="display:none; font-size:0.75rem; color:var(--primary); margin-top:8px;" class="fade-in">
-                        ⏳ {% trans "AI is writing a premium description..." %}
-                    </div>
-                </div>
+       </div>
 
                 {# --- Toggles --- #}
                 <div class="field-group">
@@ -158,47 +247,77 @@
 </div>
 
 <script>
-    document.getElementById('aiDescBtn').addEventListener('click', async function() {
-        const name = document.querySelector('[name="name"]').value;
-        if (!name) {
-            alert('{% trans "Please enter a product name first." %}');
-            return;
-        }
-        
-        const loading = document.getElementById('aiLoading');
-        loading.style.display = 'block';
-        this.disabled = true;
+    // Tab switching logic
+    document.querySelectorAll('.lang-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const lang = tab.dataset.lang;
+            // Update tabs
+            tab.parentElement.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            // Update panes
+            const panes = tab.closest('.field-group').querySelectorAll('.lang-pane');
+            panes.forEach(p => p.classList.remove('active'));
+            document.getElementById(`pane-${lang}`).classList.add('active');
+        });
+    });
 
-        try {
-            const response = await fetch('{% url "ai_product_description" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: `product_name=${encodeURIComponent(name)}`
-            });
-            const data = await response.json();
-            if (data.description) {
-                document.querySelector('[name="description"]').value = data.description;
+    // AI Description logic
+    document.querySelectorAll('.aiDescBtn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const targetField = this.dataset.target;
+            const lang = this.closest('.lang-pane').id.replace('pane-', '');
+            const nameField = lang === 'default' ? 'name' : `name_${lang}`;
+            const name = document.querySelector(`[name="${nameField}"]`).value || document.querySelector('[name="name"]').value;
+            
+            if (!name) {
+                alert('{% trans "Please enter a product name first." %}');
+                return;
             }
-        } catch (e) {
-            console.error(e);
-        } finally {
-            loading.style.display = 'none';
-            this.disabled = false;
-        }
+            
+            const loading = document.getElementById('aiLoading');
+            loading.style.display = 'block';
+            this.disabled = true;
+
+            try {
+                const response = await fetch('{% url "ai_product_description" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: `product_name=${encodeURIComponent(name)}&lang=${lang}`
+                });
+                const data = await response.json();
+                if (data.description) {
+                    document.querySelector(`[name="${targetField}"]`).value = data.description;
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                loading.style.display = 'none';
+                this.disabled = false;
+            }
+        });
     });
 </script>
 
 <style>
-    input, select, textarea {
-        width: 100%; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 14px;
-        font-size: 0.95rem; transition: all var(--transition); background: #fdfdfd; font-weight: 600;
+    input:not([type="checkbox"]):not([type="radio"]), 
+    select, 
+    textarea {
+        width: 100%; padding: 14px 20px; border: 2px solid #f1f5f9; border-radius: 16px;
+        font-size: 0.95rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        background: #f8fafc; font-weight: 600; color: #1e293b; font-family: inherit;
     }
     input:focus, select:focus, textarea:focus {
-        outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.05);
+        outline: none; border-color: var(--primary); background: #fff; 
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08); transform: translateY(-1px);
     }
-    textarea { height: 160px; line-height: 1.6; }
+    textarea { height: 160px; line-height: 1.6; resize: vertical; }
+    
+    .form-label {
+        font-weight: 800; font-size: 0.85rem; color: #475569; 
+        margin-bottom: 10px; display: block; text-transform: uppercase; letter-spacing: 0.02em;
+    }
 </style>
 {% endblock %}

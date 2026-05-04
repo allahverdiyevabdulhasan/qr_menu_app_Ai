@@ -32,7 +32,7 @@
 
       {# Cart icon in topbar #}
       {% if cart_count %}
-      <a href="{% url 'cart_view' slug=restaurant.slug %}"
+      <a href="{% url 'cart_view' restaurant_slug=restaurant.slug %}"
          style="display:flex; align-items:center; gap:6px; background:var(--dark); color:#fff;
                 padding:8px 14px; border-radius:20px; font-weight:700; font-size:0.85rem; text-decoration:none;">
         🛒 <span class="cart-badge">{{ cart_count }}</span>
@@ -46,7 +46,7 @@
 
   {# ── Sticky Cart (floating bottom) only show if items in cart ── #}
   {% if cart_count %}
-  <a href="{% url 'cart_view' slug=restaurant.slug %}" class="cart-sticky">
+  <a href="{% url 'cart_view' restaurant_slug=restaurant.slug %}" class="cart-sticky">
     <span style="font-size:1.1rem;">🛒</span>
     <span>{% trans "View Cart" %}</span>
     <span style="background:rgba(255,255,255,0.18); padding:4px 12px; border-radius:20px; font-size:0.9rem;">

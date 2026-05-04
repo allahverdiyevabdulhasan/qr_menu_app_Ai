@@ -1,0 +1,64 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Roles & Permissions" %}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="mb-6">
+        <h2 class="mb-1">{% trans "Staff Permissions" %}</h2>
+        <p class="text-muted text-sm">{% trans "Manage granular financial visibility for your team" %}</p>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "User" %}</th>
+                            <th>{% trans "Role" %}</th>
+                            <th>{% trans "Financial Access" %}</th>
+                            <th class="text-right">{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>
+                                <div class="font-bold">{{ u.get_full_name|default:u.username }}</div>
+                                <div class="text-xs text-muted">{{ u.email }}</div>
+                            </td>
+                            <td>
+                                <span class="badge badge-dark">{{ u.get_role_display }}</span>
+                            </td>
+                            <td>
+                                <div class="flex flex-wrap gap-1">
+                                    {% if u.can_view_daily_revenue %}<span class="badge badge-success text-xs">{% trans "Daily Rev" %}</span>{% endif %}
+                                    {% if u.can_view_net_profit %}<span class="badge badge-primary text-xs">{% trans "Net Profit" %}</span>{% endif %}
+                                    {% if u.can_view_expenses %}<span class="badge badge-warning text-xs">{% trans "Expenses" %}</span>{% endif %}
+                                    {% if not u.can_view_daily_revenue and not u.can_view_net_profit %}<span class="text-muted text-xs">{% trans "No financial access" %}</span>{% endif %}
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                <a href="{% url 'role_permission_edit' u.pk %}" class="btn btn-sm btn-secondary">
+                                    🔐 {% trans "Manage Permissions" %}
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <h3>{% trans "No staff members found" %}</h3>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

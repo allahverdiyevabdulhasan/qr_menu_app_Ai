@@ -92,9 +92,16 @@ def get_net_profit(restaurant, start_date=None, end_date=None):
         expenses_qs = expenses_qs.filter(date__lte=end_date.date() if hasattr(end_date, 'date') else end_date)
     total_expenses = Decimal(str(expenses_qs.aggregate(t=Sum('amount'))['t'] or 0))
 
-    # Note: discounts are already reflected in 'revenue' (Payment.amount),
-    # so we do NOT subtract them again here.
-    net_profit = revenue - product_costs - total_expenses
+    # Deduct payroll payments
+    from staff.models import Payroll
+    payroll_qs = Payroll.objects.filter(staff__user__restaurant=restaurant, payment_status='PAID')
+    if start_date:
+        payroll_qs = payroll_qs.filter(payment_date__gte=start_date.date() if hasattr(start_date, 'date') else start_date)
+    if end_date:
+        payroll_qs = payroll_qs.filter(payment_date__lte=end_date.date() if hasattr(end_date, 'date') else end_date)
+    total_payroll = Decimal(str(payroll_qs.aggregate(t=Sum('amount'))['t'] or 0))
+
+    net_profit = revenue - product_costs - total_expenses - total_payroll
     return net_profit
 
 def get_top_products(restaurant, start_date=None, end_date=None, limit=10, ascending=False):

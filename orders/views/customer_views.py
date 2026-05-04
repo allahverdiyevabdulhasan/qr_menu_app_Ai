@@ -17,42 +17,50 @@ class CartView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        slug = self.kwargs.get('slug')
-        context['restaurant'] = get_object_or_404(Restaurant, slug=slug)
+        restaurant_slug = self.kwargs.get('restaurant_slug')
+        context['restaurant'] = get_object_or_404(Restaurant, slug=restaurant_slug)
         context['cart'] = Cart(self.request)
         return context
 
 class CartAddView(View):
-    def post(self, request, slug, *args, **kwargs):
+    def post(self, request, restaurant_slug, *args, **kwargs):
         cart = Cart(request)
         product = get_object_or_404(Product, pk=request.POST.get('product_id'))
         quantity = int(request.POST.get('quantity', 1))
         options = request.POST.getlist('options') # list of option IDs
+        removed_ingredients = request.POST.getlist('removed_ingredients') # list of names
+        note = request.POST.get('note', '')
         
-        cart.add(product=product, quantity=quantity, options=[int(opt) for opt in options])
+        cart.add(
+            product=product, 
+            quantity=quantity, 
+            options=[int(opt) for opt in options],
+            removed_ingredients=removed_ingredients,
+            note=note
+        )
         messages.success(request, f"{product.name} added to cart.")
         
         # Redirect back to where they came from
-        return redirect(request.META.get('HTTP_REFERER', reverse('public_menu', kwargs={'slug': slug})))
+        return redirect(request.META.get('HTTP_REFERER', reverse('public_menu', kwargs={'restaurant_slug': restaurant_slug})))
 
 class CartUpdateView(View):
-    def post(self, request, slug, *args, **kwargs):
+    def post(self, request, restaurant_slug, *args, **kwargs):
         cart = Cart(request)
         item_id = request.POST.get('item_id')
         quantity = int(request.POST.get('quantity', 1))
         
         cart.update(item_id, quantity)
-        return redirect('cart_view', slug=slug)
+        return redirect('cart_view', restaurant_slug=restaurant_slug)
 
 class CartClearView(View):
-    def post(self, request, slug, *args, **kwargs):
+    def post(self, request, restaurant_slug, *args, **kwargs):
         cart = Cart(request)
         cart.clear()
-        return redirect('cart_view', slug=slug)
+        return redirect('cart_view', restaurant_slug=restaurant_slug)
 
 class CheckoutView(View):
-    def get(self, request, slug, token=None):
-        restaurant = get_object_or_404(Restaurant, slug=slug)
+    def get(self, request, restaurant_slug, token=None):
+        restaurant = get_object_or_404(Restaurant, slug=restaurant_slug)
         table = None
         if token:
             table = get_object_or_404(RestaurantTable, token=token, restaurant=restaurant)
@@ -60,7 +68,7 @@ class CheckoutView(View):
         cart = Cart(request)
         if not cart.cart:
             messages.warning(request, "Your cart is empty.")
-            return redirect('public_menu', slug=slug)
+            return redirect('public_menu', restaurant_slug=restaurant_slug)
             
         return render(request, 'orders/customer/checkout.html', {
             'restaurant': restaurant,
@@ -68,15 +76,19 @@ class CheckoutView(View):
             'cart': cart
         })
 
-    def post(self, request, slug, token=None):
-        restaurant = get_object_or_404(Restaurant, slug=slug)
+    def post(self, request, restaurant_slug, token=None):
+        restaurant = get_object_or_404(Restaurant, slug=restaurant_slug)
         table = None
         if token:
             table = get_object_or_404(RestaurantTable, token=token, restaurant=restaurant)
+        else:
+            table_id = request.POST.get('table_id')
+            if table_id:
+                table = get_object_or_404(RestaurantTable, id=table_id, restaurant=restaurant)
             
         cart = Cart(request)
         if not cart.cart:
-            return redirect('public_menu', slug=slug)
+            return redirect('public_menu', restaurant_slug=restaurant_slug)
 
         order_type = request.POST.get('order_type', 'DINE_IN')
         note = request.POST.get('note', '')
@@ -167,12 +179,16 @@ class CheckoutView(View):
                 quantity=item['quantity'],
                 unit_price=item['unit_price'],
                 total_price=item['total_price'],
-                selected_options=item['options']
+                note=item.get('note', ''),
+                selected_options={
+                    'options': item['options'],
+                    'removed_ingredients': item.get('removed_ingredients', [])
+                }
             )
 
         cart.clear()
         
-        return redirect('order_success', slug=slug, order_number=order.order_number)
+        return redirect('order_success', restaurant_slug=restaurant_slug, order_number=order.order_number)
 
 class OrderSuccessView(TemplateView):
     template_name = 'orders/customer/order_success.html'
@@ -189,3 +205,8 @@ class OrderTrackingView(DetailView):
     
     def get_object(self, queryset=None):
         return get_object_or_404(Order, order_number=self.kwargs['order_number'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['restaurant'] = self.get_object().restaurant
+        return context

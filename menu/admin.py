@@ -1,6 +1,6 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
-from .models import Category, Product, ProductOption
+from .models import Category, Product, ProductOption, ProductIngredient
 
 @admin.register(Category)
 class CategoryAdmin(TranslationAdmin):
@@ -12,9 +12,13 @@ class ProductOptionInline(admin.TabularInline):
     model = ProductOption
     extra = 1
 
+class ProductIngredientInline(admin.TabularInline):
+    model = ProductIngredient
+    extra = 1
+
 @admin.register(Product)
 class ProductAdmin(TranslationAdmin):
     list_display = ('name', 'restaurant', 'category', 'price', 'stock_status', 'is_active')
     list_filter = ('restaurant', 'category', 'is_active', 'stock_status')
     search_fields = ('name', 'restaurant__name')
-    inlines = [ProductOptionInline]
+    inlines = [ProductOptionInline, ProductIngredientInline]

@@ -3,132 +3,185 @@
 {% block title %}{% trans "Track Order" %} #{{ order.order_number|slice:"-6:" }}{% endblock %}
 {% block extra_css %}
 <style>
-  .tracking-steps {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    position: relative; padding: 0 12px;
+  :root {
+    --track-bg: #f8fafc;
   }
-  .tracking-steps::before {
-    content: ''; position: absolute; top: 22px; left: 12%; right: 12%;
-    height: 3px; background: var(--border); border-radius: 3px; z-index: 0;
+  body, .main-content { background: var(--track-bg) !important; }
+
+  .tracking-container {
+    max-width: 500px; margin: 0 auto; padding: 40px 20px;
   }
-  .tracking-step {
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    position: relative; z-index: 1; flex: 1;
+
+  .tracking-header { text-align: center; margin-bottom: 40px; }
+  .tracking-title { font-size: 2rem; font-weight: 900; color: #1e293b; font-family: 'Outfit', sans-serif; }
+  .tracking-subtitle { font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── Modern Vertical Steps ── */
+  .v-steps { display: flex; flex-direction: column; gap: 32px; position: relative; padding-left: 20px; }
+  .v-steps::before {
+    content: ''; position: absolute; left: 37px; top: 10px; bottom: 10px;
+    width: 3px; background: #e2e8f0; border-radius: 3px;
   }
-  .tracking-step-icon {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: var(--bg); border: 2px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; transition: var(--transition);
+
+  .v-step { display: flex; align-items: center; gap: 24px; position: relative; opacity: 0.4; transition: all 0.4s ease; }
+  .v-step.active { opacity: 1; transform: scale(1.05); }
+  .v-step.done { opacity: 1; }
+
+  .v-step-icon {
+    width: 36px; height: 36px; border-radius: 50%; background: #fff;
+    border: 3px solid #e2e8f0; display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; z-index: 10; transition: all 0.4s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
-  .tracking-step.active .tracking-step-icon {
-    background: var(--primary); border-color: var(--primary);
-    box-shadow: 0 0 0 5px rgba(99,102,241,0.15);
-    animation: pulse 2s ease-in-out infinite;
+  .v-step.active .v-step-icon {
+    border-color: var(--primary); color: var(--primary);
+    box-shadow: 0 0 20px rgba(99,102,241,0.3);
+    animation: bounce 1.5s infinite;
   }
-  .tracking-step.done .tracking-step-icon {
+  .v-step.done .v-step-icon {
     background: var(--success); border-color: var(--success); color: #fff;
   }
-  .tracking-step-label {
-    font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-align: center;
-  }
-  .tracking-step.active .tracking-step-label { color: var(--primary); }
-  .tracking-step.done   .tracking-step-label { color: var(--success); }
 
-  .data-table {
-    width: 100%; border-collapse: collapse;
+  .v-step-content { flex: 1; }
+  .v-step-label { font-size: 1rem; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
+  .v-step-desc { font-size: 0.8rem; color: #64748b; font-weight: 600; }
+
+  /* ── Summary Card ── */
+  .summary-card {
+    background: #fff; border-radius: 24px; padding: 24px; margin-top: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;
   }
-  .data-table td {
-    padding: 12px 20px; border-bottom: 1px solid var(--border);
-    font-size: 0.9rem; color: var(--dark); vertical-align: middle;
+  .summary-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f8fafc; font-size: 0.95rem; }
+  .summary-item:last-child { border: none; font-weight: 900; font-size: 1.1rem; color: #1e293b; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
   }
-  .data-table tr:last-child td { border-bottom: none; }
 </style>
 {% endblock %}
 
 {% block content %}
-
-<div style="max-width:600px; margin:0 auto; padding:40px 16px; text-align:center;">
-  
-  <div style="font-size:3rem; margin-bottom:12px;">🚚</div>
-  <h2 class="mb-2">{% trans "Order Tracking" %}</h2>
-  <p class="text-muted mb-4">{% trans "Order" %} #{{ order.order_number }}</p>
-
-  {# ── Progress Tracker ── #}
-  <div class="card mb-4">
-    <div class="card-body">
-      <div class="tracking-steps">
-        <div class="tracking-step {% if order.status != 'CANCELLED' %}done{% endif %}">
-          <div class="tracking-step-icon">📝</div>
-          <div class="tracking-step-label">{% trans "Received" %}</div>
-        </div>
-        <div class="tracking-step {% if order.status == 'PREPARING' %}active{% elif order.status == 'READY' or order.status == 'SERVED' or order.status == 'COMPLETED' %}done{% endif %}">
-          <div class="tracking-step-icon">🔥</div>
-          <div class="tracking-step-label">{% trans "Preparing" %}</div>
-        </div>
-        <div class="tracking-step {% if order.status == 'READY' %}active{% elif order.status == 'SERVED' or order.status == 'COMPLETED' %}done{% endif %}">
-          <div class="tracking-step-icon">🛎️</div>
-          <div class="tracking-step-label">{% trans "Ready" %}</div>
-        </div>
-        <div class="tracking-step {% if order.status == 'SERVED' or order.status == 'COMPLETED' %}done{% endif %}">
-          <div class="tracking-step-icon">🍽️</div>
-          <div class="tracking-step-label">{% trans "Served" %}</div>
-        </div>
-      </div>
-
-      <div style="margin-top:24px; padding:16px; background:var(--bg); border-radius:var(--radius);">
-        <h3 style="font-size:1.1rem; color:var(--primary);">{{ order.get_status_display }}</h3>
-        <p class="text-muted text-sm" style="margin:0;">
-          {% if order.status == 'NEW' %}
-            {% trans "The kitchen has received your order and will start preparing it shortly." %}
-          {% elif order.status == 'PREPARING' %}
-            {% trans "Chef is cooking your delicious meal right now!" %}
-          {% elif order.status == 'READY' %}
-            {% trans "Your order is ready! It will be brought to your table shortly." %}
-          {% elif order.status == 'SERVED' %}
-            {% trans "Enjoy your meal! Let us know if you need anything else." %}
-          {% elif order.status == 'CANCELLED' %}
-            {% trans "This order has been cancelled. Please contact staff for details." %}
-          {% endif %}
-        </p>
-      </div>
+<div class="tracking-container fade-in">
+    <div class="tracking-header">
+        <div class="tracking-subtitle">{% trans "Track Order" %}</div>
+        <h1 class="tracking-title">{{ order.tracking_code }}</h1>
     </div>
-  </div>
 
-  {# ── Order Summary ── #}
-  <div class="card">
-    <div class="card-header">{% trans "Your Order" %}</div>
-    <div class="card-body" style="padding:0;">
-      <table class="data-table">
-        <tbody>
-          {% for item in order.items.all %}
-          <tr>
-            <td><strong>{{ item.quantity }} ×</strong> {{ item.product_name_snapshot }}</td>
-            <td style="text-align:right;">{{ item.total_price }} ₼</td>
-          </tr>
-          {% endfor %}
-          <tr style="background:var(--bg); font-weight:800;">
-            <td>{% trans "Total" %}</td>
-            <td style="text-align:right;">{{ order.total_amount }} ₼</td>
-          </tr>
-        </tbody>
-      </table>
+    {# ── Progress Tracker (Vertical) ── #}
+    <div class="v-steps">
+        <div class="v-step {% if order.status != 'CANCELLED' %}done{% endif %}">
+            <div class="v-step-icon">📝</div>
+            <div class="v-step-content">
+                <div class="v-step-label">{% trans "Received" %}</div>
+                <div class="v-step-desc">{% trans "Your order is in the system." %}</div>
+            </div>
+        </div>
+
+        <div class="v-step {% if order.status == 'PREPARING' %}active{% elif order.status in 'READY,SERVED,COMPLETED' %}done{% endif %}">
+            <div class="v-step-icon">👨‍🍳</div>
+            <div class="v-step-content">
+                <div class="v-step-label">{% trans "Preparing" %}</div>
+                <div class="v-step-desc" id="prep-desc">
+                    {% if order.estimated_prep_time %}
+                        ⏱ {% trans "Estimated" %}: {{ order.estimated_prep_time }} {% trans "mins" %}
+                    {% else %}
+                        {% trans "Chef is preparing your meal." %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="v-step {% if order.status == 'READY' %}active{% elif order.status in 'SERVED,COMPLETED' %}done{% endif %}">
+            <div class="v-step-icon">🛎️</div>
+            <div class="v-step-content">
+                <div class="v-step-label">{% trans "Ready" %}</div>
+                <div class="v-step-desc">{% trans "Your order is ready to serve!" %}</div>
+            </div>
+        </div>
+
+        <div class="v-step {% if order.status in 'SERVED,COMPLETED' %}done{% endif %}">
+            <div class="v-step-icon">🍽️</div>
+            <div class="v-step-content">
+                <div class="v-step-label">{% trans "Served" %}</div>
+                <div class="v-step-desc">{% trans "Enjoy your delicious meal!" %}</div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div style="margin-top:32px; display:flex; flex-direction:column; gap:12px;">
-    <a href="{% url 'public_menu' slug=restaurant.slug %}" class="btn btn-secondary btn-block">
-      ➕ {% trans "Order More" %}
-    </a>
-    <a href="{% url 'review_add' order_number=order.order_number %}" class="btn btn-secondary btn-block">
-      ⭐ {% trans "Rate our service" %}
-    </a>
-  </div>
+    {# ── Order Summary ── #}
+    <div class="summary-card">
+        <div style="font-weight:900; color:#1e293b; margin-bottom:16px; font-size:1.1rem; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">
+            {% trans "Order Summary" %}
+        </div>
+        {% for item in order.items.all %}
+        <div class="summary-item">
+            <div style="display:flex; gap:12px;">
+                <span style="font-weight:900; color:var(--primary);">{{ item.quantity }}x</span>
+                <span style="font-weight:700; color:#475569;">{{ item.product_name_snapshot }}</span>
+            </div>
+            <span style="font-weight:800; color:#1e293b;">{{ item.total_price }} ₼</span>
+        </div>
+        {% endfor %}
+        <div class="summary-item" style="margin-top:10px; padding-top:16px;">
+            <span>{% trans "Total Amount" %}</span>
+            <span>{{ order.total_amount }} ₼</span>
+        </div>
+    </div>
 
+    <div style="margin-top:40px; display:flex; flex-direction:column; gap:15px;">
+        <a href="{% url 'public_menu' restaurant_slug=restaurant.slug %}" style="display:block; text-align:center; background:#fff; border:2px solid #e2e8f0; padding:16px; border-radius:20px; font-weight:800; color:#1e293b; text-decoration:none; transition:all 0.2s;">
+            ➕ {% trans "Order More" %}
+        </a>
+        <a href="{% url 'review_add' order_number=order.order_number %}" style="display:block; text-align:center; background:var(--primary); color:#fff; padding:18px; border-radius:20px; font-weight:900; text-decoration:none; box-shadow:0 10px 20px rgba(99,102,241,0.2);">
+            ⭐ {% trans "Rate our service" %}
+        </a>
+    </div>
 </div>
 
-{# Auto-refresh to see status changes #}
 <script>
-setTimeout(() => location.reload(), 20000);
+const orderNumber = "{{ order.order_number }}";
+const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const socketUrl = `${protocol}//${window.location.host}/ws/tracking/${orderNumber}/`;
+const trackingSocket = new WebSocket(socketUrl);
+
+trackingSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log("Tracking update:", data);
+    
+    if (data.type === 'order_status_update') {
+        updateUI(data.status, data.estimated_prep_time);
+    }
+};
+
+function updateUI(status, prepTime) {
+    const steps = document.querySelectorAll('.v-step');
+    steps.forEach(step => step.classList.remove('active', 'done'));
+
+    // Received
+    if (status !== 'CANCELLED') steps[0].classList.add('done');
+
+    // Preparing
+    if (status === 'PREPARING') {
+        steps[1].classList.add('active');
+        if (prepTime) {
+            document.getElementById('prep-desc').innerText = `⏱ {% trans "Estimated" %}: ${prepTime} {% trans "mins" %}`;
+        }
+    } else if (['READY', 'SERVED', 'COMPLETED'].includes(status)) {
+        steps[1].classList.add('done');
+    }
+
+    // Ready
+    if (status === 'READY') {
+        steps[2].classList.add('active');
+    } else if (['SERVED', 'COMPLETED'].includes(status)) {
+        steps[2].classList.add('done');
+    }
+
+    // Served
+    if (['SERVED', 'COMPLETED'].includes(status)) {
+        steps[3].classList.add('done');
+    }
+}
 </script>
 {% endblock %}

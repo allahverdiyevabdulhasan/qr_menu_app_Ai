@@ -341,6 +341,24 @@
   }
 
   @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  /* ── Floating Actions ── */
+  .floating-actions {
+    position: fixed; bottom: 85px; right: 20px;
+    display: flex; flex-direction: column; gap: 12px; z-index: 500;
+  }
+  .f-btn {
+    display: flex; align-items: center; gap: 10px; padding: 10px 18px;
+    border-radius: 30px; border: none; background: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); cursor: pointer;
+    transition: var(--transition); text-decoration: none;
+  }
+  .f-btn:hover { transform: scale(1.05); box-shadow: 0 12px 32px rgba(0,0,0,0.18); }
+  .f-icon { font-size: 1.2rem; }
+  .f-label { font-size: 0.85rem; font-weight: 700; color: var(--dark); font-family: 'Poppins', sans-serif; }
+  .call-waiter-btn { background: var(--primary-gradient); }
+  .call-waiter-btn .f-label { color: #fff; }
+  .call-waiter-btn .f-icon { filter: brightness(0) invert(1); }
 </style>
 {% endblock %}
 
@@ -397,7 +415,7 @@
                 </span>
             </div>
         </div>
-        <a href="{% url 'ai_budget_recommendation' %}" class="btn btn-primary pulse" style="border-radius:20px; font-size:0.88rem;">
+        <a href="{% url 'ai_budget_recommendation' restaurant_slug=restaurant.slug %}" class="btn btn-primary pulse" style="border-radius:20px; font-size:0.88rem;">
             ✨ {% trans "AI Menu Advisor" %}
         </a>
     </div>
@@ -407,6 +425,22 @@
       <span>💰</span>
       <span id="budgetBarText">Budget: — ₼</span>
       <button class="budget-reset" onclick="resetBudget()">✕ {% trans "Reset" %}</button>
+    </div>
+
+    {# ── Action Buttons (Floating) ── #}
+    <div class="floating-actions">
+        <button class="f-btn call-waiter-btn" onclick="callWaiter()">
+            <span class="f-icon">🛎️</span>
+            <span class="f-label">{% trans "Call Waiter" %}</span>
+        </button>
+        <button class="f-btn" onclick="requestBill()" style="background:#fff; color:var(--dark);">
+            <span class="f-icon">💳</span>
+            <span class="f-label">{% trans "Request Bill" %}</span>
+        </button>
+        <a href="{% url 'public_reservation' restaurant_slug=restaurant.slug %}" class="f-btn reserve-btn">
+            <span class="f-icon">📅</span>
+            <span class="f-label">{% trans "Reserve" %}</span>
+        </a>
     </div>
 
     {# ── Search ── #}
@@ -451,13 +485,20 @@
                             <div style="height:100%; background:linear-gradient(135deg,#eef2ff,#e0e7ff);
                                         display:flex; align-items:center; justify-content:center; font-size:2.5rem;">🥗</div>
                         {% endif %}
-                        <div class="price-tag">{{ p.price }} ₼</div>
+                        <div class="price-tag">{{ p.price|floatformat:2 }} ₼</div>
                         {% if p.is_popular %}<div style="position:absolute;top:8px;left:8px;background:#f59e0b;color:#fff;padding:3px 9px;border-radius:20px;font-size:0.65rem;font-weight:700;">🔥 Popular</div>{% endif %}
                         <div class="budget-badge-overlay" style="display:none;">💰 {% trans "Over Budget" %}</div>
                     </div>
 
                     <div class="product-content">
                         <h3 class="product-title">{{ p.name }}</h3>
+                        
+                        <div class="product-rating" style="display:flex; align-items:center; gap:4px; margin-bottom:6px;">
+                            <span style="color:#f59e0b; font-size:0.8rem;">★</span>
+                            <span style="font-size:0.75rem; font-weight:800; color:var(--dark);">{{ p.average_rating|floatformat:1 }}</span>
+                            <span style="font-size:0.7rem; color:var(--text-muted);">({{ p.review_count }})</span>
+                        </div>
+
                         <p class="product-desc">{{ p.description|truncatewords:8 }}</p>
 
                         {# Nutri row — shown only in athlete mode #}
@@ -469,12 +510,7 @@
 
                         <div class="product-bottom">
                             <span class="cal-tag">🔥 {{ p.calories|default:"—" }} kcal</span>
-                            <form method="post" action="{% url 'cart_add' slug=restaurant.slug %}" onclick="event.stopPropagation();">
-                                {% csrf_token %}
-                                <input type="hidden" name="product_id" value="{{ p.id }}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="add-btn" title="{% trans 'Add to cart' %}">+</button>
-                            </form>
+                            <a href="{% url 'public_product' restaurant_slug=restaurant.slug pk=p.id %}" class="add-btn" title="{% trans 'View Detail & Add' %}">+</a>
                         </div>
                     </div>
                 </div>
@@ -574,6 +610,56 @@ function applyAllFilters() {
       if (budgBadge) budgBadge.style.display = 'none';
     }
   });
+}
+
+function callWaiter() {
+    const restaurantSlug = "{{ restaurant.slug }}";
+    const pathParts = window.location.pathname.split('/');
+    const tableToken = pathParts[3]; // m/slug/token/
+
+    if (!tableToken || tableToken.length < 32) {
+        alert("{% trans 'Please scan a table QR code to call a waiter.' %}");
+        return;
+    }
+
+    fetch(`/en/m/${restaurantSlug}/${tableToken}/call-waiter/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert("{% trans 'Waiter has been called.' %}");
+        }
+    });
+}
+
+function requestBill() {
+    const restaurantSlug = "{{ restaurant.slug }}";
+    const pathParts = window.location.pathname.split('/');
+    const tableToken = pathParts[3];
+
+    if (!tableToken || tableToken.length < 32) {
+        alert("{% trans 'Please scan a table QR code to request the bill.' %}");
+        return;
+    }
+
+    fetch(`/en/m/${restaurantSlug}/${tableToken}/call-waiter/bill/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert("{% trans 'Bill has been requested.' %}");
+        }
+    });
 }
 
 /* Show modal on load */

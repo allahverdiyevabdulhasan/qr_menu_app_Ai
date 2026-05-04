@@ -290,6 +290,51 @@ h4 { font-size: 1rem; font-weight: 600; }
 }
 .sidebar-footer { padding: 14px 12px; border-top: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; }
 
+/* ── User Card (Sidebar Bottom) ── */
+.user-card {
+  display: flex; align-items: center; gap: 10px; padding: 12px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px; transition: var(--transition);
+}
+.user-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); }
+.user-link {
+  display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+  text-decoration: none; color: inherit;
+}
+.user-avatar {
+  width: 42px; height: 42px; border-radius: 14px;
+  background: var(--primary-gradient); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.1rem; flex-shrink: 0;
+  overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.sidebar-logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 0.88rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.user-role { font-size: 0.68rem; color: rgba(255,255,255,0.45); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.logout-form { margin-left: 10px; }
+.logout-btn {
+  width: 34px; height: 34px; border-radius: 10px; border: none;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.logout-btn:hover { background: #ef4444; color: #fff; transform: scale(1.1) rotate(5deg); box-shadow: 0 5px 15px rgba(239,68,68,0.4); }
+
+/* Topbar Logo & Avatar */
+.top-logo-wrap { width: 40px; height: 40px; border-radius: 12px; overflow: hidden; background: #fff; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; margin-right: 4px; }
+.top-logo { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.top-logo-placeholder { font-weight: 900; color: var(--primary); font-size: 1.1rem; }
+.top-user-avatar { 
+    width: 40px; height: 40px; border-radius: 12px; background: #f8fafc; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.92rem; color: var(--dark);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: var(--transition);
+}
+.top-user-avatar:hover { border-color: var(--primary); transform: translateY(-2px); }
+
 /* ── Sidebar Overlay ── */
 .sidebar-overlay {
   display: none; position: fixed; inset: 0;
@@ -419,11 +464,20 @@ h4 { font-size: 1rem; font-weight: 600; }
 .nutri-bar-fat   .nutri-bar-fill { background: #a855f7; }
 
 /* ── RTL Support ── */
-[dir="rtl"] { font-family: 'Poppins', 'Tahoma', sans-serif; }
-[dir="rtl"] .sidebar { left: auto; right: 0; }
+[dir="rtl"] { font-family: 'Poppins', 'Tahoma', sans-serif; text-align: right; }
+[dir="rtl"] .sidebar { left: auto; right: 0; border-right: none; border-left: 1px solid rgba(255,255,255,0.04); }
 [dir="rtl"] .main-content { margin-left: 0; margin-right: var(--sidebar-width); }
-[dir="rtl"] .sidebar-link { border-left: none; border-right: 3px solid transparent; }
+[dir="rtl"] .topbar-right { flex-direction: row-reverse; }
+[dir="rtl"] .topbar-left { flex-direction: row-reverse; }
+[dir="rtl"] .sidebar-link { border-left: none; border-right: 3px solid transparent; flex-direction: row; }
 [dir="rtl"] .sidebar-link.active { border-right-color: var(--primary); }
+[dir="rtl"] .metric-card .icon { right: auto; left: 18px; }
+[dir="rtl"] .data-table th { text-align: right; }
+[dir="rtl"] .alert { border-left: none; border-right: 4px solid; }
+[dir="rtl"] .btn-sm { flex-direction: row; }
+[dir="rtl"] .user-card { flex-direction: row; }
+[dir="rtl"] .logout-btn { transform: scaleX(-1); }
+[dir="rtl"] .logout-btn:hover { transform: scaleX(-1) scale(1.1) rotate(-5deg); }
 
 /* ── Animations ── */
 .fade-in { animation: fadeIn 0.45s ease-out both; }
