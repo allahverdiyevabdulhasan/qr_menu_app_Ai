@@ -79,6 +79,35 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class ModifierGroup(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='modifier_groups')
+    name = models.CharField(_("Group Name"), max_length=100)
+    is_required = models.BooleanField(_("Is Required"), default=False)
+    min_choices = models.IntegerField(_("Minimum Choices"), default=0)
+    max_choices = models.IntegerField(_("Maximum Choices"), default=1)
+    products = models.ManyToManyField(Product, related_name='modifier_groups', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("Modifier Group")
+        verbose_name_plural = _("Modifier Groups")
+
+    def __str__(self):
+        return f"{self.restaurant.name} - {self.name}"
+
+class ProductModifier(models.Model):
+    group = models.ForeignKey(ModifierGroup, on_delete=models.CASCADE, related_name='modifiers')
+    name = models.CharField(_("Modifier Name"), max_length=100)
+    price = models.DecimalField(_("Additional Price"), max_digits=10, decimal_places=2, default=0.00)
+    is_active = models.BooleanField(_("Is Active"), default=True)
+
+    class Meta:
+        verbose_name = _("Product Modifier")
+        verbose_name_plural = _("Product Modifiers")
+
+    def __str__(self):
+        return f"{self.group.name} -> {self.name} (+{self.price})"
+
 class ProductOption(models.Model):
     OPTION_TYPE_CHOICES = [
         ('single', _('Single Choice')),

@@ -27,7 +27,12 @@ class CartAddView(View):
         cart = Cart(request)
         product = get_object_or_404(Product, pk=request.POST.get('product_id'))
         quantity = int(request.POST.get('quantity', 1))
-        options = request.POST.getlist('options') # list of option IDs
+        
+        options = request.POST.getlist('modifiers') # list of checkbox modifier IDs
+        for key in request.POST.keys():
+            if key.startswith('modifier_') and key != 'modifiers':
+                options.append(request.POST.get(key)) # add radio modifier IDs
+
         removed_ingredients = request.POST.getlist('removed_ingredients') # list of names
         note = request.POST.get('note', '')
         
@@ -172,23 +177,51 @@ class CheckoutView(View):
 
         # Create Order Items
         for item in cart:
+            mod_names = [mod.name for mod in item.get('modifier_objects', [])]
             OrderItem.objects.create(
                 order=order,
                 product=item['product'],
                 product_name_snapshot=item['product'].name,
                 quantity=item['quantity'],
                 unit_price=item['unit_price'],
+                snapshot_selling_price=item['product'].price,
+                snapshot_cost_price=getattr(item['product'], 'cost_price', None) or Decimal('0.00'),
                 total_price=item['total_price'],
                 note=item.get('note', ''),
                 selected_options={
                     'options': item['options'],
+                    'modifier_names': mod_names,
                     'removed_ingredients': item.get('removed_ingredients', [])
                 }
             )
 
         cart.clear()
         
+        # WhatsApp Ordering logic
+        order_method = request.POST.get('order_method', 'standard')
+        if order_method == 'whatsapp' and hasattr(restaurant, 'settings') and restaurant.settings.enable_whatsapp_ordering and restaurant.settings.whatsapp_number:
+            import urllib.parse
+            items_text = "\\n".join([f"{item.quantity}x {item.product_name_snapshot} - {item.total_price} ₼" for item in order.items.all()])
+            text = f"Hello {restaurant.name},\\nI would like to place a new order!\\n\\nOrder #{order.order_number}\\nType: {order.get_order_type_display()}\\nTable: {table.table_number if table else 'N/A'}\\n\\nItems:\\n{items_text}\\n\\nSubtotal: {order.subtotal} ₼\\nDiscount: -{order.discount_amount} ₼\\nTax: {order.tax_amount} ₼\\nService: {order.service_charge} ₼\\n*Total:* {order.total_amount} ₼\\n\\nCustomer: {customer_name}\\nPhone: {customer_phone}\\nNote: {note}"
+            encoded_text = urllib.parse.quote(text)
+            whatsapp_url = f"https://wa.me/{restaurant.settings.whatsapp_number}?text={encoded_text}"
+            return redirect(whatsapp_url)
+            
+        if order_method == 'online':
+            return redirect('order_payment', restaurant_slug=restaurant_slug, order_number=order.order_number)
+        
         return redirect('order_success', restaurant_slug=restaurant_slug, order_number=order.order_number)
+
+class OrderPaymentView(TemplateView):
+    template_name = 'orders/customer/order_payment.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = get_object_or_404(Order, order_number=kwargs['order_number'])
+        context['order'] = order
+        context['restaurant'] = order.restaurant
+        return context
+
 
 class OrderSuccessView(TemplateView):
     template_name = 'orders/customer/order_success.html'

@@ -1,83 +1,105 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Waiter Panel" %} — NeyMenu AI{% endblock %}
-{% block page_title %}🛎️ {% trans "Waiter Panel" %}{% endblock %}
+{% block title %}Garson Paneli — Neyman{% endblock %}
+{% block page_title %}🛎️ Garson Paneli{% endblock %}
 
 {% block extra_css %}
 <style>
-.waiter-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
-.waiter-card {
-  background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
-  box-shadow: var(--shadow); overflow: hidden; transition: var(--transition);
-}
-.waiter-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.waiter-card-head {
-  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-.table-number { font-size: 1.5rem; font-weight: 800; color: var(--dark); }
-.ready-badge {
-  background: linear-gradient(135deg,#10b981,#34d399);
-  color: #fff; padding: 4px 12px; border-radius: 20px;
-  font-size: 0.72rem; font-weight: 700;
-}
-.waiter-items { padding: 14px 20px; display: flex; flex-direction: column; gap: 8px; }
-.waiter-item { display: flex; justify-content: space-between; font-size: 0.875rem; }
-.waiter-item-qty { font-weight: 700; color: var(--primary); margin-right: 8px; }
-.waiter-card-foot { padding: 14px 20px; background: var(--bg); border-top: 1px solid var(--border); }
+  :root {
+    --bg-light: #f8fafc;
+    --card-bg: #ffffff;
+    --border-light: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+  }
+  body, .main-content, .page-content { background: var(--bg-light) !important; color: var(--text-main); }
+  .topbar { background: rgba(255, 255, 255, 0.9) !important; border-color: var(--border-light) !important; backdrop-filter: blur(12px); }
+  .topbar-title { color: var(--text-main); font-weight: 800; font-family: 'Outfit', sans-serif; }
+
+  .waiter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .waiter-card {
+    background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-light);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .waiter-card:hover { box-shadow: 0 10px 25px rgba(99,102,241,0.08); transform: translateY(-3px); }
+  
+  .waiter-card-head {
+    padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px dashed var(--border-light); background: #fefce8;
+  }
+  .table-number { font-size: 1.6rem; font-weight: 900; color: var(--text-main); }
+  .ready-badge {
+    background: #10b981; color: #fff; padding: 6px 14px; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 800; box-shadow: 0 4px 10px rgba(16,185,129,0.2);
+  }
+  
+  .waiter-items { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .waiter-item { display: flex; justify-content: space-between; align-items: flex-start; font-size: 1rem; font-weight: 600; }
+  .waiter-item-qty { font-weight: 800; color: var(--primary); margin-right: 8px; background: #e0e7ff; padding: 2px 8px; border-radius: 6px; }
+  
+  .waiter-card-foot { padding: 16px 20px; background: var(--bg-light); border-top: 1px solid var(--border-light); display: flex; gap: 10px; }
+
+  /* Premium Stat Cards */
+  .stat-card {
+    border-radius: 24px; padding: 24px; position: relative; overflow: hidden; color: #fff; border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+  .stat-card .bg-icon { position: absolute; right: -10px; top: -10px; font-size: 6rem; opacity: 0.15; }
+  .stat-label { font-weight: 800; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; opacity: 0.9; }
+  .stat-value { font-size: 3rem; font-weight: 900; margin-top: 5px; line-height: 1; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="fade-in">
 
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; flex-wrap:wrap; gap:16px;">
     <div>
-      <h2 style="font-size:1.1rem; margin-bottom:4px;">{% trans "Orders ready to be served" %}</h2>
-      <p class="text-muted text-sm">{% trans "Tap 'Served' when the order reaches the customer." %}</p>
+      <h2 style="font-size:1.3rem; margin-bottom:6px; font-weight:800; font-family:'Outfit', sans-serif;">Servise Hazır Siparişler</h2>
+      <p class="text-muted text-sm" style="font-weight:500;">Müşteriye ulaştırdığınız siparişleri "Servis Edildi" olarak işaretleyin.</p>
     </div>
-    <div style="display:flex; gap:10px;">
-      <a href="{% url 'staff_order_create' %}" class="btn btn-primary btn-sm">➕ {% trans "New Order" %}</a>
-      <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Refresh" %}</button>
+    <div style="display:flex; gap:12px;">
+      <a href="{% url 'staff_order_create' %}" class="btn btn-primary" style="border-radius:20px; font-weight:800; padding:10px 20px; box-shadow:0 6px 15px rgba(99,102,241,0.3);">➕ Yeni Sipariş</a>
+      <button onclick="location.reload()" class="btn btn-secondary" style="border-radius:20px; font-weight:800; padding:10px 20px;">🔄 Yenile</button>
     </div>
   </div>
 
-  <div class="grid grid-3 mb-8" style="gap:20px;">
-    <div class="metric-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color:#fff; border:none; padding:20px; position:relative; overflow:hidden;">
-      <div style="position:absolute; right:-15px; top:-15px; font-size:6rem; opacity:0.1;">✅</div>
-      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">{% trans "Ready to Serve" %}</div>
-      <div class="value" style="font-size:2.4rem; font-weight:900;">{{ orders|length }}</div>
+  <div class="grid grid-3 mb-8" style="gap:24px;">
+    <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+      <div class="bg-icon">✅</div>
+      <div class="stat-label">Servise Hazır</div>
+      <div class="stat-value">{{ orders|length }}</div>
     </div>
-    <div class="metric-card" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color:#fff; border:none; padding:20px; position:relative; overflow:hidden;">
-      <div style="position:absolute; right:-15px; top:-15px; font-size:6rem; opacity:0.1;">🛎️</div>
-      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">{% trans "Waiter Calls" %}</div>
-      <div class="value" style="font-size:2.4rem; font-weight:900;">{{ waiter_calls|length }}</div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+      <div class="bg-icon">🚨</div>
+      <div class="stat-label">Garson Çağrıları</div>
+      <div class="stat-value">{{ waiter_calls|length }}</div>
     </div>
-    <div class="metric-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color:#fff; border:none; padding:20px; position:relative; overflow:hidden;">
-      <div style="position:absolute; right:-15px; top:-15px; font-size:6rem; opacity:0.1;">📅</div>
-      <div class="label" style="color:rgba(255,255,255,0.8); font-weight:700; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">{% trans "Pending Reservations" %}</div>
-      <div class="value" style="font-size:2.4rem; font-weight:900;">{{ reservations|length }}</div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+      <div class="bg-icon">📅</div>
+      <div class="stat-label">Bekleyen Rezervasyonlar</div>
+      <div class="stat-value">{{ reservations|length }}</div>
     </div>
   </div>
 
   {# ── Waiter Calls Section ── #}
   {% if waiter_calls %}
   <div class="mb-8">
-    <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--danger); margin-bottom:12px;">🚨 {% trans "Active Waiter Calls" %}</h3>
-    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:12px;">
+    <h3 style="font-size:1rem; font-weight:900; text-transform:uppercase; color:#ef4444; margin-bottom:16px;">🚨 Aktif Garson Çağrıları</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:16px;">
       {% for call in waiter_calls %}
-      <div class="card" style="padding:16px; border-left:4px solid var(--danger); display:flex; justify-content:space-between; align-items:center;">
+      <div style="background:#fff; padding:16px 20px; border-radius:16px; border-left:5px solid #ef4444; box-shadow:0 4px 15px rgba(239,68,68,0.1); display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <div style="font-weight:800; font-size:1.1rem;">🪑 {% trans "Table" %} #{{ call.table.table_number }}</div>
-          <div class="text-xs text-muted">{{ call.created_at|timesince }} {% trans "ago" %}</div>
+          <div style="font-weight:900; font-size:1.2rem; color:var(--text-main);">🪑 Masa #{{ call.table.table_number }}</div>
+          <div class="text-xs" style="color:#64748b; margin-top:4px; font-weight:600;">{{ call.created_at|timesince }} önce</div>
         </div>
         <form method="post" action="{% url 'waiter_call_clear' call.pk %}">
           {% csrf_token %}
-          <button type="submit" class="btn btn-secondary btn-xs">✕</button>
+          <button type="submit" class="btn btn-secondary btn-sm" style="border-radius:12px; background:#fef2f2; color:#ef4444; border-color:#fca5a5;">Gidildi ✓</button>
         </form>
       </div>
       {% endfor %}
@@ -88,26 +110,27 @@
   {# ── Reservations Section ── #}
   {% if reservations %}
   <div class="mb-8">
-    <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--primary); margin-bottom:12px;">📅 {% trans "Upcoming Reservations" %}</h3>
-    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:12px;">
+    <h3 style="font-size:1rem; font-weight:900; text-transform:uppercase; color:var(--primary); margin-bottom:16px;">📅 Yaklaşan Rezervasyonlar</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
       {% for res in reservations %}
-      <div class="card" style="padding:16px; border-left:4px solid var(--primary);">
-        <div style="font-weight:700;">{{ res.customer_name }}</div>
-        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">📞 {{ res.customer_phone }}</div>
+      <div style="background:#fff; padding:20px; border-radius:16px; border-left:5px solid var(--primary); box-shadow:0 4px 15px rgba(99,102,241,0.08);">
+        <div style="font-weight:800; font-size:1.1rem; color:var(--text-main);">{{ res.customer_name }}</div>
+        <div style="font-size:0.85rem; color:#64748b; margin-bottom:12px; font-weight:500;">📞 {{ res.customer_phone }}</div>
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-size:0.85rem; font-weight:600; color:var(--primary);">🕒 {{ res.reservation_time|date:"H:i" }} ({{ res.number_of_people }} {% trans "pers." %})</div>
-            <div style="display:flex; gap:4px; align-items:center;">
+            <div style="font-size:0.9rem; font-weight:800; color:var(--primary); background:#e0e7ff; padding:6px 12px; border-radius:10px;">
+              🕒 {{ res.reservation_time|date:"H:i" }} ({{ res.number_of_people }} Kişi)
+            </div>
+            <div style="display:flex; gap:6px;">
                 <form action="{% url 'reservation_status_update' res.pk %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="status" value="ARRIVED">
-                    <button type="submit" class="btn btn-xs btn-primary" title="{% trans 'Guest Arrived' %}">🏃</button>
+                    <button type="submit" class="btn btn-sm btn-primary" title="Müşteri Geldi" style="padding:6px 10px; border-radius:8px;">🏃</button>
                 </form>
                 <form action="{% url 'reservation_status_update' res.pk %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="status" value="SEATED">
-                    <button type="submit" class="btn btn-xs btn-success" title="{% trans 'Guest Seated' %}">🪑</button>
+                    <button type="submit" class="btn btn-sm btn-success" title="Masaya Oturdu" style="padding:6px 10px; border-radius:8px;">🪑</button>
                 </form>
-                <span class="badge badge-primary">{{ res.get_status_display }}</span>
             </div>
         </div>
       </div>
@@ -117,138 +140,75 @@
   {% endif %}
 
   {# ── Ready to Serve Section ── #}
-  <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--success); margin-bottom:12px;">✅ {% trans "Ready to Serve" %}</h3>
+  <h3 style="font-size:1rem; font-weight:900; text-transform:uppercase; color:#10b981; margin-bottom:16px;">✅ Servise Hazır</h3>
   <div class="waiter-grid mb-8">
     {% for order in orders %}
       {% if order.status == 'READY' %}
-      <div class="waiter-card" style="border-top:4px solid var(--success);">
+      <div class="waiter-card" style="border-top:5px solid #10b981;">
         <div class="waiter-card-head">
           <div>
-            <div class="table-number">{% if order.table %}🪑 #{{ order.table.table_number }}{% else %}🥡{% endif %}</div>
-            <div class="text-xs text-muted">#{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
+            <div class="table-number">{% if order.table %}🪑 Masa #{{ order.table.table_number }}{% else %}🥡 Paket Servis{% endif %}</div>
+            <div class="text-xs" style="color:#64748b; font-weight:600; margin-top:4px;">Sipariş #{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
           </div>
-          <span class="ready-badge">✅ {% trans "Ready" %}</span>
+          <span class="ready-badge">Hazır</span>
         </div>
+        
         <div class="waiter-items">
           {% for item in order.items.all %}
-          <div class="waiter-item-group" style="margin-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.03); padding-bottom:8px;">
+          <div style="margin-bottom:6px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">
             <div class="waiter-item">
-              <span><span class="waiter-item-qty">{{ item.quantity }}×</span>{{ item.product_name_snapshot }}</span>
-              <button onclick="toggleEdit('{{ item.id }}')" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:0.8rem;">✏️</button>
+              <span style="color:var(--text-main);"><span class="waiter-item-qty">{{ item.quantity }}×</span>{{ item.product_name_snapshot }}</span>
             </div>
-            
-            {# Inline Edit Form #}
-            <div id="edit-form-{{ item.id }}" style="display:none; margin-top:8px; background:var(--bg); padding:10px; border-radius:10px; border:1px solid var(--border);">
-              <form method="post" action="{% url 'order_item_update' item.pk %}">
-                {% csrf_token %}
-                <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
-                  <label class="text-xs">{% trans "Qty" %}:</label>
-                  <input type="number" name="quantity" value="{{ item.quantity }}" style="width:50px; padding:4px; border-radius:6px; border:1px solid var(--border);">
-                </div>
-                {% if item.product.display_ingredients.all %}
-                <div class="text-xs font-bold mb-2">{% trans "Remove" %}:</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-bottom:8px;">
-                  {% for ing in item.product.display_ingredients.all %}
-                  <label style="font-size:0.65rem; display:flex; align-items:center; gap:4px;">
-                    <input type="checkbox" name="removed_ingredients" value="{{ ing.name }}" 
-                           {% if ing.name in item.selected_options.removed_ingredients %}checked{% endif %}>
-                    {{ ing.name }}
-                  </label>
-                  {% endfor %}
-                </div>
+            {% if item.selected_options.modifier_names or item.selected_options.removed_ingredients or item.note %}
+              <div style="font-size:0.8rem; margin-top:6px; margin-left:36px;">
+                {% if item.selected_options.modifier_names %}
+                  <div style="color:#0284c7; font-weight:700;">➕ EKLE: {{ item.selected_options.modifier_names|join:", " }}</div>
                 {% endif %}
-                <textarea name="note" placeholder="{% trans 'Item note...' %}" style="width:100%; font-size:0.7rem; padding:6px; border-radius:6px; border:1px solid var(--border); margin-bottom:8px;">{{ item.note }}</textarea>
-                <div style="display:flex; gap:4px;">
-                  <button type="submit" class="btn btn-primary btn-xs" style="flex:1;">✅</button>
-                  <button type="button" onclick="toggleEdit('{{ item.id }}')" class="btn btn-secondary btn-xs">✕</button>
-                </div>
-              </form>
-              <form method="post" action="{% url 'order_item_delete' item.pk %}" style="margin-top:4px;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-secondary btn-block btn-xs" style="color:var(--danger); border-color:#fecaca; background:#fff1f1;">🗑️ {% trans "Remove Item" %}</button>
-              </form>
-            </div>
-
-            {% if item.selected_options.removed_ingredients or item.note %}
-            <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px; padding-left:24px; font-style:italic;">
-              {% if item.selected_options.removed_ingredients %}
-                <span style="color:var(--danger);">❌ {{ item.selected_options.removed_ingredients|join:", " }}</span>
-              {% endif %}
-              {% if item.note %}<div>📝 {{ item.note }}</div>{% endif %}
-            </div>
+                {% if item.selected_options.removed_ingredients %}
+                  <div style="color:#ef4444; font-weight:700;">❌ ÇIKAR: {{ item.selected_options.removed_ingredients|join:", " }}</div>
+                {% endif %}
+                {% if item.note %}<div style="color:#d97706; font-weight:600;">📝 {{ item.note }}</div>{% endif %}
+              </div>
             {% endif %}
           </div>
           {% endfor %}
         </div>
+
         <div class="waiter-card-foot">
-          <form method="post" action="{% url 'order_status_update' order.pk %}">
+          <form method="post" action="{% url 'order_status_update' order.pk %}" style="flex:2;">
             {% csrf_token %}
             <input type="hidden" name="status" value="SERVED">
-            <button type="submit" class="btn btn-success btn-block">🍽️ {% trans "Mark Served" %}</button>
+            <button type="submit" class="btn btn-success btn-block" style="border-radius:12px; font-weight:800; font-size:1.05rem; padding:12px; background:#10b981; border:none; box-shadow:0 4px 12px rgba(16,185,129,0.2);">
+              🍽️ Servis Edildi
+            </button>
           </form>
+          <a href="{% url 'order_detail' order.id %}" class="btn btn-secondary" style="flex:1; border-radius:12px; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none;">
+            ✏️ İçine Bak
+          </a>
         </div>
       </div>
       {% endif %}
     {% endfor %}
-  </div>
-
-  {# ── Pending Orders Section ── #}
-  <h3 style="font-size:0.9rem; font-weight:800; text-transform:uppercase; color:var(--primary); margin-bottom:12px;">⏳ {% trans "Pending Orders" %}</h3>
-  <div class="waiter-grid">
-    {% for order in orders %}
-      {% if order.status in 'NEW,ACCEPTED,PREPARING' %}
-      <div class="waiter-card" style="opacity:0.85;">
-        <div class="waiter-card-head" style="background:#f8fafc;">
-          <div>
-            <div style="font-weight:700;">{% if order.table %}🪑 #{{ order.table.table_number }}{% else %}🥡{% endif %}</div>
-            <div class="text-xs text-muted">#{{ order.id }}</div>
-          </div>
-          <span class="badge" style="background:#e0e7ff; color:#4338ca; font-size:0.65rem;">{{ order.get_status_display }}</span>
-        </div>
-        <div class="waiter-items" style="max-height:100px; overflow:hidden;">
-            {% for item in order.items.all|slice:":2" %}
-            <div class="waiter-item" style="font-size:0.75rem;">
-                <span>{{ item.quantity }}× {{ item.product_name_snapshot }}</span>
-            </div>
-            {% endfor %}
-            {% if order.items.count > 2 %}<div class="text-xs text-muted">...</div>{% endif %}
-        </div>
-      </div>
-      {% endif %}
-    {% endfor %}
-  </div>
-
-  {% if not orders and not waiter_calls and not reservations %}
-  <div class="card">
-    <div class="empty-state" style="padding:80px 24px;">
-      <div style="font-size:4rem; margin-bottom:16px;">🎉</div>
-      <h3>{% trans "All orders served!" %}</h3>
-      <p class="text-muted">{% trans "No orders waiting to be served right now." %}</p>
+    
+    {% if not orders %}
+    <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; background: #fff; border-radius: 24px; border: 1px dashed #cbd5e1;">
+      <div style="font-size: 4rem; margin-bottom: 16px;">☕</div>
+      <h3 style="font-weight: 900; color: var(--text-main); font-size: 1.5rem;">Şu an servise hazır sipariş yok.</h3>
+      <p style="color: #64748b; font-weight: 500;">Mutfak çalışmaya devam ediyor!</p>
     </div>
+    {% endif %}
   </div>
-  {% endif %}
 </div>
 
 <script>
-function toggleEdit(id) {
-    const el = document.getElementById('edit-form-' + id);
-    if (el.style.display === 'none') {
-        el.style.display = 'block';
-    } else {
-        el.style.display = 'none';
-    }
-}
-
 // WebSocket for Real-time updates
 const restaurantSlug = "{{ request.user.restaurant.slug }}";
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 const socketUrl = `${protocol}//${window.location.host}/ws/orders/${restaurantSlug}/`;
 const orderSocket = new WebSocket(socketUrl);
 
-// Sound setup
 const sounds = {
     waiter_call: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'),
-    bill_request: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
     new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
     status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
 };
@@ -264,10 +224,10 @@ function unlockAudio() {
         }).catch(e => console.log("Audio unlock failed:", e));
     });
     audioUnlocked = true;
-    document.getElementById('sound-unlocked-badge').style.display = 'none';
+    const badge = document.getElementById('sound-unlocked-badge');
+    if (badge) badge.style.display = 'none';
 }
 
-// Add unlock listener
 document.addEventListener('click', unlockAudio, { once: true });
 
 if ("Notification" in window && Notification.permission !== "granted") {
@@ -278,40 +238,36 @@ orderSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     console.log("WebSocket message:", data);
 
-    // Play appropriate sound
     const sound = sounds[data.call_type] || sounds.status_update;
     sound.play().catch(e => console.log("Audio blocked:", e));
 
     if (Notification.permission === "granted") {
-        new Notification("NeyMenu AI: {% trans 'Staff Update' %}", { body: data.message });
+        new Notification("Neyman: Garson Bildirimi", { body: data.message });
     }
 
     showNotification(data.message, data.call_type);
     
     // Auto-refresh for UI update
-    setTimeout(() => location.reload(), 2000);
+    setTimeout(() => location.reload(), 1500);
 };
 
 function showNotification(msg, type) {
     const toast = document.createElement('div');
-    const isUrgent = type === 'waiter_call' || type === 'reservation' || type === 'bill_request';
-    const icon = type === 'bill_request' ? '💳' : (type === 'waiter_call' ? '🚨' : '🛎️');
+    const isUrgent = type === 'waiter_call' || type === 'reservation';
+    const icon = type === 'waiter_call' ? '🚨' : '🛎️';
     
     toast.style.cssText = `
         position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: ${isUrgent ? '#ef4444' : 'var(--primary)'}; 
-        color: #fff; padding: 18px 32px; border-radius: 20px; 
-        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-        z-index: 99999; font-weight: 800; font-size: 1.1rem;
+        background: ${isUrgent ? '#ef4444' : '#10b981'}; 
+        color: #fff; padding: 20px 32px; border-radius: 20px; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        z-index: 99999; font-weight: 800; font-size: 1.15rem;
         display: flex; align-items: center; gap: 16px;
         animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 2px solid rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.3);
     `;
     
-    toast.innerHTML = `
-        <span style="font-size:1.8rem;">${icon}</span>
-        <span>${msg}</span>
-    `;
+    toast.innerHTML = `<span style="font-size:2rem;">${icon}</span><span>${msg}</span>`;
     
     document.body.appendChild(toast);
     setTimeout(() => {
@@ -319,7 +275,7 @@ function showNotification(msg, type) {
         toast.style.opacity = '0';
         toast.style.transform = 'translateX(-50%) translateY(-20px)';
         setTimeout(() => toast.remove(), 500);
-    }, 8000);
+    }, 6000);
 }
 
 const style = document.createElement('style');
@@ -333,7 +289,14 @@ document.head.appendChild(style);
 </script>
 
 {# Floating Audio Unlock Hint #}
-<div id="sound-unlocked-badge" onclick="unlockAudio()" style="position:fixed; bottom:20px; right:20px; background:var(--warning); color:#fff; padding:12px 20px; border-radius:30px; font-weight:800; font-size:0.85rem; cursor:pointer; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:1000; animation: pulse 2s infinite;">
-    🔊 {% trans "Click to Enable Sounds" %}
+<div id="sound-unlocked-badge" onclick="unlockAudio()" style="position:fixed; bottom:20px; right:20px; background:#f59e0b; color:#fff; padding:14px 24px; border-radius:30px; font-weight:800; font-size:0.9rem; cursor:pointer; box-shadow:0 10px 25px rgba(245,158,11,0.3); z-index:1000; animation: pulse 2s infinite; border: 2px solid #fde68a;">
+    🔊 Sesleri Açmak İçin Tıklayın
 </div>
+<style>
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  }
+</style>
 {% endblock %}

@@ -185,6 +185,8 @@ class StaffOrderCreateView(RestaurantAccessMixin, TemplateView):
                     product_name_snapshot=product.name,
                     quantity=qty,
                     unit_price=product.price,
+                    snapshot_selling_price=product.price,
+                    snapshot_cost_price=getattr(product, 'cost_price', None) or Decimal('0.00'),
                     total_price=line_total
                 )
                 total_amount += line_total
@@ -275,6 +277,8 @@ class OrderAddItemView(RestaurantAccessMixin, View):
             defaults={
                 'product_name_snapshot': product.name,
                 'unit_price': product.price,
+                'snapshot_selling_price': product.price,
+                'snapshot_cost_price': getattr(product, 'cost_price', None) or Decimal('0.00'),
                 'total_price': 0
             }
         )

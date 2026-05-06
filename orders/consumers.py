@@ -65,3 +65,33 @@ class OrderTrackingConsumer(AsyncWebsocketConsumer):
             'message': event.get('message', ''),
             'estimated_prep_time': event.get('estimated_prep_time')
         }))
+
+class WaiterCallConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.restaurant_slug = self.scope['url_route']['kwargs']['slug']
+        self.room_group_name = f'waiter_calls_{self.restaurant_slug}'
+
+        # Join room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # Leave room group
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    # Receive message from room group
+    async def waiter_call_update(self, event):
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'type': 'waiter_call_update',
+            'call_id': event.get('call_id'),
+            'table_number': event.get('table_number'),
+            'status': event.get('status'),
+            'created_at': event.get('created_at')
+        }))

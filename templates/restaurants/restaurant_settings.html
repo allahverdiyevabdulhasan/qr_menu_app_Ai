@@ -9,9 +9,22 @@
 
     {# ── Tabs ── #}
     <div class="settings-tabs" style="max-width: 860px;">
-        <button class="stab active" onclick="switchTab('ordering', this)">🛒 {% trans "Ordering & Service" %}</button>
-        <button class="stab" onclick="switchTab('ai_loyalty', this)">🤖 {% trans "AI & Loyalty" %}</button>
-        <button class="stab" onclick="switchTab('display', this)">🖥️ {% trans "Display & Info" %}</button>
+        <button class="stab active" onclick="switchTab('ordering', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            {% trans "Ordering" %}
+        </button>
+        <button class="stab" onclick="switchTab('ai_loyalty', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M12 8V4H8"></path><rect x="4" y="8" width="16" height="12" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+            {% trans "AI & Loyalty" %}
+        </button>
+        <button class="stab" onclick="switchTab('display', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            {% trans "Display" %}
+        </button>
+        <button class="stab" onclick="switchTab('integrations', this)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            {% trans "Integrations" %}
+        </button>
     </div>
 
     <form method="post" style="max-width: 860px;">
@@ -75,7 +88,9 @@
         <div id="tab-display" class="stab-content">
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <div class="settings-card-icon">🖥️</div>
+                    <div class="settings-card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
                     <div>
                         <h3 class="settings-card-title">{% trans "Display & Info" %}</h3>
                         <p class="settings-card-subtitle">{% trans "Customize how your menu looks to customers." %}</p>
@@ -85,6 +100,35 @@
                     <div class="settings-grid">
                         {% for field in form %}
                             {% if field.name in "show_calories,show_allergens,theme_color" %}
+                            <div class="form-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}">
+                                <label class="field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}<div class="field-error">{{ field.errors|join:", " }}</div>{% endif %}
+                                {% if field.help_text %}<div class="field-hint">{{ field.help_text }}</div>{% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# ── TAB: Integrations ── #}
+        <div id="tab-integrations" class="stab-content">
+            <div class="settings-card">
+                <div class="settings-card-header">
+                    <div class="settings-card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    </div>
+                    <div>
+                        <h3 class="settings-card-title">{% trans "Integrations & Payments" %}</h3>
+                        <p class="settings-card-subtitle">{% trans "Connect WhatsApp ordering and configure payment gateways." %}</p>
+                    </div>
+                </div>
+                <div class="card-body" style="padding: 32px;">
+                    <div class="settings-grid">
+                        {% for field in form %}
+                            {% if field.name in "enable_whatsapp_ordering,whatsapp_number,enable_stripe,stripe_public_key,stripe_secret_key,enable_paypal,paypal_client_id" %}
                             <div class="form-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}">
                                 <label class="field-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field }}

@@ -79,6 +79,8 @@ class OrderItem(models.Model):
     product_name_snapshot = models.CharField(max_length=200) # In case product is renamed/deleted later
     quantity = models.PositiveIntegerField(default=1)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2) # Snapshotted price at order time
+    snapshot_selling_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    snapshot_cost_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     note = models.TextField(blank=True)
     selected_options = models.JSONField(default=dict, blank=True)
@@ -98,3 +100,4 @@ class OrderStageHistory(models.Model):
         verbose_name = _("Order Stage History")
         verbose_name_plural = _("Order Stage Histories")
         ordering = ['-changed_at']
+

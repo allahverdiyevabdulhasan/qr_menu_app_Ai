@@ -1,16 +1,17 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "KDS — Kitchen Display System" %} — NeyMenu AI{% endblock %}
-{% block page_title %}👨‍🍳 {% trans "Kitchen Display System" %}{% endblock %}
+{% block title %}KDS — Mutfak Ekranı — Neyman{% endblock %}
+{% block page_title %}👨‍🍳 Mutfak Ekranı{% endblock %}
 
 {% block extra_css %}
 <style>
   :root {
-    --kds-bg: #0b0e14;
-    --kds-card-bg: #151921;
-    --kds-border: #232a35;
-    --kds-text: #e2e8f0;
+    --kds-bg: #f8fafc;
+    --kds-card-bg: #ffffff;
+    --kds-border: #e2e8f0;
+    --kds-text: #0f172a;
+    --kds-text-muted: #64748b;
   }
   
   body, .main-content, .page-content { 
@@ -19,36 +20,36 @@
   }
   
   .topbar { 
-    background: rgba(21, 25, 33, 0.8) !important; 
+    background: rgba(255, 255, 255, 0.9) !important; 
     border-color: var(--kds-border) !important; 
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
   }
   
-  .topbar-title { color: #fff; }
+  .topbar-title { color: var(--kds-text); font-weight: 800; font-family: 'Outfit', sans-serif; }
   
   .kds-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-    gap: 24px; 
-    padding: 20px 0;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); 
+    gap: 28px; 
+    padding: 24px 0;
   }
   
   .kds-card {
     background: var(--kds-card-bg); 
-    border: 2px solid var(--kds-border); 
-    border-radius: var(--radius);
+    border: 1px solid var(--kds-border); 
+    border-radius: 28px;
     display: flex; 
     flex-direction: column; 
     overflow: hidden; 
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05); 
     animation: kdsSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transition: transform var(--transition);
+    transition: transform var(--transition), box-shadow var(--transition);
   }
   
   .kds-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(99,102,241,0.12);
   }
   
   @keyframes kdsSlideIn { 
@@ -57,27 +58,29 @@
   }
 
   .kds-card-header { 
-    padding: 20px; 
-    border-bottom: 2px solid var(--kds-border); 
+    padding: 24px; 
+    border-bottom: 1px solid var(--kds-border); 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
   }
   
   .kds-card-number { 
-    font-size: 2rem; 
-    font-weight: 800; 
+    font-size: 2.2rem; 
+    font-weight: 900; 
     font-family: 'Outfit', sans-serif; 
     line-height: 1; 
+    color: var(--kds-text);
   }
   
   .kds-items { 
     list-style: none; 
-    padding: 20px; 
+    padding: 24px; 
     flex: 1; 
     display: flex; 
     flex-direction: column; 
-    gap: 16px; 
+    gap: 18px; 
+    margin: 0;
   }
   
   .kds-item { 
@@ -85,61 +88,79 @@
     align-items: flex-start; 
     gap: 16px; 
     font-size: 1.15rem; 
+    padding-bottom: 16px;
+    border-bottom: 1px dashed #e2e8f0;
   }
+  .kds-item:last-child { border-bottom: none; padding-bottom: 0; }
   
   .kds-item-qty { 
-    background: var(--primary); 
-    color: #fff; 
-    width: 32px; 
-    height: 32px; 
-    border-radius: 8px;
+    background: #f1f5f9; 
+    color: var(--primary); 
+    width: 38px; 
+    height: 38px; 
+    border-radius: 12px;
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    font-weight: 800; 
-    font-size: 1rem; 
+    font-weight: 900; 
+    font-size: 1.1rem; 
     flex-shrink: 0;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
   }
   
   .kds-item-name { 
-    font-weight: 600; 
-    line-height: 1.3; 
+    font-weight: 700; 
+    line-height: 1.4; 
+    flex: 1;
   }
 
   .kds-footer { 
-    padding: 20px; 
-    background: rgba(0,0,0,0.2); 
+    padding: 24px; 
+    background: #f8fafc; 
     border-top: 1px solid var(--kds-border); 
   }
   
-  .status-new { border-color: var(--danger); }
-  .status-preparing { border-color: var(--warning); }
-  .status-ready { border-color: var(--success); }
+  /* Status Colors (Light Theme) */
+  .status-new { border-top: 6px solid #ef4444; }
+  .status-preparing { border-top: 6px solid #f59e0b; }
+  .status-ready { border-top: 6px solid #10b981; }
+  
+  .header-bg-new { background: #fef2f2; }
+  .header-bg-preparing { background: #fffbeb; }
   
   .kds-timer { 
-    font-size: 0.9rem; 
+    font-size: 1rem; 
     font-weight: 800; 
-    color: #94a3b8; 
+    color: var(--kds-text-muted); 
     display: flex; 
     align-items: center; 
-    gap: 6px;
-    background: rgba(255,255,255,0.05);
-    padding: 6px 12px;
+    gap: 8px;
+    background: #fff;
+    padding: 8px 16px;
     border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid var(--kds-border);
   }
   
   .kds-timer.warning { 
-    color: #fff; 
-    background: var(--danger);
-    animation: pulse 1.5s infinite; 
+    color: #ef4444; 
+    border-color: #fca5a5;
+    background: #fef2f2;
+    animation: pulse-red 2s infinite; 
+  }
+
+  @keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
   }
 
   .pulse {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: var(--success);
+    background: #10b981;
     box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
     animation: pulse-ring 2s infinite;
   }
@@ -154,28 +175,30 @@
 
 {% block content %}
 <div class="fade-in">
-    <div class="flex justify-between items-center mb-6">
-      <div class="flex gap-4">
-        <div class="card" style="padding:10px 20px; border-radius:30px; display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.03); border-color:var(--kds-border);">
+    <div class="flex justify-between items-center mb-6" style="flex-wrap: wrap; gap: 16px;">
+      <div class="flex gap-4 items-center">
+        <div style="padding:10px 20px; border-radius:30px; display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--kds-border); box-shadow:0 4px 10px rgba(0,0,0,0.02);">
           <span class="pulse"></span>
-          <span style="font-weight:700; font-size:0.9rem; color:#fff;">{% trans "System Live" %}</span>
+          <span style="font-weight:800; font-size:0.95rem; color:var(--kds-text);">Sistem Aktif</span>
         </div>
-        <div class="badge badge-danger" style="font-size:0.9rem; padding:8px 16px;">
-            {{ orders|length }} {% trans "Orders Pending" %}
+        <div style="background:#fef2f2; color:#ef4444; font-weight:800; font-size:0.95rem; padding:10px 20px; border-radius:30px; border:1px solid #fca5a5;">
+            {{ orders|length }} Bekleyen Sipariş
         </div>
       </div>
-      <button onclick="location.reload()" class="btn btn-secondary btn-sm">🔄 {% trans "Sync Screen" %}</button>
+      <button onclick="location.reload()" class="btn btn-primary" style="border-radius:30px; font-weight:800; padding:10px 24px; box-shadow:0 8px 20px rgba(99,102,241,0.3);">
+          🔄 Ekranı Yenile
+      </button>
     </div>
 
     {% if orders %}
     <div class="kds-grid">
       {% for order in orders %}
       <div class="kds-card status-{{ order.status|lower }}">
-        <div class="kds-card-header" style="{% if order.status == 'NEW' %}background:rgba(239, 68, 68, 0.08);{% elif order.status == 'PREPARING' %}background:rgba(245, 158, 11, 0.08);{% endif %}">
+        <div class="kds-card-header {% if order.status == 'NEW' %}header-bg-new{% elif order.status == 'PREPARING' %}header-bg-preparing{% endif %}">
           <div>
             <div class="kds-card-number">#{{ order.id }}</div>
-            <div class="text-xs font-bold" style="opacity:0.7; margin-top:4px;">
-              {% if order.table %}🪑 {{ order.table.table_name }}{% else %}🥡 {% trans "Takeaway" %}{% endif %}
+            <div style="font-size:0.85rem; font-weight:800; color:var(--kds-text-muted); margin-top:6px; text-transform:uppercase; letter-spacing:0.5px;">
+              {% if order.table %}🪑 {{ order.table.table_name }}{% else %}🥡 Paket Servis{% endif %}
             </div>
           </div>
           <div class="kds-timer" id="timer-{{ order.id }}" data-time="{{ order.created_at|date:'c' }}">
@@ -188,30 +211,39 @@
           <li class="kds-item">
             <div class="kds-item-qty">{{ item.quantity }}</div>
             <div class="kds-item-name">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span>{{ item.product_name_snapshot }}</span>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <span style="font-size:1.1rem; color:var(--kds-text);">{{ item.product_name_snapshot }}</span>
                 {% if item.product.preparation_time %}
-                  <span style="font-size:0.65rem; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; opacity:0.6;">
-                    ⏱ {{ item.product.preparation_time }}m
+                  <span style="font-size:0.75rem; background:#f1f5f9; color:#64748b; padding:4px 8px; border-radius:8px; font-weight:800; white-space:nowrap; margin-left:12px;">
+                    ⏱ {{ item.product.preparation_time }} dk
                   </span>
                 {% endif %}
               </div>
               
-              {# --- Special Instructions (Removed Ingredients & Note) --- #}
-              {% if item.selected_options.removed_ingredients %}
-                <div class="text-xs" style="color:#ef4444; margin-top:4px; font-weight:900; background:rgba(239,68,68,0.1); padding:4px 8px; border-radius:6px; border-left:3px solid #ef4444;">
-                  ❌ {% trans "NO" %}: {{ item.selected_options.removed_ingredients|join:", " }}
+              {# --- Special Instructions --- #}
+              {% if item.selected_options.modifier_names %}
+                <div style="font-size:0.85rem; color:#0284c7; margin-top:8px; font-weight:800; background:#e0f2fe; padding:6px 12px; border-radius:10px;">
+                  ➕ EKLE: {{ item.selected_options.modifier_names|join:", " }}
                 </div>
               {% endif %}
-              {% if item.note %}<div class="text-xs" style="color:#f59e0b; margin-top:6px; background:rgba(245,158,11,0.1); padding:4px 8px; border-radius:6px; border-left:3px solid #f59e0b;">📝 {{ item.note }}</div>{% endif %}
+              {% if item.selected_options.removed_ingredients %}
+                <div style="font-size:0.85rem; color:#b91c1c; margin-top:8px; font-weight:800; background:#fee2e2; padding:6px 12px; border-radius:10px;">
+                  ❌ ÇIKAR: {{ item.selected_options.removed_ingredients|join:", " }}
+                </div>
+              {% endif %}
+              {% if item.note %}
+                <div style="font-size:0.85rem; color:#b45309; margin-top:8px; font-weight:800; background:#fef3c7; padding:6px 12px; border-radius:10px;">
+                  📝 NOT: {{ item.note }}
+                </div>
+              {% endif %}
 
-              {# --- Standard Recipe / Allergens (Hidden by default, click to see) --- #}
-              <div class="recipe-info" style="margin-top:8px; font-size:0.75rem; opacity:0.6; display:none;">
-                <div style="border-top:1px solid var(--kds-border); padding-top:4px;">
+              {# --- Standard Recipe / Allergens (Hidden by default) --- #}
+              <div class="recipe-info" style="margin-top:12px; font-size:0.85rem; color:#64748b; display:none; background:#f8fafc; padding:12px; border-radius:12px; border:1px solid #e2e8f0;">
+                <div style="font-weight:500; line-height:1.5;">
                   {{ item.product.description|truncatewords:20 }}
                 </div>
                 {% if item.product.allergens %}
-                  <div style="color:#ef4444; font-weight:700; margin-top:4px;">⚠️ {% trans "Allergens" %}: {{ item.product.allergens|join:", " }}</div>
+                  <div style="color:#ef4444; font-weight:800; margin-top:8px;">⚠️ Alerjenler: {{ item.product.allergens|join:", " }}</div>
                 {% endif %}
               </div>
             </div>
@@ -220,8 +252,9 @@
         </ul>
 
         {% if order.note %}
-        <div style="padding:16px; background:rgba(245, 158, 11, 0.1); border-top:1px solid var(--kds-border); color:var(--warning); font-size:0.9rem; font-weight:600;">
-          💬 {{ order.note }}
+        <div style="padding:16px 24px; background:#fffbeb; border-top:1px solid #fde68a; border-bottom:1px solid #fde68a; color:#b45309; font-size:0.95rem; font-weight:800; display:flex; gap:12px; align-items:center;">
+          <span style="font-size:1.4rem;">💬</span> 
+          <span>{{ order.note }}</span>
         </div>
         {% endif %}
 
@@ -230,13 +263,19 @@
             {% csrf_token %}
             {% if order.status == 'NEW' %}
               <input type="hidden" name="status" value="PREPARING">
-              <button type="submit" class="btn btn-warning btn-block" style="height:50px; font-weight:800;">🔥 {% trans "Start Preparing" %}</button>
+              <button type="submit" class="btn btn-warning btn-block" style="height:56px; font-weight:900; font-size:1.1rem; border-radius:16px; background:#f59e0b; color:#fff; border:none; box-shadow:0 10px 20px rgba(245,158,11,0.2);">
+                  🔥 Hazırlamaya Başla
+              </button>
             {% elif order.status == 'PREPARING' %}
               <input type="hidden" name="status" value="READY">
-              <button type="submit" class="btn btn-success btn-block" style="height:50px; font-weight:800;">✅ {% trans "Mark Ready" %}</button>
+              <button type="submit" class="btn btn-success btn-block" style="height:56px; font-weight:900; font-size:1.1rem; border-radius:16px; background:#10b981; color:#fff; border:none; box-shadow:0 10px 20px rgba(16,185,129,0.2);">
+                  ✅ Hazır İşaretle
+              </button>
             {% elif order.status == 'READY' %}
               <input type="hidden" name="status" value="SERVED">
-              <button type="submit" class="btn btn-primary btn-block" style="height:50px; font-weight:800;">🍽️ {% trans "Order Served" %}</button>
+              <button type="submit" class="btn btn-primary btn-block" style="height:56px; font-weight:900; font-size:1.1rem; border-radius:16px; background:var(--primary); color:#fff; border:none; box-shadow:0 10px 20px rgba(99,102,241,0.3);">
+                  🍽️ Servis Edildi
+              </button>
             {% endif %}
           </form>
         </div>
@@ -244,11 +283,17 @@
       {% endfor %}
     </div>
     {% else %}
-    <div class="empty-state" style="padding:120px 0;">
-      <div style="font-size:6rem; margin-bottom:24px;">👨‍🍳</div>
-      <h2 style="color:#fff; font-size:2rem;">{% trans "The kitchen is empty!" %}</h2>
-      <p class="text-muted" style="font-size:1.1rem;">{% trans "All orders have been served. Take a well-deserved break!" %}</p>
+    <div class="empty-state" style="padding:120px 20px; background:#fff; border-radius:32px; border:1px dashed #cbd5e1; margin-top:20px; box-shadow:0 10px 40px rgba(0,0,0,0.02);">
+      <div style="font-size:7rem; margin-bottom:24px; animation:bounce 2s infinite;">👨‍🍳</div>
+      <h2 style="color:var(--kds-text); font-size:2.2rem; font-weight:900; font-family:'Outfit', sans-serif;">Mutfak şu an boş!</h2>
+      <p style="font-size:1.15rem; color:#64748b; margin-top:12px; font-weight:500;">Tüm siparişler servis edildi. Derin bir nefes alabilirsiniz!</p>
     </div>
+    <style>
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+      }
+    </style>
     {% endif %}
 </div>
 
@@ -279,7 +324,9 @@ document.querySelectorAll('.kds-item-name').forEach(el => {
     el.style.cursor = 'pointer';
     el.addEventListener('click', () => {
         const info = el.querySelector('.recipe-info');
-        if (info) info.style.display = info.style.display === 'none' ? 'block' : 'none';
+        if (info) {
+            info.style.display = info.style.display === 'none' ? 'block' : 'none';
+        }
     });
 });
 
@@ -325,7 +372,7 @@ orderSocket.onmessage = function(e) {
     sound.play().catch(e => console.log("Audio blocked:", e));
 
     if (Notification.permission === "granted") {
-        new Notification("NeyMenu AI: {% trans 'Kitchen Update' %}", { body: data.message });
+        new Notification("Neyman: Mutfak Bildirimi", { body: data.message });
     }
 
     showNotification(data.message, data.call_type);
@@ -339,16 +386,16 @@ function showNotification(msg, type) {
     toast.style.cssText = `
         position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
         background: ${isUrgent ? '#ef4444' : 'var(--primary)'}; 
-        color: #fff; padding: 18px 32px; border-radius: 20px; 
-        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-        z-index: 99999; font-weight: 800; font-size: 1.1rem;
+        color: #fff; padding: 20px 32px; border-radius: 20px; 
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        z-index: 99999; font-weight: 800; font-size: 1.15rem;
         display: flex; align-items: center; gap: 16px;
         animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 2px solid rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.4);
     `;
     
     toast.innerHTML = `
-        <span style="font-size:1.8rem;">${isUrgent ? '🔥' : '👨‍🍳'}</span>
+        <span style="font-size:2rem;">${isUrgent ? '🔥' : '👨‍🍳'}</span>
         <span>${msg}</span>
     `;
     
@@ -372,8 +419,14 @@ document.head.appendChild(style);
 </script>
 
 {# Floating Audio Unlock Hint #}
-<div id="sound-unlocked-badge" onclick="unlockAudio()" style="position:fixed; bottom:20px; right:20px; background:var(--warning); color:#fff; padding:12px 20px; border-radius:30px; font-weight:800; font-size:0.85rem; cursor:pointer; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:1000; animation: pulse 2s infinite;">
-    🔊 {% trans "Click to Enable Sounds" %}
+<div id="sound-unlocked-badge" onclick="unlockAudio()" style="position:fixed; bottom:30px; right:30px; background:#f59e0b; color:#fff; padding:14px 24px; border-radius:30px; font-weight:800; font-size:0.9rem; cursor:pointer; box-shadow:0 15px 30px rgba(245,158,11,0.3); z-index:1000; animation: pulse-yellow 2s infinite; border: 2px solid #fde68a;">
+    🔊 Sesleri Açmak İçin Tıklayın
 </div>
+<style>
+  @keyframes pulse-yellow {
+    0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  }
+</style>
 {% endblock %}
-

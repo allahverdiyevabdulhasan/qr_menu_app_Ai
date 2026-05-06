@@ -167,8 +167,27 @@
                     <span class="cart-item-title">{{ item.product.name }}</span>
                     <span class="cart-item-price">{{ item.total_price }} ₼</span>
                 </div>
+                
+                {% if item.modifier_objects or item.removed_ingredients or item.note %}
+                <div style="margin-top:6px; font-size:0.75rem; color:var(--text-muted); line-height:1.4;">
+                    {% if item.modifier_objects %}
+                        {% for mod in item.modifier_objects %}
+                            <div style="color:var(--dark);">+ {{ mod.name }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if item.removed_ingredients %}
+                        {% for ing in item.removed_ingredients %}
+                            <div style="color:#ef4444;">- No {{ ing }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if item.note %}
+                        <div style="color:#f59e0b; font-style:italic;">📝 "{{ item.note }}"</div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
                 {% if item.product.calories %}
-                <div class="cart-item-kcal">🔥 {{ item.product.calories }} kcal · 💪 {{ item.product.protein|default:"—" }}g prot</div>
+                <div class="cart-item-kcal" style="margin-top:8px;">🔥 {{ item.product.calories }} kcal · 💪 {{ item.product.protein|default:"—" }}g prot</div>
                 {% endif %}
 
                 <div class="qty-control">

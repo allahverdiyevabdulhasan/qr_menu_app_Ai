@@ -58,7 +58,19 @@ class RestaurantSettings(models.Model):
     theme_color = models.CharField(_("Theme Color"), max_length=7, default='#000000')
     show_calories = models.BooleanField(_("Show Calories"), default=False)
     show_allergens = models.BooleanField(_("Show Allergens"), default=True)
-
+    
+    # WhatsApp Ordering
+    enable_whatsapp_ordering = models.BooleanField(_("Enable WhatsApp Ordering"), default=False)
+    whatsapp_number = models.CharField(_("WhatsApp Number"), max_length=20, blank=True, help_text=_("Include country code, e.g. +90555..."))
+    
+    # Payment Gateways
+    enable_stripe = models.BooleanField(_("Enable Stripe"), default=False)
+    stripe_public_key = models.CharField(_("Stripe Public Key"), max_length=255, blank=True)
+    stripe_secret_key = models.CharField(_("Stripe Secret Key"), max_length=255, blank=True)
+    
+    enable_paypal = models.BooleanField(_("Enable PayPal"), default=False)
+    paypal_client_id = models.CharField(_("PayPal Client ID"), max_length=255, blank=True)
+    
     class Meta:
         verbose_name = _('Restaurant Settings')
         verbose_name_plural = _('Restaurant Settings')

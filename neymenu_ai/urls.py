@@ -7,7 +7,7 @@ from menu.views.public_views import PublicMenuView, PublicCategoryProductsView, 
 from ai_engine.views.public_views import PublicAIBudgetRecommendationView, PublicAIFoodAdvisorView
 from orders.views.customer_views import (
     CartView, CartAddView, CartUpdateView, CartClearView,
-    CheckoutView, OrderSuccessView, OrderTrackingView,
+    CheckoutView, OrderSuccessView, OrderTrackingView, OrderPaymentView
 )
 
 from core.views import SuperAdminDashboardView
@@ -49,6 +49,7 @@ urlpatterns += i18n_patterns(
         path('cart/clear/', CartClearView.as_view(), name='cart_clear'),
         path('checkout/', CheckoutView.as_view(), name='checkout'),
         path('checkout/<uuid:token>/', CheckoutView.as_view(), name='checkout_table'),
+        path('order/<str:order_number>/payment/', OrderPaymentView.as_view(), name='order_payment'),
         path('order/<str:order_number>/success/', OrderSuccessView.as_view(), name='order_success'),
         path('order/<str:order_number>/track/', OrderTrackingView.as_view(), name='order_tracking'),
         

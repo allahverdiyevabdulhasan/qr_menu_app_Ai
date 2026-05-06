@@ -1,0 +1,56 @@
+{% extends 'customer_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Payment" %} — {{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 60px auto; padding: 40px; background: #fff; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); text-align: center;">
+    <div style="width: 80px; height: 80px; background: rgba(99, 102, 241, 0.1); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 24px;">
+        💳
+    </div>
+    <h1 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 12px;">{% trans "Complete Your Payment" %}</h1>
+    <p style="color: var(--text-muted); margin-bottom: 32px;">{% trans "Please select your preferred payment method to complete order" %} <strong>#{{ order.order_number }}</strong></p>
+
+    <div style="background: var(--bg); border-radius: 16px; padding: 24px; margin-bottom: 32px; text-align: left;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--text-muted); font-size: 0.9rem;">
+            <span>{% trans "Subtotal" %}</span>
+            <span>{{ order.subtotal }} ₼</span>
+        </div>
+        {% if order.discount_amount > 0 %}
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--danger); font-size: 0.9rem;">
+            <span>{% trans "Discount" %}</span>
+            <span>-{{ order.discount_amount }} ₼</span>
+        </div>
+        {% endif %}
+        <div style="display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); font-weight: 800; font-size: 1.25rem;">
+            <span>{% trans "Total to Pay" %}</span>
+            <span style="color: var(--primary);">{{ order.total_amount }} ₼</span>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+        {% if restaurant.settings.enable_stripe %}
+        <a href="{% url 'order_success' restaurant_slug=restaurant.slug order_number=order.order_number %}" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: #635bff; color: white; border-radius: 12px; font-weight: 600; text-decoration: none; transition: transform 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            {% trans "Pay with Stripe (Simulated)" %}
+        </a>
+        {% endif %}
+
+        {% if restaurant.settings.enable_paypal %}
+        <a href="{% url 'order_success' restaurant_slug=restaurant.slug order_number=order.order_number %}" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: #003087; color: white; border-radius: 12px; font-weight: 600; text-decoration: none; transition: transform 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            {% trans "Pay with PayPal (Simulated)" %}
+        </a>
+        {% endif %}
+
+        {% if not restaurant.settings.enable_stripe and not restaurant.settings.enable_paypal %}
+        <div style="padding: 16px; background: #fffbeb; color: #b45309; border-radius: 12px; font-size: 0.9rem;">
+            {% trans "No online payment gateways are configured for this restaurant." %}
+        </div>
+        {% endif %}
+
+        <a href="{% url 'order_success' restaurant_slug=restaurant.slug order_number=order.order_number %}" style="margin-top: 16px; color: var(--text-muted); font-weight: 500; font-size: 0.9rem; text-decoration: none;">
+            {% trans "Skip payment (Pay at counter)" %}
+        </a>
+    </div>
+</div>
+{% endblock %}

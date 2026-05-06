@@ -163,6 +163,29 @@
                 </div>
 
                 <div class="section-title">
+                    <span>💳</span> {% trans "Order Method" %}
+                </div>
+                
+                <div style="display: flex; gap: 16px; margin-bottom: 40px;">
+                    <label class="type-option">
+                        <input type="radio" name="order_method" value="standard" checked>
+                        <div class="type-card">
+                            <span class="type-icon">🔔</span>
+                            <span class="type-label">{% trans "Standard (Web)" %}</span>
+                        </div>
+                    </label>
+                    {% if restaurant.settings.enable_whatsapp_ordering %}
+                    <label class="type-option">
+                        <input type="radio" name="order_method" value="whatsapp">
+                        <div class="type-card">
+                            <span class="type-icon">💬</span>
+                            <span class="type-label">{% trans "WhatsApp" %}</span>
+                        </div>
+                    </label>
+                    {% endif %}
+                </div>
+
+                <div class="section-title">
                     <span>👤</span> {% trans "Your Information" %}
                 </div>
                 

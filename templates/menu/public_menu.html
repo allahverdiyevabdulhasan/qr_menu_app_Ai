@@ -6,36 +6,36 @@
 <style>
   /* ── Layout ── */
   .customer-layout {
-    background: #fafafa;
+    background: #ffffff;
     min-height: 100vh;
+    color: var(--text);
   }
 
   /* ── Hero Section ── */
   .premium-hero {
-    height: 46vh;
-    min-height: 220px;
-    background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.75)),
+    height: 40vh;
+    min-height: 200px;
+    background: linear-gradient(to top, rgba(255,255,255,1), rgba(0,0,0,0.4)),
                 url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 32px 20px 28px;
+    padding: 32px 20px 20px;
     color: #fff;
-    border-radius: 0 0 36px 36px;
     position: relative;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
   }
 
   .restaurant-glass-card {
-    background: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.4);
     padding: 18px 20px;
     border-radius: 20px;
     margin-bottom: 16px;
     animation: fadeInUp 0.7s ease-out both;
+    color: var(--dark);
   }
 
   /* ── Budget bar ── */
@@ -43,45 +43,45 @@
     display: none;
     margin: 12px 16px 0;
     padding: 12px 16px;
-    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-    border: 1.5px solid #a7f3d0;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1.5px solid rgba(16, 185, 129, 0.2);
     border-radius: 14px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #065f46;
+    color: #34d399;
     align-items: center;
     gap: 10px;
   }
   .budget-bar.active { display: flex; }
   .budget-bar .budget-reset {
     margin-left: auto; background: none; border: none; cursor: pointer;
-    color: #065f46; font-size: 0.8rem; font-weight: 700; padding: 4px 10px;
+    color: #34d399; font-size: 0.8rem; font-weight: 700; padding: 4px 10px;
     border-radius: 10px; transition: all 0.2s;
   }
-  .budget-bar .budget-reset:hover { background: rgba(0,0,0,0.08); }
+  .budget-bar .budget-reset:hover { background: rgba(16, 185, 129, 0.15); }
 
   /* ── Search ── */
   .search-container {
     padding: 16px 16px 4px;
-    background: #fafafa;
+    background: #ffffff;
     position: sticky;
     top: 56px;
     z-index: 400;
   }
 
   .search-wrapper {
-    background: #fff;
+    background: #f8fafc;
     border: 1.5px solid var(--border);
     border-radius: 14px;
     display: flex;
     align-items: center;
     padding: 4px 14px;
     transition: var(--transition);
-    box-shadow: var(--shadow-sm);
   }
   .search-wrapper:focus-within {
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
   }
   .search-input {
     border: none;
@@ -108,103 +108,106 @@
   .premium-pill {
     padding: 9px 18px;
     border-radius: 30px;
-    background: #fff;
-    border: 1.5px solid var(--border);
+    background: #f8fafc;
+    border: 1px solid var(--border);
     font-weight: 600;
     font-size: 0.82rem;
     white-space: nowrap;
     transition: var(--transition);
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
-    color: var(--text);
+    color: var(--text-muted);
   }
-  .premium-pill:hover { border-color: var(--primary); color: var(--primary); }
+  .premium-pill:hover { background: #fff; color: var(--primary); border-color: var(--primary); }
   .premium-pill.active {
     background: var(--primary);
     color: #fff;
     border-color: var(--primary);
-    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
   }
   .premium-pill.athlete-pill {
     background: linear-gradient(135deg, #10b981, #059669);
     color: #fff;
     border-color: #10b981;
-    box-shadow: 0 6px 16px rgba(16,185,129,0.3);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
   }
 
   /* ── Product Grid ── */
   .product-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 16px;
     padding: 8px 16px 140px;
+    background: #ffffff;
   }
 
   .premium-product-card {
-    background: #fff;
+    background: #ffffff;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: var(--shadow);
     transition: var(--transition);
-    border: 1.5px solid var(--border);
+    border: 1px solid var(--border);
     cursor: pointer;
     position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   }
   .premium-product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
     border-color: var(--primary);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
   }
   .premium-product-card.budget-locked {
-    opacity: 0.42;
+    opacity: 0.4;
     pointer-events: none;
   }
 
   .product-image-wrapper {
-    height: 130px;
+    height: 140px;
     position: relative;
     overflow: hidden;
+    background: #f8fafc;
   }
   .product-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.45s ease;
+    transition: transform 0.5s ease;
   }
-  .premium-product-card:hover .product-img { transform: scale(1.08); }
+  .premium-product-card:hover .product-img { transform: scale(1.05); }
 
   .price-tag {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(6px);
-    padding: 5px 11px;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 12px;
     font-weight: 800;
     color: var(--primary);
-    font-size: 0.88rem;
-    box-shadow: var(--shadow-sm);
+    font-size: 0.85rem;
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
 
   .budget-badge-overlay {
     position: absolute;
     top: 8px;
     left: 8px;
-    background: var(--danger);
+    background: #ef4444;
     color: #fff;
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 0.65rem;
     font-weight: 700;
     z-index: 5;
-    box-shadow: 0 4px 10px rgba(239,68,68,0.3);
+    box-shadow: 0 4px 10px rgba(239,68,68,0.4);
   }
 
-  .product-content { padding: 12px 14px 14px; }
+  .product-content { padding: 14px; }
 
   .product-title {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--dark);
@@ -216,12 +219,12 @@
   }
 
   .product-desc {
-    font-size: 0.73rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    height: 30px;
+    height: 32px;
     overflow: hidden;
-    line-height: 1.5;
-    margin-bottom: 10px;
+    line-height: 1.4;
+    margin-bottom: 12px;
   }
 
   /* Nutri row shown in athlete mode */
@@ -229,7 +232,7 @@
     display: none;
     gap: 6px;
     flex-wrap: wrap;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   body.athlete-mode .nutri-row { display: flex; }
 
@@ -240,15 +243,15 @@
   }
 
   .cal-tag {
-    font-size: 0.73rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     font-weight: 600;
   }
-  body.athlete-mode .cal-tag { color: #ea580c; font-weight: 700; font-size: 0.78rem; }
+  body.athlete-mode .cal-tag { color: #ea580c; font-weight: 700; }
 
   .add-btn {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: var(--primary-gradient);
     color: #fff;
@@ -260,15 +263,15 @@
     transition: var(--transition);
     font-size: 1.1rem;
     font-weight: 900;
-    box-shadow: 0 4px 10px rgba(99,102,241,0.3);
     flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(99,102,241,0.2);
   }
-  .add-btn:hover { transform: scale(1.15); box-shadow: 0 6px 14px rgba(99,102,241,0.4); }
+  .add-btn:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
 
   /* ── Budget Modal (Bottom Sheet) ── */
   #budgetModal {
     position: fixed; inset: 0;
-    background: rgba(15,23,42,0.55);
+    background: rgba(15,23,42,0.4);
     backdrop-filter: blur(4px);
     z-index: 3000;
     display: flex; align-items: flex-end; justify-content: center;
@@ -277,10 +280,13 @@
 
   .budget-sheet {
     width: 100%; max-width: 520px;
-    background: #fff;
+    background: #ffffff;
+    border: none;
     border-radius: 32px 32px 0 0;
     overflow: hidden;
     animation: sheetUp 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    color: var(--dark);
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
   }
 
   .sheet-handle-wrap { padding: 14px 0 0; text-align: center; }
@@ -300,18 +306,18 @@
   .budget-amount-input {
     flex: 1; padding: 14px 18px; border: 2px solid var(--border);
     border-radius: 14px; font-size: 1.2rem; font-weight: 700; outline: none;
-    font-family: 'Poppins', sans-serif; color: var(--dark); transition: var(--transition);
+    font-family: 'Poppins', sans-serif; color: var(--dark); background: #fff; transition: var(--transition);
   }
   .budget-amount-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.12); }
   .budget-currency {
-    padding: 14px 18px; background: var(--bg); border-radius: 14px;
+    padding: 14px 18px; background: #f8fafc; border-radius: 14px;
     font-size: 1.2rem; font-weight: 800; color: var(--dark);
     border: 2px solid var(--border);
   }
 
   .toggle-row {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 20px; background: var(--bg); border-radius: 16px; margin-bottom: 24px;
+    padding: 16px 20px; background: #f8fafc; border-radius: 16px; margin-bottom: 24px;
     border: 1.5px solid var(--border);
   }
   .toggle-row-info { flex: 1; }
@@ -371,7 +377,7 @@
       <h2 class="sheet-title">🍽️ {% trans "Welcome!" %}</h2>
       <p class="sheet-sub">{% trans "Enter your budget and we'll show what fits. Athlete mode highlights nutrition." %}</p>
 
-      <label style="font-weight:700; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); display:block; margin-bottom:10px;">
+      <label style="font-weight:700; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.05em; color:#64748b; display:block; margin-bottom:10px;">
         💰 {% trans "Your budget" %}
       </label>
       <div class="budget-input-row">
@@ -402,22 +408,22 @@
     {# ── Hero ── #}
     <div class="premium-hero">
         <div class="restaurant-glass-card">
-            <h1 style="color:#fff; font-size:1.6rem; font-weight:800; margin-bottom:4px;">{{ restaurant.name }}</h1>
-            <p style="color:rgba(255,255,255,0.78); font-size:0.83rem; margin-bottom:14px;">
+            <h1 style="color:var(--dark); font-size:1.6rem; font-weight:800; margin-bottom:4px;">{{ restaurant.name }}</h1>
+            <p style="color:var(--text-muted); font-size:0.83rem; margin-bottom:14px;">
                 {{ restaurant.description|default:_("AI-Enhanced Dining Experience") }}
             </p>
             <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:0.72rem;">
-                <span style="background:rgba(255,255,255,0.18); backdrop-filter:blur(6px); padding:5px 12px; border-radius:20px; font-weight:600;">
+                <span style="background:rgba(0,0,0,0.05); padding:5px 12px; border-radius:20px; font-weight:600; color:var(--dark);">
                   📍 {{ restaurant.address|default:_("Main Location") }}
                 </span>
-                <span style="background:rgba(255,255,255,0.18); backdrop-filter:blur(6px); padding:5px 12px; border-radius:20px; font-weight:600;">
+                <span style="background:rgba(0,0,0,0.05); padding:5px 12px; border-radius:20px; font-weight:600; color:var(--dark);">
                   ⭐ 4.9 (500+)
                 </span>
             </div>
         </div>
-        <a href="{% url 'ai_budget_recommendation' restaurant_slug=restaurant.slug %}" class="btn btn-primary pulse" style="border-radius:20px; font-size:0.88rem;">
+        <button onclick="openBudgetModal()" class="btn btn-primary pulse" style="border-radius:20px; font-size:0.88rem; box-shadow: 0 4px 16px rgba(99,102,241,0.5);">
             ✨ {% trans "AI Menu Advisor" %}
-        </a>
+        </button>
     </div>
 
     {# ── Budget Status Bar ── #}
@@ -664,10 +670,8 @@ function requestBill() {
 
 /* Show modal on load */
 window.addEventListener('DOMContentLoaded', () => {
-  // Only show modal once per session
-  if (!sessionStorage.getItem('budgetSet_{{ restaurant.slug }}')) {
-    document.getElementById('budgetModal').classList.remove('hidden');
-  }
+  // We no longer show the modal automatically.
+  // The user can open it by clicking "AI Menu Advisor" button.
 });
 
 document.querySelector('.sheet-submit-btn') && document.querySelector('.sheet-submit-btn').addEventListener('click', () => {
@@ -676,5 +680,8 @@ document.querySelector('.sheet-submit-btn') && document.querySelector('.sheet-su
 document.querySelector('.skip-link') && document.querySelector('.skip-link').addEventListener('click', () => {
   sessionStorage.setItem('budgetSet_{{ restaurant.slug }}', '1');
 });
+function openBudgetModal() {
+    document.getElementById('budgetModal').classList.remove('hidden');
+}
 </script>
 {% endblock %}

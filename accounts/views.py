@@ -37,7 +37,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
-class StaffListView(OwnerRequiredMixin, ListView):
+class StaffListView(ManagerRequiredMixin, ListView):
     model = User
     template_name = 'accounts/staff_list.html'
     context_object_name = 'staff_members'
@@ -48,7 +48,7 @@ class StaffListView(OwnerRequiredMixin, ListView):
             return User.objects.filter(restaurant=restaurant).exclude(id=self.request.user.id)
         return User.objects.none()
 
-class StaffCreateView(OwnerRequiredMixin, CreateView):
+class StaffCreateView(ManagerRequiredMixin, CreateView):
     model = User
     form_class = StaffCreateForm
     template_name = 'accounts/staff_form.html'
@@ -63,7 +63,7 @@ class StaffCreateView(OwnerRequiredMixin, CreateView):
         form.instance.restaurant = self.request.user.restaurant
         return super().form_valid(form)
 
-class StaffUpdateView(OwnerRequiredMixin, UpdateView):
+class StaffUpdateView(ManagerRequiredMixin, UpdateView):
     model = User
     template_name = 'accounts/staff_form.html'
     fields = ['first_name', 'last_name', 'email', 'phone', 'role', 'branch']
@@ -72,7 +72,7 @@ class StaffUpdateView(OwnerRequiredMixin, UpdateView):
     def get_queryset(self):
         return User.objects.filter(restaurant=self.request.user.restaurant)
 
-class RolePermissionListView(OwnerRequiredMixin, ListView):
+class RolePermissionListView(ManagerRequiredMixin, ListView):
     model = User
     template_name = 'accounts/permission_list.html'
     context_object_name = 'users'
@@ -81,7 +81,7 @@ class RolePermissionListView(OwnerRequiredMixin, ListView):
         # CEO can manage permissions for all staff
         return User.objects.filter(restaurant=self.request.user.restaurant).exclude(id=self.request.user.id)
 
-class RolePermissionUpdateView(OwnerRequiredMixin, UpdateView):
+class RolePermissionUpdateView(ManagerRequiredMixin, UpdateView):
     model = User
     fields = [
         'can_view_daily_revenue', 'can_view_monthly_revenue', 'can_view_yearly_revenue',

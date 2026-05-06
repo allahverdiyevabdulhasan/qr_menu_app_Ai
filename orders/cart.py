@@ -70,9 +70,12 @@ class Cart:
                 if item['product_id'] == product.id:
                     item['product'] = product
                     # Calculate option prices dynamically
-                    option_price = sum(opt.price for opt in product.options.filter(id__in=item['options']))
+                    from menu.models import ProductModifier
+                    modifiers = ProductModifier.objects.filter(id__in=item['options'])
+                    option_price = sum(opt.price for opt in modifiers)
                     item['unit_price'] = product.price + option_price
                     item['total_price'] = item['unit_price'] * item['quantity']
+                    item['modifier_objects'] = modifiers
                     yield item
 
     def get_total_price(self):

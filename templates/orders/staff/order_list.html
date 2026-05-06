@@ -1,31 +1,41 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Orders" %} — NeyMenu AI{% endblock %}
-{% block page_title %}📋 {% trans "Orders" %}{% endblock %}
+{% block title %}Tüm Siparişler — Neyman{% endblock %}
+{% block page_title %}📋 Sipariş Geçmişi{% endblock %}
 
 {% block extra_css %}
 <style>
-.order-table-wrap { overflow-x: auto; }
+.order-table-wrap { overflow-x: auto; background: #fff; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.03); padding: 20px; }
 .status-badge {
   display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+  padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 800;
 }
-.status-NEW       { background: #e0f2fe; color: #0369a1; }
-.status-ACCEPTED  { background: #fef9c3; color: #a16207; }
-.status-PREPARING { background: #fef3c7; color: #d97706; }
-.status-READY     { background: #d1fae5; color: #065f46; }
-.status-SERVED    { background: #ede9fe; color: #5b21b6; }
-.status-COMPLETED { background: #dcfce7; color: #166534; }
-.status-CANCELLED { background: #fee2e2; color: #991b1b; }
+.status-NEW       { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+.status-ACCEPTED  { background: #fef9c3; color: #a16207; border: 1px solid #fef08a; }
+.status-PREPARING { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+.status-READY     { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.status-SERVED    { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+.status-COMPLETED { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.status-CANCELLED { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
-.order-row:hover { background: var(--bg); }
-.filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; align-items: center; }
+.order-row:hover { background: #f8fafc; }
+.filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; align-items: center; }
 .filter-pill {
-  padding: 8px 18px; border-radius: 20px; border: 1.5px solid var(--border);
-  font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
-  background: #fff; color: var(--dark);
+  padding: 10px 20px; border-radius: 30px; border: 1px solid var(--border);
+  font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  background: #fff; color: var(--text-main); box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
-.filter-pill.active, .filter-pill:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.filter-pill.active, .filter-pill:hover { border-color: var(--primary); color: #fff; background: var(--primary); box-shadow: 0 4px 15px rgba(99,102,241,0.3); }
+
+/* Premium Stat Cards */
+.stat-card {
+  border-radius: 24px; padding: 24px; position: relative; overflow: hidden; color: #fff; border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08); background: #fff; color: var(--text-main);
+  border: 1px solid var(--border);
+}
+.stat-card .bg-icon { position: absolute; right: -10px; top: -10px; font-size: 5rem; opacity: 0.05; color: inherit; }
+.stat-label { font-weight: 800; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted); }
+.stat-value { font-size: 2.5rem; font-weight: 900; margin-top: 5px; line-height: 1; color: var(--text-main); }
 </style>
 {% endblock %}
 
@@ -33,95 +43,109 @@
 <div class="fade-in">
 
   {# ── Stats Row ── #}
-  <div class="grid grid-4 mb-6">
-    <div class="metric-card metric-primary">
-      <div class="icon">📋</div>
-      <div class="label">{% trans "Total Today" %}</div>
-      <div class="value">{{ orders|length }}</div>
+  <div class="grid grid-4 mb-8" style="gap:20px;">
+    <div class="stat-card">
+      <div class="bg-icon">📋</div>
+      <div class="stat-label">Bugünkü Siparişler</div>
+      <div class="stat-value" style="color:var(--primary);">{{ orders|length }}</div>
     </div>
-    <div class="metric-card metric-warning">
-      <div class="icon">🔥</div>
-      <div class="label">{% trans "In Kitchen" %}</div>
-      <div class="value">{{ orders|length }}</div>
+    <div class="stat-card">
+      <div class="bg-icon">🔥</div>
+      <div class="stat-label">Mutfaktaki Siparişler</div>
+      <div class="stat-value" style="color:#f59e0b;">{{ orders|length }}</div>
     </div>
-    <div class="metric-card metric-success">
-      <div class="icon">✅</div>
-      <div class="label">{% trans "Completed" %}</div>
-      <div class="value">0</div>
+    <div class="stat-card">
+      <div class="bg-icon">✅</div>
+      <div class="stat-label">Tamamlananlar</div>
+      <div class="stat-value" style="color:#10b981;">0</div>
     </div>
-    <div class="metric-card metric-info">
-      <div class="icon">💰</div>
-      <div class="label">{% trans "Revenue" %}</div>
-      <div class="value">0.00 ₼</div>
+    <div class="stat-card">
+      <div class="bg-icon">💰</div>
+      <div class="stat-label">Bugünkü Ciro</div>
+      <div class="stat-value" style="color:#6366f1;">0.00 ₼</div>
     </div>
   </div>
 
   {# ── Filter Bar ── #}
   <div class="filter-bar">
-    <span class="text-xs font-bold text-muted" style="text-transform:uppercase;">{% trans "Filter" %}:</span>
-    <button class="filter-pill active" onclick="filterOrders('ALL', this)">{% trans "All" %}</button>
-    <button class="filter-pill" onclick="filterOrders('NEW', this)">🆕 {% trans "New" %}</button>
-    <button class="filter-pill" onclick="filterOrders('PREPARING', this)">🔥 {% trans "Preparing" %}</button>
-    <button class="filter-pill" onclick="filterOrders('READY', this)">✅ {% trans "Ready" %}</button>
-    <button class="filter-pill" onclick="filterOrders('COMPLETED', this)">🏁 {% trans "Completed" %}</button>
+    <button class="filter-pill active" onclick="filterOrders('ALL', this)">Tümü</button>
+    <button class="filter-pill" onclick="filterOrders('NEW', this)">🆕 Yeni Bekleyen</button>
+    <button class="filter-pill" onclick="filterOrders('PREPARING', this)">🔥 Hazırlanıyor</button>
+    <button class="filter-pill" onclick="filterOrders('READY', this)">✅ Hazır</button>
+    <button class="filter-pill" onclick="filterOrders('COMPLETED', this)">🏁 Tamamlanan</button>
   </div>
 
   {# ── Orders Table ── #}
-  <div class="card">
-    <div class="card-header">
-      <span>📋 {% trans "Order List" %}</span>
-      <span class="badge badge-primary">{{ orders|length }} {% trans "orders" %}</span>
+  <div class="order-table-wrap">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding: 0 10px;">
+      <h3 style="margin:0; font-weight:900; font-size:1.2rem; color:var(--text-main);">📋 Sipariş Listesi</h3>
+      <span class="badge" style="background:var(--primary); color:#fff; padding:6px 16px; border-radius:20px; font-weight:800;">{{ orders|length }} Sipariş</span>
     </div>
-    <div class="card-body" style="padding:0;">
-      {% if orders %}
-      <div class="order-table-wrap">
-        <table class="data-table" id="ordersTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>{% trans "Table" %}</th>
-              <th>{% trans "Items" %}</th>
-              <th>{% trans "Total" %}</th>
-              <th>{% trans "Status" %}</th>
-              <th>{% trans "Time" %}</th>
-              <th>{% trans "Actions" %}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for order in orders %}
-            <tr class="order-row" data-status="{{ order.status }}">
-              <td><strong>#{{ order.id }}</strong></td>
-              <td>{{ order.table.table_number|default:"—" }}</td>
-              <td>{{ order.items.count }} {% trans "items" %}</td>
-              <td><strong>{{ order.total_amount }} ₼</strong></td>
-              <td><span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span></td>
-              <td class="text-muted text-sm">{{ order.created_at|date:"H:i" }}</td>
-              <td>
-                <div style="display:flex; gap:6px;">
-                  <a href="{% url 'order_detail' order.pk %}" class="btn btn-secondary btn-sm">{% trans "View" %}</a>
-                  <form method="post" action="{% url 'order_status_update' order.pk %}">
-                    {% csrf_token %}
-                    <select name="status" onchange="this.form.submit()" style="padding:4px 8px; border-radius:8px; border:1.5px solid var(--border); font-size:0.8rem; font-family:'Poppins',sans-serif;">
-                      {% for val, label in order.STATUS_CHOICES %}
-                      <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
-                      {% endfor %}
-                    </select>
-                  </form>
-                </div>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      {% else %}
-      <div class="empty-state">
-        <div style="font-size:4rem; margin-bottom:16px;">📭</div>
-        <h3>{% trans "No orders yet" %}</h3>
-        <p class="text-muted">{% trans "Orders will appear here when customers scan the QR code." %}</p>
-      </div>
-      {% endif %}
+    
+    {% if orders %}
+    <table class="data-table" id="ordersTable" style="width:100%; text-align:left; border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid #f1f5f9;">
+          <th style="padding:16px 10px; color:#64748b; font-size:0.85rem; font-weight:800; text-transform:uppercase;">No</th>
+          <th style="padding:16px 10px; color:#64748b; font-size:0.85rem; font-weight:800; text-transform:uppercase;">Masa / Müşteri</th>
+          <th style="padding:16px 10px; color:#64748b; font-size:0.85rem; font-weight:800; text-transform:uppercase;">Öğeler</th>
+          <th style="padding:16px 10px; color:#64748b; font-size:0.85rem; font-weight:800; text-transform:uppercase;">Toplam Tutar</th>
+          <th style="padding:16px 10px; color:#64748b; font-size:0.85rem; font-weight:800; text-transform:uppercase;">Durum</th>
+          <th style="padding:16px 10px; color:#64748b; font-size:0.85rem; font-weight:800; text-transform:uppercase;">Saat</th>
+          <th style="padding:16px 10px; color:#64748b; font-size:0.85rem; font-weight:800; text-transform:uppercase; text-align:right;">İşlem</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr class="order-row" data-status="{{ order.status }}" style="border-bottom:1px solid #f1f5f9; transition:background 0.2s;">
+          <td style="padding:16px 10px;">
+            <a href="{% url 'order_detail' order.pk %}" style="font-weight:900; font-size:1.1rem; color:var(--text-main); text-decoration:none;">#{{ order.id }}</a>
+          </td>
+          <td style="padding:16px 10px; font-weight:700; color:var(--text-main);">
+            {% if order.table %}🪑 Masa {{ order.table.table_number }}{% else %}🥡 Paket Servis{% endif %}
+          </td>
+          <td style="padding:16px 10px; font-weight:600; color:#64748b;">{{ order.items.count }} Öğe</td>
+          <td style="padding:16px 10px; font-weight:900; color:var(--primary); font-size:1.05rem;">{{ order.total_amount|floatformat:2 }} ₼</td>
+          <td style="padding:16px 10px;">
+            <span class="status-badge status-{{ order.status }}">
+              {% if order.status == 'NEW' %}⏳ Onay Bekliyor
+              {% elif order.status == 'PREPARING' %}🔥 Hazırlanıyor
+              {% elif order.status == 'READY' %}✅ Hazır
+              {% elif order.status == 'SERVED' %}🍽️ Servis Edildi
+              {% elif order.status == 'COMPLETED' %}💰 Tamamlandı
+              {% elif order.status == 'CANCELLED' %}❌ İptal Edildi
+              {% else %}{{ order.get_status_display }}{% endif %}
+            </span>
+          </td>
+          <td style="padding:16px 10px; font-weight:600; color:#64748b;">{{ order.created_at|date:"H:i" }}</td>
+          <td style="padding:16px 10px; text-align:right;">
+            <div style="display:flex; gap:8px; justify-content:flex-end; align-items:center;">
+              <a href="{% url 'order_detail' order.pk %}" class="btn btn-primary btn-sm" style="border-radius:10px; padding:6px 14px; font-weight:800; box-shadow:0 4px 10px rgba(99,102,241,0.2);">İncele</a>
+              <form method="post" action="{% url 'order_status_update' order.pk %}">
+                {% csrf_token %}
+                <select name="status" onchange="this.form.submit()" style="padding:6px 10px; border-radius:10px; border:1px solid var(--border); font-size:0.8rem; font-weight:700; outline:none; cursor:pointer;">
+                  <option value="NEW" {% if order.status == 'NEW' %}selected{% endif %}>Yeni</option>
+                  <option value="ACCEPTED" {% if order.status == 'ACCEPTED' %}selected{% endif %}>Onayla</option>
+                  <option value="PREPARING" {% if order.status == 'PREPARING' %}selected{% endif %}>Hazırlanıyor</option>
+                  <option value="READY" {% if order.status == 'READY' %}selected{% endif %}>Hazır</option>
+                  <option value="SERVED" {% if order.status == 'SERVED' %}selected{% endif %}>Servis Edildi</option>
+                  <option value="COMPLETED" {% if order.status == 'COMPLETED' %}selected{% endif %}>Tamamlandı</option>
+                  <option value="CANCELLED" {% if order.status == 'CANCELLED' %}selected{% endif %}>İptal Et</option>
+                </select>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div style="padding:80px 20px; text-align:center;">
+      <div style="font-size:4rem; margin-bottom:16px; opacity:0.8;">📭</div>
+      <h3 style="font-weight:900; font-size:1.5rem; color:var(--text-main);">Henüz sipariş yok</h3>
+      <p style="color:#64748b; font-weight:500;">Müşteriler sipariş verdikçe burada listelenecektir.</p>
     </div>
+    {% endif %}
   </div>
 
 </div>
