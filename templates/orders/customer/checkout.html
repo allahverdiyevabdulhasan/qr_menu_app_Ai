@@ -232,20 +232,20 @@
                     <div class="summary-item">
                         <div>
                             <div class="font-black text-sm">{{ item.product.name }}</div>
-                            <div class="text-xs opacity-60">{{ item.quantity }} × {{ item.unit_price }} ₼</div>
+                            <div class="text-xs opacity-60">{{ item.quantity }} × {{ item.unit_price }} ₺</div>
                         </div>
-                        <div class="font-black">{{ item.total_price }} ₼</div>
+                        <div class="font-black">{{ item.total_price }} ₺</div>
                     </div>
                     {% endfor %}
                 </div>
 
                 <div style="display: flex; justify-content: space-between; margin-bottom: 12px; opacity: 0.6;">
                     <span>{% trans "Subtotal" %}</span>
-                    <span class="font-bold">{{ cart.total_price }} ₼</span>
+                    <span class="font-bold">{{ cart.total_price }} ₺</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 1.5rem; font-weight: 900; margin-top: 24px; padding-top: 24px; border-top: 1px dashed rgba(255,255,255,0.2);">
                     <span>{% trans "Total" %}</span>
-                    <span style="color: var(--primary);">{{ cart.total_price }} ₼</span>
+                    <span style="color: var(--primary);">{{ cart.total_price }} ₺</span>
                 </div>
 
                 <button type="submit" class="place-order-btn">

@@ -20,7 +20,7 @@
                 {% endif %}
                 <h2 style="font-size:1.5rem; margin-bottom:4px;">{{ product.name }}</h2>
                 <span class="badge badge-info mb-4">{{ product.category|default:_("No Category") }}</span>
-                <div style="font-size:1.25rem; font-bold; color:var(--primary); margin-bottom:24px;">{{ product.price }} ₼</div>
+                <div style="font-size:1.25rem; font-bold; color:var(--primary); margin-bottom:24px;">{{ product.price }} ₺</div>
                 
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     <a href="{% url 'product_edit' product.pk %}" class="btn btn-secondary btn-block">✏️ {% trans "Edit Product" %}</a>
@@ -49,7 +49,7 @@
                         <tr>
                             <td><span class="font-bold">{{ option.name }}</span></td>
                             <td><span class="badge badge-secondary">{{ option.get_option_type_display }}</span></td>
-                            <td><span style="color:var(--success);">+{{ option.price }} ₼</span></td>
+                            <td><span style="color:var(--success);">+{{ option.price }} ₺</span></td>
                             <td>
                                 <span class="badge badge-{% if option.is_active %}success{% else %}secondary{% endif %}">
                                     {{ option.is_active|yesno:_("Active,Inactive") }}

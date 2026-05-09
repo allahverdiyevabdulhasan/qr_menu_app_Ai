@@ -51,7 +51,7 @@
           </div>
           <div style="text-align:right;">
             <div style="font-size:1.8rem; font-weight:900; color:var(--primary); line-height:1;">
-              {% if c.discount_type == 'PERCENT' %}{{ c.discount_value|floatformat:0 }}%{% else %}{{ c.discount_value }} ₼{% endif %}
+              {% if c.discount_type == 'PERCENT' %}{{ c.discount_value|floatformat:0 }}%{% else %}{{ c.discount_value }} ₺{% endif %}
             </div>
             <div class="text-xs text-muted">{% trans "Discount" %}</div>
           </div>
@@ -64,7 +64,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; font-size:0.83rem;">
             <span class="text-muted">{% trans "Min. Order" %}</span>
-            <span style="font-weight:600;">{{ c.min_order_amount|floatformat:2 }} ₼</span>
+            <span style="font-weight:600;">{{ c.min_order_amount|floatformat:2 }} ₺</span>
           </div>
           <div style="display:flex; justify-content:space-between; font-size:0.83rem;">
             <span class="text-muted">{% trans "Period" %}</span>

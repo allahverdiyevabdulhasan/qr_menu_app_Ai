@@ -382,7 +382,7 @@
       </label>
       <div class="budget-input-row">
         <input type="number" id="budgetInput" class="budget-amount-input" placeholder="50" min="0" step="0.5">
-        <span class="budget-currency">₼</span>
+        <span class="budget-currency">₺</span>
       </div>
 
       <div class="toggle-row">
@@ -421,15 +421,23 @@
                 </span>
             </div>
         </div>
-        <button onclick="openBudgetModal()" class="btn btn-primary pulse" style="border-radius:20px; font-size:0.88rem; box-shadow: 0 4px 16px rgba(99,102,241,0.5);">
-            ✨ {% trans "AI Menu Advisor" %}
-        </button>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button onclick="openBudgetModal()" class="btn btn-primary pulse" style="flex:1; border-radius:20px; font-size:0.85rem; box-shadow: 0 4px 16px rgba(99,102,241,0.5);">
+                💰 {% trans "Budget Filter" %}
+            </button>
+            <a href="{% url 'ai_food_advisor' restaurant_slug=restaurant.slug %}" class="btn" style="flex:1; background:#8b5cf6; color:#fff; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; border-radius:20px; font-size:0.85rem; font-weight:700; box-shadow: 0 4px 16px rgba(139,92,246,0.5);">
+                🤖 {% trans "AI Advisor" %}
+            </a>
+            <a href="{% url 'ai_budget_recommendation' restaurant_slug=restaurant.slug %}" class="btn" style="flex:1; background:#f59e0b; color:#fff; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; border-radius:20px; font-size:0.85rem; font-weight:700; box-shadow: 0 4px 16px rgba(245,158,11,0.5);">
+                ✨ {% trans "AI Combos" %}
+            </a>
+        </div>
     </div>
 
     {# ── Budget Status Bar ── #}
     <div class="budget-bar" id="budgetBar">
       <span>💰</span>
-      <span id="budgetBarText">Budget: — ₼</span>
+      <span id="budgetBarText">Budget: — ₺</span>
       <button class="budget-reset" onclick="resetBudget()">✕ {% trans "Reset" %}</button>
     </div>
 
@@ -491,7 +499,7 @@
                             <div style="height:100%; background:linear-gradient(135deg,#eef2ff,#e0e7ff);
                                         display:flex; align-items:center; justify-content:center; font-size:2.5rem;">🥗</div>
                         {% endif %}
-                        <div class="price-tag">{{ p.price|floatformat:2 }} ₼</div>
+                        <div class="price-tag">{{ p.price|floatformat:2 }} ₺</div>
                         {% if p.is_popular %}<div style="position:absolute;top:8px;left:8px;background:#f59e0b;color:#fff;padding:3px 9px;border-radius:20px;font-size:0.65rem;font-weight:700;">🔥 Popular</div>{% endif %}
                         <div class="budget-badge-overlay" style="display:none;">💰 {% trans "Over Budget" %}</div>
                     </div>
@@ -547,7 +555,7 @@ function applyBudget() {
     const bar = document.getElementById('budgetBar');
     bar.classList.add('active');
     document.getElementById('budgetBarText').textContent =
-      '{% trans "Budget" %}: ' + activeBudget.toFixed(2) + ' ₼';
+      '{% trans "Budget" %}: ' + activeBudget.toFixed(2) + ' ₺';
   }
 
   if (athleteMode) {

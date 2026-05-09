@@ -1,12 +1,77 @@
-﻿{% extends 'dashboard_base.html' %}
+{% extends 'customer_base.html' %}
+{% load i18n %}
+
+{% block title %}Değerlendirme Yap — Kanatçı Mustafa{% endblock %}
+
 {% block content %}
-<h2>Leave a Review</h2>
-<p>Thanks for ordering! How was your experience?</p>
+<div style="background: var(--bg); padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 15px;">
+    <!-- In a real scenario we'd go back to the menu or order success, let's just use history back -->
+    <button onclick="window.history.back()" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; color: var(--text); border: none; cursor: pointer;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <h2 style="margin: 0; font-size: 1.2rem; font-weight: 700;">Değerlendirme Yap</h2>
+</div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn">Submit Review</button>
-</form>
+<div style="padding: 30px 20px; max-width: 600px; margin: 0 auto; text-align: center;">
+    
+    <div style="font-size: 4rem; margin-bottom: 10px;">⭐</div>
+    <h2 style="font-weight: 800; color: var(--text); margin-bottom: 8px;">Bizi Değerlendirin</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px;">
+        Siparişiniz için teşekkür ederiz! Deneyiminiz nasıldı? Düşüncelerinizi bizimle paylaşırsanız çok seviniriz.
+    </p>
+
+    <div style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: left; border: 1px solid var(--border);">
+        <form method="post" class="review-form">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 8px; font-size: 0.9rem;">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color: #64748b; font-size: 0.8rem; margin-top: 4px; display: block;">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <small style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; display: block;">{{ error }}</small>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" style="width: 100%; background: var(--primary); color: white; border: none; border-radius: 12px; padding: 14px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">
+                Yorumu Gönder
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .review-form input,
+    .review-form select,
+    .review-form textarea {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        background: #f8fafc;
+        transition: all 0.2s ease;
+    }
+    
+    .review-form input:focus,
+    .review-form select:focus,
+    .review-form textarea:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        outline: none;
+    }
+
+    .review-form button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(99,102,241,0.4);
+    }
+</style>
 {% endblock %}
-

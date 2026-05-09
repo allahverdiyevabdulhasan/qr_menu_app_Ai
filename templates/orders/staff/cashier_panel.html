@@ -85,7 +85,7 @@
       <div class="bg-icon">💰</div>
       <div>
         <div class="stat-label">Toplam Kasa Değeri</div>
-        <div class="stat-value">{{ total_active_value|floatformat:2|default:"0.00" }} <span style="font-size:1.8rem; font-weight:600; opacity:0.8;">₼</span></div>
+        <div class="stat-value">{{ total_active_value|floatformat:2|default:"0.00" }} <span style="font-size:1.8rem; font-weight:600; opacity:0.8;">₺</span></div>
       </div>
       <div style="margin-top:16px; font-size:0.85rem; background:rgba(255,255,255,0.2); display:inline-block; padding:6px 16px; border-radius:20px; font-weight:700; align-self: flex-start;">
         Anlık güncelleniyor
@@ -163,7 +163,7 @@
           <div style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">#{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
         </div>
         <div style="text-align:right;">
-          <div class="cashier-total">{{ order.total_amount|floatformat:2 }} ₼</div>
+          <div class="cashier-total">{{ order.total_amount|floatformat:2 }} ₺</div>
           <span class="status-chip chip-{{ order.status|lower }}">
             {% if order.status == 'NEW' %}⏳ Onay Bekliyor
             {% elif order.status == 'PREPARING' %}🔥 Hazırlanıyor
@@ -179,7 +179,7 @@
         <div style="margin-bottom:8px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">
           <div class="cashier-item">
             <span><span style="color:var(--primary); font-weight:900;">{{ item.quantity }}×</span> {{ item.product_name_snapshot }}</span>
-            <span>{{ item.total_price|floatformat:2 }} ₼</span>
+            <span>{{ item.total_price|floatformat:2 }} ₺</span>
           </div>
 
           {% if item.selected_options.modifier_names or item.selected_options.removed_ingredients or item.note %}

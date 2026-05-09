@@ -31,18 +31,18 @@
       <div class="icon">💸</div>
       <div class="label">{% trans "This Month" %}</div>
       <div class="value" style="font-size:1.4rem;">
-        {% with total=expenses|length %}— ₼{% endwith %}
+        {% with total=expenses|length %}— ₺{% endwith %}
       </div>
     </div>
     <div class="metric-card metric-warning">
       <div class="icon">🏢</div>
       <div class="label">{% trans "Salary & Payroll" %}</div>
-      <div class="value" style="font-size:1.4rem;">— ₼</div>
+      <div class="value" style="font-size:1.4rem;">— ₺</div>
     </div>
     <div class="metric-card metric-info">
       <div class="icon">🛒</div>
       <div class="label">{% trans "Ingredients" %}</div>
-      <div class="value" style="font-size:1.4rem;">— ₼</div>
+      <div class="value" style="font-size:1.4rem;">— ₺</div>
     </div>
     <div class="metric-card metric-primary">
       <div class="icon">📋</div>
@@ -87,7 +87,7 @@
             </td>
             <td class="text-muted text-sm">{{ expense.branch.name|default:"—" }}</td>
             <td style="text-align:right;">
-              <span style="font-weight:800; font-size:1rem; color:var(--dark);">{{ expense.amount|floatformat:2 }} ₼</span>
+              <span style="font-weight:800; font-size:1rem; color:var(--dark);">{{ expense.amount|floatformat:2 }} ₺</span>
             </td>
             <td style="text-align:right;">
               <div style="display:flex; gap:6px; justify-content:flex-end;">

@@ -49,12 +49,12 @@
     <div class="grid grid-4 mb-8">
         <div class="metric-card metric-primary">
             <div class="label">{% trans "Total Revenue" %}</div>
-            <div class="value">{{ revenue|default:"0.00"|floatformat:2 }} ₼</div>
+            <div class="value">{{ revenue|default:"0.00"|floatformat:2 }} ₺</div>
             <div class="text-muted text-xs">{% trans "Selected Period" %}</div>
         </div>
         <div class="metric-card metric-success">
             <div class="label">{% trans "Net Profit" %}</div>
-            <div class="value" style="color:var(--success);">{{ net_profit|default:"0.00"|floatformat:2 }} ₼</div>
+            <div class="value" style="color:var(--success);">{{ net_profit|default:"0.00"|floatformat:2 }} ₺</div>
             <div class="text-muted text-xs">{% trans "After Expenses & Payroll" %}</div>
         </div>
         <div class="metric-card metric-info">
@@ -137,7 +137,7 @@
                         <tr>
                             <td><strong>{{ p.name }}</strong></td>
                             <td>{{ p.total_quantity }}</td>
-                            <td style="text-align:right; font-weight:800; color:var(--primary);">{{ p.total_revenue|floatformat:2 }} ₼</td>
+                            <td style="text-align:right; font-weight:800; color:var(--primary);">{{ p.total_revenue|floatformat:2 }} ₺</td>
                         </tr>
                         {% empty %}
                         <tr><td colspan="3" class="text-center py-8 opacity-50">{% trans "No data available" %}</td></tr>

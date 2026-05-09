@@ -1,0 +1,33 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}Masa Sil — NeyMenu AI{% endblock %}
+{% block page_title %}Masa Sil{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 500px; margin: 40px auto;">
+    <div class="card" style="border: 2px solid var(--danger, #e74c3c);">
+        <div class="card-body" style="padding: 2rem; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🗑️</div>
+            <h2 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--danger, #e74c3c);">
+                Masayı Silmek İstediğinizden Emin Misiniz?
+            </h2>
+            <p style="color: var(--text-muted, #888); margin-bottom: 1.5rem;">
+                <strong>#{{ object.table_number }}
+                {% if object.table_name %} — {{ object.table_name }}{% endif %}</strong>
+                numaralı masa kalıcı olarak silinecek. Bu işlem geri alınamaz.
+            </p>
+
+            <form method="post" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                {% csrf_token %}
+                <a href="{% url 'table_list' %}" class="btn btn-secondary">
+                    ← İptal
+                </a>
+                <button type="submit" class="btn" style="background: var(--danger, #e74c3c); color: #fff; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer;">
+                    🗑️ Evet, Sil
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

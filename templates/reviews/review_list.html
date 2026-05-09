@@ -35,17 +35,17 @@
     <div class="metric-card metric-success">
       <div class="icon">😊</div>
       <div class="label">{% trans "Positive" %}</div>
-      <div class="value">{{ positive_count|default:reviews|length }}</div>
+      <div class="value">{{ positive_count|default:0 }}</div>
     </div>
     <div class="metric-card metric-info">
       <div class="icon">😐</div>
       <div class="label">{% trans "Neutral" %}</div>
-      <div class="value">0</div>
+      <div class="value">{{ neutral_count|default:0 }}</div>
     </div>
     <div class="metric-card metric-danger">
       <div class="icon">😞</div>
       <div class="label">{% trans "Negative" %}</div>
-      <div class="value">0</div>
+      <div class="value">{{ negative_count|default:0 }}</div>
     </div>
   </div>
 
@@ -92,14 +92,18 @@
                 {% endif %}
               </span>
             </td>
-            <td><span class="badge badge-info" style="font-size:0.7rem;">{{ review.get_category_display|default:"General" }}</span></td>
+            <td><span class="badge badge-info" style="font-size:0.7rem;">{{ review.category|default:"General" }}</span></td>
             <td>
               <div class="review-summary" title="{{ review.comment }}">
                 {{ review.comment|default:"—"|truncatechars:50 }}
               </div>
             </td>
             <td style="text-align:right;">
-              <a href="{% url 'review_detail' review.pk %}" class="btn btn-secondary btn-sm" style="padding:5px 12px;">{% trans "View" %}</a>
+              {% if not review.is_product_review %}
+              <a href="{{ review.detail_url }}" class="btn btn-secondary btn-sm" style="padding:5px 12px;">{% trans "View" %}</a>
+              {% else %}
+              <span class="text-xs text-muted">—</span>
+              {% endif %}
             </td>
           </tr>
           {% empty %}

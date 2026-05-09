@@ -165,7 +165,7 @@
             <div class="cart-item-info">
                 <div class="cart-item-header">
                     <span class="cart-item-title">{{ item.product.name }}</span>
-                    <span class="cart-item-price">{{ item.total_price }} ₼</span>
+                    <span class="cart-item-price">{{ item.total_price }} ₺</span>
                 </div>
                 
                 {% if item.modifier_objects or item.removed_ingredients or item.note %}
@@ -236,7 +236,7 @@
         <div class="summary-card">
             <div class="summary-row">
                 <span>{% trans "Items Subtotal" %}</span>
-                <span>{{ cart.total_price }} ₼</span>
+                <span>{{ cart.total_price }} ₺</span>
             </div>
             <div class="summary-row">
                 <span>{% trans "Service Charge" %}</span>
@@ -244,7 +244,7 @@
             </div>
             <div class="summary-total">
                 <span>{% trans "Total" %}</span>
-                <span>{{ cart.total_price }} ₼</span>
+                <span>{{ cart.total_price }} ₺</span>
             </div>
         </div>
 

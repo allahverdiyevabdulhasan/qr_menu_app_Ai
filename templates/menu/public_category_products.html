@@ -1,26 +1,117 @@
-﻿{% extends 'customer_base.html' %}
+{% extends 'customer_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ category.name|default:"Kategori" }} - {{ restaurant.name }}{% endblock %}
+
 {% block content %}
-<h2>{{ restaurant.name }} - Products</h2>
-
-<form method="get" style="margin-bottom: 20px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
-    <h4>Filter Options</h4>
-    {{ filter_form.as_p }}
-    <button type="submit" class="btn">Apply Filters</button>
-</form>
-
-<div class="products">
-    {% for prod in products %}
-        <div class="product-card" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 10px;">
-            <h3><a href="{% url 'public_product' restaurant.slug prod.pk %}">{{ prod.name }}</a></h3>
-            <p>{{ prod.description }}</p>
-            <strong>Price: {{ prod.price }}</strong>
-            {% if prod.stock_status == 'out_of_stock' %}
-                <span style="color:red;">(Out of Stock)</span>
-            {% endif %}
-        </div>
-    {% empty %}
-        <p>No products found for the selected filters.</p>
-    {% endfor %}
+<!-- Top Header with Back Button -->
+<div style="background: var(--bg); padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 15px;">
+    <a href="{% url 'public_menu' restaurant.slug %}" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; color: var(--text); text-decoration: none;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </a>
+    <h2 style="margin: 0; font-size: 1.2rem; font-weight: 700;">{{ category.name|default:"Tüm Ürünler" }}</h2>
 </div>
-{% endblock %}
 
+<!-- Main Content Area -->
+<div style="padding: 20px;">
+    
+    <!-- Filter Section (Collapsible or subtle) -->
+    <form method="get" style="margin-bottom: 25px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h4 style="margin: 0; font-size: 0.95rem; font-weight: 600; color: #475569; display: flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                Filtrele
+            </h4>
+        </div>
+        <div class="filter-grid" style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: flex-end;">
+            <div style="font-size: 0.9rem;">
+                {{ filter_form.as_p }}
+            </div>
+            <button type="submit" style="background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 15px; font-weight: 600; cursor: pointer; height: 40px; margin-bottom: 16px;">Uygula</button>
+        </div>
+    </form>
+
+    <!-- Product Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        {% for prod in products %}
+            <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s; display: flex; flex-direction: column;">
+                
+                <!-- Product Image Placeholder -->
+                <div style="height: 160px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative;">
+                    {% if prod.image %}
+                        <img src="{{ prod.image.url }}" alt="{{ prod.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                        <span style="font-size: 3rem;">🍽️</span>
+                    {% endif %}
+                    
+                    {% if prod.stock_status == 'out_of_stock' %}
+                        <div style="position: absolute; inset: 0; background: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
+                            <span style="background: #ef4444; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px;">TÜKENDİ</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Product Info -->
+                <div style="padding: 16px; flex: 1; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text);">
+                            {{ prod.name }}
+                        </h3>
+                        <span style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">
+                            {{ prod.price }}₺
+                        </span>
+                    </div>
+                    
+                    <p style="margin: 0 0 16px 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; flex: 1;">
+                        {{ prod.description|truncatechars:80 }}
+                    </p>
+                    
+                    <a href="{% url 'public_product' restaurant.slug prod.pk %}" style="display: block; width: 100%; text-align: center; background: {% if prod.stock_status == 'out_of_stock' %}#e2e8f0{% else %}#f1f5f9{% endif %}; color: {% if prod.stock_status == 'out_of_stock' %}#94a3b8{% else %}var(--primary){% endif %}; padding: 12px; border-radius: 10px; font-weight: 600; text-decoration: none; transition: background 0.2s; pointer-events: {% if prod.stock_status == 'out_of_stock' %}none{% else %}auto{% endif %};">
+                        İncele & Ekle
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; background: #f8fafc; border-radius: 16px; border: 1px dashed #cbd5e1;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">🔍</div>
+                <h3 style="margin: 0 0 8px 0; color: #334155;">Sonuç Bulunamadı</h3>
+                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Seçtiğiniz filtrelere uygun ürün bulunmamaktadır.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Clean up the form generated by Django */
+    .filter-grid p {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .filter-grid label {
+        font-weight: 600;
+        color: #64748b;
+        font-size: 0.85rem;
+    }
+    .filter-grid input, .filter-grid select {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-family: inherit;
+        background: white;
+    }
+    
+    @media (max-width: 600px) {
+        .filter-grid {
+            grid-template-columns: 1fr;
+        }
+        .filter-grid button {
+            width: 100%;
+            margin-bottom: 0;
+            margin-top: 10px;
+        }
+    }
+</style>
+{% endblock %}

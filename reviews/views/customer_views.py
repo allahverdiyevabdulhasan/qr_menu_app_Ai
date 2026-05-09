@@ -48,13 +48,15 @@ class ProductReviewCreateView(CreateView):
         if self.request.user.is_authenticated:
             try:
                 from customers.models import Customer
-                # Match by email since user field is missing on Customer model
-                customer = Customer.objects.filter(
-                    restaurant=product.restaurant, 
-                    email=self.request.user.email
-                ).first()
+                customer, created = Customer.objects.get_or_create(
+                    restaurant=product.restaurant,
+                    email=self.request.user.email,
+                    defaults={
+                        'name': self.request.user.get_full_name() or self.request.user.username,
+                    }
+                )
                 form.instance.customer = customer
-            except:
+            except Exception as e:
                 pass
         return super().form_valid(form)
 

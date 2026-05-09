@@ -33,7 +33,7 @@
                                 {% else %}
                                 <div class="p-img-placeholder">🥗</div>
                                 {% endif %}
-                                <div class="staff-p-price">{{ product.price|floatformat:2 }} ₼</div>
+                                <div class="staff-p-price">{{ product.price|floatformat:2 }} ₺</div>
                             </div>
                             <div class="staff-p-content">
                                 <div class="staff-p-name">{{ product.name }}</div>
@@ -93,11 +93,11 @@
                         <div class="checkout-totals">
                             <div class="total-line">
                                 <span>Ara Toplam</span>
-                                <span id="subtotal-val">0.00 ₼</span>
+                                <span id="subtotal-val">0.00 ₺</span>
                             </div>
                             <div class="total-line grand-total">
                                 <span>Toplam Tutar</span>
-                                <span id="total-val">0.00 ₼</span>
+                                <span id="total-val">0.00 ₺</span>
                             </div>
                         </div>
 
@@ -265,7 +265,7 @@ function updateBasketUI() {
             <div class="cart-item fade-in">
                 <div class="item-info">
                     <div class="item-name">${item.name}</div>
-                    <div class="item-price">${(item.price * item.qty).toFixed(2)} ₼</div>
+                    <div class="item-price">${(item.price * item.qty).toFixed(2)} ₺</div>
                 </div>
                 <div class="qty-control">
                     <button type="button" class="qty-btn" onclick="updateQty('${id}', -1)">−</button>
@@ -294,8 +294,8 @@ function updateBasketUI() {
         submitBtn.disabled = false;
     }
     
-    document.getElementById('subtotal-val').innerText = subtotal.toFixed(2) + ' ₼';
-    document.getElementById('total-val').innerText = subtotal.toFixed(2) + ' ₼';
+    document.getElementById('subtotal-val').innerText = subtotal.toFixed(2) + ' ₺';
+    document.getElementById('total-val').innerText = subtotal.toFixed(2) + ' ₺';
 }
 
 function filterProducts() {

@@ -35,17 +35,19 @@
                         <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                             <div style="display:flex; align-items:center; gap:8px;">
                                 <span style="color:var(--warning); font-weight:bold;">{{ r.rating }} ⭐</span>
-                                <span class="badge badge-{% if r.ai_sentiment == 'POSITIVE' %}success{% elif r.ai_sentiment == 'NEGATIVE' %}danger{% else %}secondary{% endif %}">
-                                    {{ r.ai_sentiment }}
+                                <span class="badge badge-{% if r.sentiment == 'POSITIVE' %}success{% elif r.sentiment == 'NEGATIVE' %}danger{% else %}secondary{% endif %}">
+                                    {{ r.sentiment }}
                                 </span>
                             </div>
                             <span class="text-xs text-muted">{{ r.created_at|date:"d M, H:i" }}</span>
                         </div>
                         <div class="text-sm" style="margin-bottom:8px;">
-                            <span class="badge badge-info text-xs">{{ r.ai_category }}</span>
+                            <span class="badge badge-info text-xs">{{ r.category }}</span>
                         </div>
                         <p class="text-sm text-muted" style="margin-bottom:8px;">{{ r.comment|truncatewords:20 }}</p>
-                        <a href="{% url 'review_detail' r.pk %}" class="text-xs font-bold" style="color:var(--primary); text-decoration:none;">{% trans "Read Full Analysis" %} →</a>
+                        {% if not r.is_product_review %}
+                        <a href="{{ r.detail_url }}" class="text-xs font-bold" style="color:var(--primary); text-decoration:none;">{% trans "Read Full Analysis" %} →</a>
+                        {% endif %}
                     </li>
                     {% empty %}
                     <li class="p-8 text-center text-muted">

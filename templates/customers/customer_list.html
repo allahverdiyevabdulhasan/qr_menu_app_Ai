@@ -51,7 +51,7 @@
     <div class="metric-card metric-info">
       <div class="icon">💰</div>
       <div class="label">{% trans "Total Revenue" %}</div>
-      <div class="value" style="font-size:1.3rem;">— ₼</div>
+      <div class="value" style="font-size:1.3rem;">— ₺</div>
     </div>
   </div>
 
@@ -90,7 +90,7 @@
             </td>
             <td class="text-muted">{{ customer.phone|default:"—" }}</td>
             <td><span class="badge badge-primary">{{ customer.order_count|default:"0" }}</span></td>
-            <td style="font-weight:700;">{{ customer.total_spent|default:"0.00" }} ₼</td>
+            <td style="font-weight:700;">{{ customer.total_spent|default:"0.00" }} ₺</td>
             <td>
               {% if customer.tier == 'GOLD' %}
               <span class="tier-badge tier-gold">🥇 Gold</span>

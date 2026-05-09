@@ -193,24 +193,24 @@
         <div class="combo-card" style="animation-delay:{{ forloop.counter0 }}00ms;">
             <div class="combo-top">
                 <span class="ai-badge">✨ {% trans "AI Pick" %} #{{ forloop.counter }}</span>
-                <span class="price-pill">{{ combo.total_price }} ₼</span>
+                <span class="price-pill">{{ combo.total_price }} ₺</span>
             </div>
 
             <p class="combo-reason">"{{ combo.reason }}"</p>
 
             <div class="combo-items">
-                {% for p_name in combo.products %}
+                {% for p in combo.products %}
                 <div class="combo-item">
-                    <span class="combo-item-name">🍽️ {{ p_name }}</span>
+                    <span class="combo-item-name">🍽️ {{ p.name }}</span>
                     <span style="color:var(--success); font-weight:700;">✓</span>
                 </div>
                 {% endfor %}
             </div>
 
-            <form method="post" action="{% url 'cart_add' restaurant_slug=restaurant.slug %}">
+            <form method="post" action="{% url 'cart_add_combo' restaurant_slug=restaurant.slug %}">
                 {% csrf_token %}
-                {% for p_name in combo.products %}
-                <input type="hidden" name="product_names" value="{{ p_name }}">
+                {% for p in combo.products %}
+                <input type="hidden" name="product_ids" value="{{ p.id }}">
                 {% endfor %}
                 <button type="submit" class="btn btn-primary btn-block" style="border-radius:14px; height:52px; font-size:0.95rem; font-weight:800;">
                     🛒 {% trans "Add all to Cart" %}

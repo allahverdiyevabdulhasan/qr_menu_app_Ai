@@ -13,17 +13,17 @@
     <div style="background: var(--bg); border-radius: 16px; padding: 24px; margin-bottom: 32px; text-align: left;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--text-muted); font-size: 0.9rem;">
             <span>{% trans "Subtotal" %}</span>
-            <span>{{ order.subtotal }} ₼</span>
+            <span>{{ order.subtotal }} ₺</span>
         </div>
         {% if order.discount_amount > 0 %}
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--danger); font-size: 0.9rem;">
             <span>{% trans "Discount" %}</span>
-            <span>-{{ order.discount_amount }} ₼</span>
+            <span>-{{ order.discount_amount }} ₺</span>
         </div>
         {% endif %}
         <div style="display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); font-weight: 800; font-size: 1.25rem;">
             <span>{% trans "Total to Pay" %}</span>
-            <span style="color: var(--primary);">{{ order.total_amount }} ₼</span>
+            <span style="color: var(--primary);">{{ order.total_amount }} ₺</span>
         </div>
     </div>
 

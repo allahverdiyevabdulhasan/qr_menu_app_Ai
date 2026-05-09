@@ -31,7 +31,7 @@
                     <tr>
                         <td><span class="font-bold">#{{ order.order_number|slice:"-6:" }}</span></td>
                         <td><span class="badge badge-info">{{ order.get_order_type_display }}</span></td>
-                        <td><span class="font-bold" style="color:var(--primary);">{{ order.total_amount }} ₼</span></td>
+                        <td><span class="font-bold" style="color:var(--primary);">{{ order.total_amount }} ₺</span></td>
                         <td>
                             <span class="badge badge-{% if order.status == 'COMPLETED' %}success{% elif order.status == 'CANCELLED' %}danger{% else %}warning{% endif %}">
                                 {{ order.get_status_display }}

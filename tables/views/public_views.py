@@ -6,6 +6,23 @@ from django.views import View
 from ..models import RestaurantTable, TableReservation, WaiterCall
 from restaurants.models import Restaurant
 
+
+class TableScanView(View):
+    """QR kod okutulduğunda çalışır: masa token'ını session'a kaydedip menüye yönlendirir."""
+
+    def get(self, request, restaurant_slug, table_token, *args, **kwargs):
+        restaurant = get_object_or_404(Restaurant, slug=restaurant_slug, status='active')
+        table = get_object_or_404(RestaurantTable, token=table_token, restaurant=restaurant, is_active=True)
+
+        # Masa bilgisini session'a kaydet (sipariş verilirken kullanılır)
+        request.session['table_token'] = str(table.token)
+        request.session['table_number'] = table.table_number
+        request.session['restaurant_slug'] = restaurant_slug
+
+        # Menü sayfasına yönlendir
+        return redirect(reverse('public_menu', kwargs={'restaurant_slug': restaurant_slug}))
+
+
 class TableReservationCreateView(CreateView):
     model = TableReservation
     fields = ['customer_name', 'customer_phone', 'reservation_time', 'number_of_people', 'note']

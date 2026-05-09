@@ -1,15 +1,56 @@
-﻿{% extends 'dashboard_base.html' %}
-{% block content %}
-<h2>AI Stock Forecast (Beta)</h2>
-<p><a href="{% url 'inventory_list' %}" class="btn">Back to Inventory</a></p>
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
 
-<div style="border: 1px solid #17a2b8; padding: 20px; border-radius: 5px; background-color: #f8f9fa;">
-    <h3 style="color: #17a2b8;">Forecast for next {{ forecast.forecast_days }} days</h3>
+{% block title %}Yapay Zeka Stok Tahmini — Kanatçı Mustafa{% endblock %}
+{% block page_title %}Yapay Zeka Stok Tahmini (Beta){% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <a href="{% url 'inventory_list' %}" class="btn btn-sm" style="background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </a>
+        <h2 style="margin: 0;">🤖 NeyMenu AI: Stok Tahmin Motoru</h2>
+    </div>
+</div>
+
+<div class="grid grid-2 mb-3">
+    <div class="card" style="border-top: 4px solid var(--primary); background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, rgba(255,255,255,1) 100%);">
+        <div class="card-body" style="padding: 30px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(99, 102, 241, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--text);">Gelecek {{ forecast.forecast_days|default:"7" }} Gün Tahmini</h3>
+                    <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">Satış verileri baz alınarak ML ile hesaplandı</p>
+                </div>
+            </div>
+            
+            <div style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                <p style="margin: 0; font-size: 1.05rem; line-height: 1.6; color: var(--text); font-weight: 500;">
+                    <em>"{{ forecast.message|default:'Yeterli satış verisi toplanıyor. Tahminler önümüzdeki günlerde aktifleşecektir.' }}"</em>
+                </p>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #f59e0b; display: flex; gap: 12px; align-items: flex-start;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink:0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <div style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">
+                    <strong>Beta Modülü:</strong> Bu özellik geçmiş sipariş hızınızı makine öğrenmesi algoritması ile analiz ederek, hafta sonu yoğunlukları gibi periyodik trendleri hesaba katar. NeyMenu v2.0 ile tedarikçi entegrasyonu tamamen otomatikleşecektir.
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <p><em>{{ forecast.message }}</em></p>
-    
-    <hr>
-    <small>This feature analyzes your recent Order usages via machine learning to predict exactly how many raw materials you will need to survive the coming week. Coming fully online in v2.0.</small>
+    <div class="card">
+        <div class="card-header border-bottom">Tüketim Trend Grafiği (Örnek)</div>
+        <div class="card-body" style="display: flex; align-items: center; justify-content: center; min-height: 300px; background: #f8fafc; border-radius: 0 0 12px 12px;">
+            <div style="text-align: center; color: #94a3b8;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin-bottom: 10px; opacity: 0.5;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <p>Grafik Modülü Yükleniyor...</p>
+                <small>Geçmiş 30 gün verisi analiz ediliyor</small>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
-

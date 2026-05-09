@@ -26,14 +26,14 @@
               {% for item in order.items.all %}
               <tr>
                 <td><strong>{{ item.quantity }} ×</strong> {{ item.product_name_snapshot }}</td>
-                <td style="text-align:right; font-weight:700;">{{ item.total_price }} ₼</td>
+                <td style="text-align:right; font-weight:700;">{{ item.total_price }} ₺</td>
               </tr>
               {% endfor %}
             </tbody>
             <tfoot>
               <tr style="background:var(--bg);">
                 <td><strong>{% trans "Total" %}</strong></td>
-                <td style="text-align:right; font-size:1.2rem; font-weight:900; color:var(--primary);">{{ order.total_amount }} ₼</td>
+                <td style="text-align:right; font-size:1.2rem; font-weight:900; color:var(--primary);">{{ order.total_amount }} ₺</td>
               </tr>
             </tfoot>
           </table>
@@ -51,7 +51,7 @@
               <select name="product_id" class="form-control" required>
                 <option value="">{% trans "Select product..." %}</option>
                 {% for p in products %}
-                <option value="{{ p.id }}">{{ p.name }} ({{ p.price }} ₼)</option>
+                <option value="{{ p.id }}">{{ p.name }} ({{ p.price }} ₺)</option>
                 {% endfor %}
               </select>
             </div>

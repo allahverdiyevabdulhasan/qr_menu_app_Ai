@@ -36,7 +36,7 @@
 
   {# ── Action Buttons ── #}
   <div style="display:flex; flex-direction:column; gap:12px;">
-    <a href="{% url 'order_tracking' order.order_number %}" class="btn btn-primary btn-block btn-lg" style="border-radius:18px;">
+    <a href="{% url 'order_tracking' restaurant_slug=order.restaurant.slug order_number=order.order_number %}" class="btn btn-primary btn-block btn-lg" style="border-radius:18px;">
       🚚 {% trans "Track My Order" %}
     </a>
     <a href="{% url 'review_add' order.order_number %}" class="btn btn-secondary btn-block" style="border-radius:18px; height:52px;">

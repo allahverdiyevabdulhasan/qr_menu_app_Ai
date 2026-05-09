@@ -11,6 +11,7 @@ from orders.cart import Cart
 from orders.models import Order, OrderItem
 from customers.services import link_or_create_customer
 from campaigns.services import validate_coupon
+from orders.utils import broadcast_order_update
 
 class CartView(TemplateView):
     template_name = 'orders/customer/cart.html'
@@ -47,6 +48,27 @@ class CartAddView(View):
         
         # Redirect back to where they came from
         return redirect(request.META.get('HTTP_REFERER', reverse('public_menu', kwargs={'restaurant_slug': restaurant_slug})))
+
+class CartAddComboView(View):
+    def post(self, request, restaurant_slug, *args, **kwargs):
+        cart = Cart(request)
+        product_ids = request.POST.getlist('product_ids')
+        
+        for pid in product_ids:
+            try:
+                product = get_object_or_404(Product, pk=pid)
+                cart.add(
+                    product=product, 
+                    quantity=1, 
+                    options=[],
+                    removed_ingredients=[],
+                    note=''
+                )
+            except Exception:
+                pass
+                
+        messages.success(request, _("Combo added to cart successfully."))
+        return redirect('cart_view', restaurant_slug=restaurant_slug)
 
 class CartUpdateView(View):
     def post(self, request, restaurant_slug, *args, **kwargs):
@@ -197,12 +219,16 @@ class CheckoutView(View):
 
         cart.clear()
         
+        # Broadcast the new order to the staff panels via WebSockets
+        from django.utils.translation import gettext as _
+        broadcast_order_update(order, message=_("New order received!"), call_type='new_order')
+        
         # WhatsApp Ordering logic
         order_method = request.POST.get('order_method', 'standard')
         if order_method == 'whatsapp' and hasattr(restaurant, 'settings') and restaurant.settings.enable_whatsapp_ordering and restaurant.settings.whatsapp_number:
             import urllib.parse
-            items_text = "\\n".join([f"{item.quantity}x {item.product_name_snapshot} - {item.total_price} ₼" for item in order.items.all()])
-            text = f"Hello {restaurant.name},\\nI would like to place a new order!\\n\\nOrder #{order.order_number}\\nType: {order.get_order_type_display()}\\nTable: {table.table_number if table else 'N/A'}\\n\\nItems:\\n{items_text}\\n\\nSubtotal: {order.subtotal} ₼\\nDiscount: -{order.discount_amount} ₼\\nTax: {order.tax_amount} ₼\\nService: {order.service_charge} ₼\\n*Total:* {order.total_amount} ₼\\n\\nCustomer: {customer_name}\\nPhone: {customer_phone}\\nNote: {note}"
+            items_text = "\\n".join([f"{item.quantity}x {item.product_name_snapshot} - {item.total_price} ₺" for item in order.items.all()])
+            text = f"Hello {restaurant.name},\\nI would like to place a new order!\\n\\nOrder #{order.order_number}\\nType: {order.get_order_type_display()}\\nTable: {table.table_number if table else 'N/A'}\\n\\nItems:\\n{items_text}\\n\\nSubtotal: {order.subtotal} ₺\\nDiscount: -{order.discount_amount} ₺\\nTax: {order.tax_amount} ₺\\nService: {order.service_charge} ₺\\n*Total:* {order.total_amount} ₺\\n\\nCustomer: {customer_name}\\nPhone: {customer_phone}\\nNote: {note}"
             encoded_text = urllib.parse.quote(text)
             whatsapp_url = f"https://wa.me/{restaurant.settings.whatsapp_number}?text={encoded_text}"
             return redirect(whatsapp_url)

@@ -20,7 +20,7 @@ class CustomLoginView(LoginView):
             return reverse_lazy('restaurant_dashboard')
         elif user.is_customer:
             if user.restaurant:
-                return reverse_lazy('public_menu', kwargs={'slug': user.restaurant.slug})
+                return reverse_lazy('public_menu', kwargs={'restaurant_slug': user.restaurant.slug})
             return reverse_lazy('logout') # Safely logout if no restaurant context for customer
         else:
             return reverse_lazy('restaurant_dashboard') # Staff dashboard

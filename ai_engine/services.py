@@ -76,12 +76,17 @@ class BudgetRecommendationService:
 
         # Safety guard: strip any suggested product not in the real catalogue
         if result and "combinations" in result:
-            valid_names = {p["name"] for p in products}
+            valid_products = {p["name"]: p for p in products}
             for combo in result["combinations"]:
-                combo["products"] = [
-                    name for name in combo.get("products", [])
-                    if name in valid_names
-                ]
+                combo_items = []
+                for name in combo.get("products", []):
+                    if name in valid_products:
+                        combo_items.append({
+                            "id": valid_products[name]["id"],
+                            "name": name,
+                            "price": valid_products[name]["price"]
+                        })
+                combo["products"] = combo_items
 
         return result or {"combinations": []}
 

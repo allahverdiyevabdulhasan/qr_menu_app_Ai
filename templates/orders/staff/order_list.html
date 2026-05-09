@@ -62,7 +62,7 @@
     <div class="stat-card">
       <div class="bg-icon">💰</div>
       <div class="stat-label">Bugünkü Ciro</div>
-      <div class="stat-value" style="color:#6366f1;">0.00 ₼</div>
+      <div class="stat-value" style="color:#6366f1;">0.00 ₺</div>
     </div>
   </div>
 
@@ -105,7 +105,7 @@
             {% if order.table %}🪑 Masa {{ order.table.table_number }}{% else %}🥡 Paket Servis{% endif %}
           </td>
           <td style="padding:16px 10px; font-weight:600; color:#64748b;">{{ order.items.count }} Öğe</td>
-          <td style="padding:16px 10px; font-weight:900; color:var(--primary); font-size:1.05rem;">{{ order.total_amount|floatformat:2 }} ₼</td>
+          <td style="padding:16px 10px; font-weight:900; color:var(--primary); font-size:1.05rem;">{{ order.total_amount|floatformat:2 }} ₺</td>
           <td style="padding:16px 10px;">
             <span class="status-badge status-{{ order.status }}">
               {% if order.status == 'NEW' %}⏳ Onay Bekliyor

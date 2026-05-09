@@ -1,0 +1,71 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}Delete Branch — Kanatçı Mustafa{% endblock %}
+{% block page_title %}Delete Branch{% endblock %}
+
+{% block extra_css %}
+<!-- Tailwind CSS for styling the danger confirmation -->
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    /* Reset tailwind's preflight conflict with existing styles if any */
+    .dashboard-layout { font-family: 'Poppins', sans-serif; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto py-12 px-4">
+    <div class="bg-white rounded-2xl shadow-sm border border-red-100 overflow-hidden">
+        <!-- Header -->
+        <div class="bg-red-50 border-b border-red-100 px-8 py-6 flex items-start gap-4">
+            <div class="bg-red-100 p-3 rounded-full text-red-600 mt-1 flex-shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-red-800 mb-1">Delete Branch: {{ branch.name|default:object.name }}</h2>
+                <p class="text-red-600 text-sm">
+                    You are about to permanently delete this branch and all its associated localized settings. This action <strong>cannot be undone</strong>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Details -->
+        <div class="px-8 py-6 border-b border-gray-100">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Branch Information</h3>
+            <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="block text-xs text-gray-500 mb-1">Branch Name</span>
+                        <span class="block font-medium text-gray-900">{{ branch.name|default:object.name }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-gray-500 mb-1">Location / Address</span>
+                        <span class="block font-medium text-gray-900">{{ branch.address|default:object.address|default:"Not specified" }}</span>
+                    </div>
+                    {% if branch.phone or object.phone %}
+                    <div>
+                        <span class="block text-xs text-gray-500 mb-1">Phone Number</span>
+                        <span class="block font-medium text-gray-900">{{ branch.phone|default:object.phone }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <p class="mt-4 text-sm text-gray-500 italic">
+                Note: Ensure that any staff members or inventory currently assigned to this branch are reassigned before proceeding.
+            </p>
+        </div>
+
+        <!-- Form Actions -->
+        <form method="post" class="px-8 py-5 bg-gray-50 flex items-center justify-end gap-3">
+            {% csrf_token %}
+            <a href="{% url 'branch_list' %}" class="px-5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-gray-200">
+                Cancel
+            </a>
+            <button type="submit" class="px-5 py-2.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors shadow-sm flex items-center gap-2 focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                Yes, Delete Branch
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

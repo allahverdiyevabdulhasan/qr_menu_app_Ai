@@ -69,14 +69,21 @@ class RefundPaymentView(RestaurantAccessMixin, View):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    def get(self, request, pk, *args, **kwargs):
+        from django.shortcuts import render
+        payment = get_object_or_404(Payment, pk=pk, restaurant=request.user.restaurant)
+        return render(request, 'payments/refund_payment.html', {'payment': payment})
+
     def post(self, request, pk, *args, **kwargs):
+        from django.contrib import messages
         payment = get_object_or_404(Payment, pk=pk, restaurant=request.user.restaurant)
         
         if payment.status == 'PAID':
             payment.status = 'REFUNDED'
             payment.save()
+            messages.success(request, f"Payment #{payment.id} refunded successfully.")
             
-        return redirect(request.META.get('HTTP_REFERER', 'payment_list'))
+        return redirect('payment_list')
 
 class DailyPaymentSummaryView(RestaurantAccessMixin, TemplateView):
     template_name = 'payments/daily_payment_summary.html'

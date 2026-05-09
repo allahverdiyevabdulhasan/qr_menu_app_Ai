@@ -1,35 +1,95 @@
-﻿{% extends 'dashboard_base.html' %}
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}Günlük Kasa Özeti — Kanatçı Mustafa{% endblock %}
+{% block page_title %}Kasa Özeti ({{ today|date:"d M Y" }}){% endblock %}
+
 {% block content %}
-<h2>Daily Payment Summary ({{ today }})</h2>
+<div class="page-header">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <a href="{% url 'payment_list' %}" class="btn btn-sm" style="background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </a>
+        <h2 style="margin: 0;">💵 Bugünün Kasa Özeti</h2>
+    </div>
+    <div>
+        <span style="background: white; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); font-weight: 600; color: var(--text-muted);">
+            Tarih: {{ today|date:"d M Y" }}
+        </span>
+    </div>
+</div>
 
-<table class="table" style="max-width: 400px;">
-    <thead>
-        <tr>
-            <th>Payment Method</th>
-            <th>Total Collected</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in summary %}
-        <tr>
-            <td>{{ item.method }}</td>
-            <td>{{ item.total }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="2">No payments collected today.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <th><strong>Total</strong></th>
-            <th><strong>{{ total_today }}</strong></th>
-        </tr>
-    </tfoot>
-</table>
+<div class="grid grid-3 mb-4">
+    <!-- Toplam Ciro -->
+    <div class="metric-card" style="background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%); color: white; border: none; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);">
+        <div class="label" style="color: rgba(255,255,255,0.8);">Bugünkü Toplam Tahsilat</div>
+        <div class="value" style="color: white; font-size: 2.5rem;">{{ total_today|default:"0.00" }} ₺</div>
+        <div class="trend" style="color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 4px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Tüm işlemler sorunsuz
+        </div>
+    </div>
+</div>
 
-<br>
-<a href="{% url 'payment_list' %}">Back to History</a>
+<div class="card" style="max-width: 800px;">
+    <div class="card-header border-bottom">
+        Ödeme Yöntemlerine Göre Dağılım
+    </div>
+    <div class="card-body">
+        {% if summary %}
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                {% for item in summary %}
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: #f8fafc; transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateX(5px)'" onmouseout="this.style.transform='translateX(0)'">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <!-- İkon -->
+                        {% if item.method == 'CARD' %}
+                            <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text);">Kredi / Banka Kartı</h4>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">POS Tahsilatları</span>
+                            </div>
+                        {% elif item.method == 'CASH' %}
+                            <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); color: #10b981; display: flex; align-items: center; justify-content: center;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text);">Nakit Kasa</h4>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Elden Tahsilatlar</span>
+                            </div>
+                        {% elif item.method == 'ONLINE' %}
+                            <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; display: flex; align-items: center; justify-content: center;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text);">Online Ödeme</h4>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">QR / Web Tahsilatları</span>
+                            </div>
+                        {% else %}
+                            <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(100, 116, 139, 0.1); color: #64748b; display: flex; align-items: center; justify-content: center;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text);">{{ item.method }}</h4>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Diğer Tahsilatlar</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div style="text-align: right;">
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--text);">{{ item.total|default:"0.00" }} ₺</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state" style="padding: 50px 20px;">
+                <div class="icon" style="font-size: 4rem; margin-bottom: 15px;">😴</div>
+                <h3>Bugün henüz siftah yapılmadı</h3>
+                <p>İlk ödeme alındığında kasa özeti burada listelenecektir.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
-
