@@ -68,6 +68,7 @@ class Cart:
         for product in products:
             for item_id, item in cart_data.items():
                 if item['product_id'] == product.id:
+                    item['item_id'] = item_id
                     item['product'] = product
                     # Calculate option prices dynamically
                     from menu.models import ProductModifier

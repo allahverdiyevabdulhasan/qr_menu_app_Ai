@@ -47,22 +47,22 @@
     <div class="stat-card">
       <div class="bg-icon">📋</div>
       <div class="stat-label">Bugünkü Siparişler</div>
-      <div class="stat-value" style="color:var(--primary);">{{ orders|length }}</div>
+      <div class="stat-value" style="color:var(--primary);">{{ today_orders_count|default:"0" }}</div>
     </div>
     <div class="stat-card">
       <div class="bg-icon">🔥</div>
       <div class="stat-label">Mutfaktaki Siparişler</div>
-      <div class="stat-value" style="color:#f59e0b;">{{ orders|length }}</div>
+      <div class="stat-value" style="color:#f59e0b;">{{ kitchen_orders_count|default:"0" }}</div>
     </div>
     <div class="stat-card">
       <div class="bg-icon">✅</div>
       <div class="stat-label">Tamamlananlar</div>
-      <div class="stat-value" style="color:#10b981;">0</div>
+      <div class="stat-value" style="color:#10b981;">{{ completed_orders_count|default:"0" }}</div>
     </div>
     <div class="stat-card">
       <div class="bg-icon">💰</div>
       <div class="stat-label">Bugünkü Ciro</div>
-      <div class="stat-value" style="color:#6366f1;">0.00 ₺</div>
+      <div class="stat-value" style="color:#6366f1;">{{ today_revenue_total|floatformat:2 }} ₺</div>
     </div>
   </div>
 

@@ -263,7 +263,9 @@ class OrderTrackingView(DetailView):
     context_object_name = 'order'
     
     def get_object(self, queryset=None):
-        return get_object_or_404(Order, order_number=self.kwargs['order_number'])
+        val = self.kwargs['order_number']
+        from django.db.models import Q
+        return get_object_or_404(Order, Q(order_number=val) | Q(tracking_code=val))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

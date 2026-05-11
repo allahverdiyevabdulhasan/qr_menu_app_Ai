@@ -113,10 +113,23 @@ def get_top_products(restaurant, start_date=None, end_date=None, limit=10, ascen
         
     order_by = 'total_sold' if ascending else '-total_sold'
     
-    return qs.values('product__name').annotate(
+    raw_results = qs.values('product__name').annotate(
         total_sold=Sum('quantity'),
         revenue=Sum('total_price')
     ).order_by(order_by)[:limit]
+    
+    # Return both original and mapped keys to support all views/templates perfectly
+    mapped_results = []
+    for item in raw_results:
+        mapped_results.append({
+            'product__name': item['product__name'],
+            'total_sold': item['total_sold'] or 0,
+            'revenue': item['revenue'] or 0,
+            'name': item['product__name'] or "İsimsiz Ürün",
+            'total_quantity': item['total_sold'] or 0,
+            'total_revenue': item['revenue'] or 0
+        })
+    return mapped_results
 
 def get_sales_by_hour(restaurant, date):
     qs = Order.objects.filter(
@@ -137,3 +150,18 @@ def get_customer_metrics(restaurant):
         'total_customers': total_customers,
         'repeat_customers': repeat_customers
     }
+
+def get_top_tables(restaurant, start_date=None, end_date=None, limit=5):
+    qs = Order.objects.filter(restaurant=restaurant, payment_status='PAID', table__isnull=False)
+    if start_date:
+        qs = qs.filter(created_at__gte=start_date)
+    if end_date:
+        qs = qs.filter(created_at__lte=end_date)
+    
+    return qs.values('table__table_number').annotate(
+        total_revenue=Sum('total_amount'),
+        total_orders=Count('id')
+    ).order_by('-total_revenue')[:limit]
+
+def get_top_customers(restaurant, start_date=None, end_date=None, limit=5):
+    return Customer.objects.filter(restaurant=restaurant).order_by('-total_spent')[:limit]

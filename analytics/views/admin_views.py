@@ -6,7 +6,8 @@ from django.utils import timezone
 from datetime import timedelta
 from analytics.services import (
     get_revenue_metrics, get_order_metrics, get_payment_metrics,
-    get_net_profit, get_top_products, get_sales_by_hour, get_customer_metrics
+    get_net_profit, get_top_products, get_sales_by_hour, get_customer_metrics,
+    get_top_tables, get_top_customers
 )
 from orders.models import Order
 from analytics.forms import DateRangeFilterForm
@@ -58,6 +59,11 @@ class AnalyticsDashboardView(AnalyticsBaseView):
         else:
             context['today_revenue'] = context['yesterday_revenue'] = None
 
+        if not u.is_cashier or u.can_view_daily_revenue:
+            context['revenue'] = get_revenue_metrics(r, context['start_date'], context['end_date'])
+        else:
+            context['revenue'] = None
+
         if not u.is_cashier or u.can_view_net_profit:
             context['net_profit'] = get_net_profit(r, context['start_date'], context['end_date'])
         else:
@@ -67,6 +73,8 @@ class AnalyticsDashboardView(AnalyticsBaseView):
         context.update(order_metrics)
         
         context['top_products'] = get_top_products(r, context['start_date'], context['end_date'], limit=5)
+        context['top_tables'] = get_top_tables(r, context['start_date'], context['end_date'], limit=5)
+        context['top_customers'] = get_top_customers(r, context['start_date'], context['end_date'], limit=5)
         
         # Operational Stats
         from tables.models import RestaurantTable, TableReservation

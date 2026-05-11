@@ -1,7 +1,7 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Your Cart" %}{% endblock %}
+{% block title %}Sepetiniz — NeyMenu AI{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -145,16 +145,16 @@
 <div class="cart-container">
 
     <div class="cart-header">
-        <h1 style="font-size:1.4rem; font-weight:800;">🛒 {% trans "Your Basket" %}</h1>
-        {% if cart.items_count > 0 %}
-        <span class="badge badge-primary">{{ cart.items_count }} {% trans "items" %}</span>
+        <h1 style="font-size:1.4rem; font-weight:800;">🛒 Sepetiniz</h1>
+        {% if cart_count > 0 %}
+        <span class="badge badge-primary" style="font-weight: 800; font-size: 0.8rem;">{{ cart_count }} ürün</span>
         {% endif %}
     </div>
 
-    {% if cart.items_count > 0 %}
+    {% if cart_count > 0 %}
 
         {# ── Cart Items ── #}
-        {% for item in cart.items.all %}
+        {% for item in cart %}
         <div class="cart-item" style="animation-delay:{{ forloop.counter0 }}00ms;">
             {% if item.product.image %}
                 <img src="{{ item.product.image.url }}" class="cart-item-img" alt="{{ item.product.name }}">
@@ -164,43 +164,43 @@
 
             <div class="cart-item-info">
                 <div class="cart-item-header">
-                    <span class="cart-item-title">{{ item.product.name }}</span>
-                    <span class="cart-item-price">{{ item.total_price }} ₺</span>
+                    <span class="cart-item-title"><strong>{{ item.product.name }}</strong></span>
+                    <span class="cart-item-price">{{ item.total_price|floatformat:2 }} ₺</span>
                 </div>
                 
                 {% if item.modifier_objects or item.removed_ingredients or item.note %}
                 <div style="margin-top:6px; font-size:0.75rem; color:var(--text-muted); line-height:1.4;">
                     {% if item.modifier_objects %}
                         {% for mod in item.modifier_objects %}
-                            <div style="color:var(--dark);">+ {{ mod.name }}</div>
+                            <div style="color:var(--dark); font-weight: 600;">+ {{ mod.name }}</div>
                         {% endfor %}
                     {% endif %}
                     {% if item.removed_ingredients %}
                         {% for ing in item.removed_ingredients %}
-                            <div style="color:#ef4444;">- No {{ ing }}</div>
+                            <div style="color:#ef4444; font-weight: 600;">- Olmasın: {{ ing }}</div>
                         {% endfor %}
                     {% endif %}
                     {% if item.note %}
-                        <div style="color:#f59e0b; font-style:italic;">📝 "{{ item.note }}"</div>
+                        <div style="color:#f59e0b; font-style:italic; font-weight: 600;">📝 "{{ item.note }}"</div>
                     {% endif %}
                 </div>
                 {% endif %}
 
                 {% if item.product.calories %}
-                <div class="cart-item-kcal" style="margin-top:8px;">🔥 {{ item.product.calories }} kcal · 💪 {{ item.product.protein|default:"—" }}g prot</div>
+                <div class="cart-item-kcal" style="margin-top:8px;">🔥 {{ item.product.calories }} kcal · 💪 {{ item.product.protein|default:"—" }}g protein</div>
                 {% endif %}
 
                 <div class="qty-control">
                     <form method="post" action="{% url 'cart_update' restaurant_slug=restaurant.slug %}">
                         {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                        <input type="hidden" name="item_id" value="{{ item.item_id }}">
                         <input type="hidden" name="quantity" value="{{ item.quantity|add:'-1' }}">
                         <button type="submit" class="qty-btn">−</button>
                     </form>
                     <span class="qty-num">{{ item.quantity }}</span>
                     <form method="post" action="{% url 'cart_update' restaurant_slug=restaurant.slug %}">
                         {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                        <input type="hidden" name="item_id" value="{{ item.item_id }}">
                         <input type="hidden" name="quantity" value="{{ item.quantity|add:'1' }}">
                         <button type="submit" class="qty-btn">+</button>
                     </form>
@@ -211,7 +211,7 @@
 
         {# ── Nutrition Summary ── #}
         <div class="nutri-summary">
-          <div class="nutri-summary-title">💪 {% trans "Cart Nutrition Total" %}</div>
+          <div class="nutri-summary-title">💪 Sepet Besin Değerleri</div>
           <div class="nutri-summary-grid">
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalCal">—</div>
@@ -219,15 +219,15 @@
             </div>
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalProt">—</div>
-              <div class="nutri-cell-lbl">Protein g</div>
+              <div class="nutri-cell-lbl">Protein</div>
             </div>
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalCarb">—</div>
-              <div class="nutri-cell-lbl">Carbs g</div>
+              <div class="nutri-cell-lbl">Karbonh.</div>
             </div>
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalFat">—</div>
-              <div class="nutri-cell-lbl">Fat g</div>
+              <div class="nutri-cell-lbl">Yağ</div>
             </div>
           </div>
         </div>
@@ -235,16 +235,16 @@
         {# ── Summary ── #}
         <div class="summary-card">
             <div class="summary-row">
-                <span>{% trans "Items Subtotal" %}</span>
-                <span>{{ cart.total_price }} ₺</span>
+                <span>Ara Toplam</span>
+                <span>{{ cart_total|floatformat:2 }} ₺</span>
             </div>
             <div class="summary-row">
-                <span>{% trans "Service Charge" %}</span>
-                <span>{% trans "Calculated at checkout" %}</span>
+                <span>Servis Ücreti</span>
+                <span>Ödeme adımlarında hesaplanır</span>
             </div>
             <div class="summary-total">
-                <span>{% trans "Total" %}</span>
-                <span>{{ cart.total_price }} ₺</span>
+                <span>Toplam</span>
+                <span>{{ cart_total|floatformat:2 }} ₺</span>
             </div>
         </div>
 
@@ -254,13 +254,13 @@
                 <form method="post" action="{% url 'cart_clear' restaurant_slug=restaurant.slug %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-secondary"
-                            style="height:56px; width:56px; border-radius:16px; font-size:1.2rem; padding:0;"
-                            title="{% trans 'Clear cart' %}">🗑️</button>
+                            style="height:56px; width:56px; border-radius:16px; font-size:1.2rem; padding:0; display:flex; align-items:center; justify-content:center; cursor:pointer;"
+                            title="Sepeti temizle">🗑️</button>
                 </form>
                 <a href="{% url 'checkout' restaurant_slug=restaurant.slug %}"
                    class="btn btn-primary btn-block"
-                   style="flex:1; height:56px; border-radius:16px; font-size:1rem; font-weight:800;">
-                    {% trans "Continue to Checkout" %} →
+                   style="flex:1; height:56px; border-radius:16px; font-size:1rem; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none; color:#fff; background:var(--primary-gradient);">
+                    Ödemeye Devam Et →
                 </a>
             </div>
         </div>
@@ -268,10 +268,10 @@
     {% else %}
         <div class="empty-state fade-in">
             <div class="empty-state-emoji">🍱</div>
-            <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:12px;">{% trans "Your basket is empty" %}</h2>
-            <p class="text-muted mb-8">{% trans "Hungry? Browse our menu and find something delicious!" %}</p>
-            <a href="{% url 'public_menu' restaurant_slug=restaurant.slug %}" class="btn btn-primary btn-lg" style="border-radius:20px;">
-                🍽️ {% trans "Explore Menu" %}
+            <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:12px;">Sepetiniz Boş</h2>
+            <p class="text-muted mb-8">Aç mısınız? Menümüzü inceleyin ve leziz bir şeyler seçin!</p>
+            <a href="{% url 'public_menu' restaurant_slug=restaurant.slug %}" class="btn btn-primary btn-lg" style="border-radius:20px; text-decoration:none; display:inline-block; font-weight:800; background:var(--primary-gradient);">
+                🍽️ Menüyü İncele
             </a>
         </div>
     {% endif %}
@@ -282,7 +282,7 @@
 <script>
 (function(){
   const items = [
-    {% for item in cart.items.all %}
+    {% for item in cart %}
     {
       cal:  {{ item.product.calories|default:0 }} * {{ item.quantity }},
       prot: {{ item.product.protein|default:0 }} * {{ item.quantity }},

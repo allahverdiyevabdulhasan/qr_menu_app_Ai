@@ -121,11 +121,11 @@
   }
   
   /* Status Colors (Light Theme) */
-  .status-new { border-top: 6px solid #ef4444; }
+  .status-new, .status-accepted { border-top: 6px solid #ef4444; }
   .status-preparing { border-top: 6px solid #f59e0b; }
   .status-ready { border-top: 6px solid #10b981; }
   
-  .header-bg-new { background: #fef2f2; }
+  .header-bg-new, .header-bg-accepted { background: #fef2f2; }
   .header-bg-preparing { background: #fffbeb; }
   
   .kds-timer { 
@@ -194,7 +194,7 @@
     <div class="kds-grid">
       {% for order in orders %}
       <div class="kds-card status-{{ order.status|lower }}">
-        <div class="kds-card-header {% if order.status == 'NEW' %}header-bg-new{% elif order.status == 'PREPARING' %}header-bg-preparing{% endif %}">
+        <div class="kds-card-header {% if order.status == 'NEW' or order.status == 'ACCEPTED' %}header-bg-new{% elif order.status == 'PREPARING' %}header-bg-preparing{% endif %}">
           <div>
             <div class="kds-card-number">#{{ order.id }}</div>
             <div style="font-size:0.85rem; font-weight:800; color:var(--kds-text-muted); margin-top:6px; text-transform:uppercase; letter-spacing:0.5px;">
@@ -261,7 +261,7 @@
         <div class="kds-footer">
           <form method="post" action="{% url 'order_status_update' order.pk %}">
             {% csrf_token %}
-            {% if order.status == 'NEW' %}
+            {% if order.status == 'NEW' or order.status == 'ACCEPTED' %}
               <input type="hidden" name="status" value="PREPARING">
               <button type="submit" class="btn btn-warning btn-block" style="height:56px; font-weight:900; font-size:1.1rem; border-radius:16px; background:#f59e0b; color:#fff; border:none; box-shadow:0 10px 20px rgba(245,158,11,0.2);">
                   🔥 Hazırlamaya Başla
@@ -338,8 +338,10 @@ const orderSocket = new WebSocket(socketUrl);
 
 // Sound setup
 const sounds = {
-    new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
-    status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
+    waiter_call: new Audio('https://assets.mixkit.co/active_storage/sfx/2857/2857-preview.mp3'),
+    bill_request: new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3'),
+    new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/911/911-preview.mp3'),
+    status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3')
 };
 
 let audioUnlocked = false;
@@ -376,7 +378,7 @@ orderSocket.onmessage = function(e) {
     }
 
     showNotification(data.message, data.call_type);
-    setTimeout(() => location.reload(), 500);
+    setTimeout(() => location.reload(), 6000);
 };
 
 function showNotification(msg, type) {

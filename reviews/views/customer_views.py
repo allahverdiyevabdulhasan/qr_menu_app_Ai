@@ -12,7 +12,7 @@ class ReviewCreateView(CreateView):
     fields = ['rating', 'comment', 'taste_rating', 'service_rating', 'speed_rating', 'price_rating']
     
     def get_success_url(self):
-        return reverse_lazy('public_menu', kwargs={'slug': self.object.restaurant.slug})
+        return reverse_lazy('public_menu', kwargs={'restaurant_slug': self.object.restaurant.slug})
 
     def form_valid(self, form):
         order_number = self.kwargs.get('order_number')

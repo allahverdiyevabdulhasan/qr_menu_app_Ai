@@ -24,6 +24,24 @@ class CustomerListView(RestaurantAccessMixin, ListView):
             
         return qs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from django.db.models import Sum, Q
+        
+        restaurant = self.request.user.restaurant
+        restaurant_customers = Customer.objects.filter(restaurant=restaurant)
+        
+        # Calculate VIP Customers count (spent > 500 or orders > 10)
+        context['vip_count'] = restaurant_customers.filter(Q(total_spent__gt=500) | Q(order_count__gt=10)).count()
+        
+        # Calculate Returning Customers count (orders > 1)
+        context['returning_count'] = restaurant_customers.filter(order_count__gt=1).count()
+        
+        # Calculate Total Revenue from all customers
+        context['total_revenue'] = restaurant_customers.aggregate(total=Sum('total_spent'))['total'] or 0
+        
+        return context
+
 class CustomerDetailView(RestaurantAccessMixin, DetailView):
     model = Customer
     template_name = 'customers/customer_detail.html'

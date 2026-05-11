@@ -19,7 +19,51 @@ class OrderListView(RestaurantAccessMixin, ListView):
     context_object_name = 'orders'
 
     def get_queryset(self):
-        return Order.objects.filter(restaurant=self.request.user.restaurant)
+        return Order.objects.filter(restaurant=self.request.user.restaurant).order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from django.utils import timezone
+        from datetime import timedelta
+        from django.db.models import Sum
+        from payments.models import Payment
+        
+        restaurant = self.request.user.restaurant
+        today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_end = today_start + timedelta(days=1)
+        
+        # Today's Orders (all orders placed today)
+        context['today_orders_count'] = Order.objects.filter(
+            restaurant=restaurant,
+            created_at__gte=today_start,
+            created_at__lte=today_end
+        ).count()
+        
+        # Mutfaktaki Siparişler (orders in NEW, ACCEPTED, PREPARING today)
+        context['kitchen_orders_count'] = Order.objects.filter(
+            restaurant=restaurant,
+            status__in=['NEW', 'ACCEPTED', 'PREPARING'],
+            created_at__gte=today_start,
+            created_at__lte=today_end
+        ).count()
+        
+        # Tamamlananlar (completed orders today)
+        context['completed_orders_count'] = Order.objects.filter(
+            restaurant=restaurant,
+            status='COMPLETED',
+            created_at__gte=today_start,
+            created_at__lte=today_end
+        ).count()
+        
+        # Bugünün Cirosu (calculated from PAID payments today)
+        context['today_revenue_total'] = Payment.objects.filter(
+            restaurant=restaurant,
+            status='PAID',
+            created_at__gte=today_start,
+            created_at__lte=today_end
+        ).aggregate(total=Sum('amount'))['total'] or 0
+        
+        return context
 
 class OrderDetailView(RestaurantAccessMixin, DetailView):
     model = Order
@@ -69,6 +113,10 @@ class WaiterPanelView(RestaurantAccessMixin, ListView):
         context = super().get_context_data(**kwargs)
         from tables.models import WaiterCall, TableReservation
         restaurant = self.request.user.restaurant
+        orders = self.get_queryset()
+        context['pending_approval_count'] = orders.filter(status='NEW').count()
+        context['preparing_count'] = orders.filter(status__in=['ACCEPTED', 'PREPARING']).count()
+        context['ready_count'] = orders.filter(status='READY').count()
         context['waiter_calls'] = WaiterCall.objects.filter(restaurant=restaurant, is_active=True).order_by('-created_at')
         context['reservations'] = TableReservation.objects.filter(restaurant=restaurant, status='PENDING').order_by('reservation_time')
         return context
@@ -91,14 +139,23 @@ class CashierPanelView(RestaurantAccessMixin, ListView):
         context = super().get_context_data(**kwargs)
         from tables.models import TableReservation
         from django.db.models import Sum
+        from payments.models import Payment
+        from decimal import Decimal
+        from django.utils import timezone
+        
         restaurant = self.request.user.restaurant
         context['pending_reservations'] = TableReservation.objects.filter(
             restaurant=restaurant, status='PENDING'
         ).order_by('reservation_time')
         
-        # Calculate total value of active orders
-        context['total_active_value'] = self.get_queryset().aggregate(
-            total=Sum('total_amount'))['total'] or 0
+        # Calculate Toplam Kasa Değeri (Today's Total Paid Payments)
+        today = timezone.now().date()
+        today_payments = Payment.objects.filter(
+            order__restaurant=restaurant,
+            status='PAID',
+            created_at__date=today
+        )
+        context['total_active_value'] = today_payments.aggregate(t=Sum('amount'))['t'] or Decimal('0.00')
         return context
 
 
@@ -125,8 +182,21 @@ class OrderStatusUpdateView(RestaurantAccessMixin, View):
                 
         order.save()
         
-        # Auto-generate invoice if completed
+        # Auto-generate invoice and payment if completed
         if order.status == 'COMPLETED':
+            from django.utils import timezone
+            from payments.models import Payment
+            if not Payment.objects.filter(order=order, status='PAID').exists():
+                Payment.objects.create(
+                    order=order,
+                    restaurant=order.restaurant,
+                    amount=order.total_amount,
+                    method='CASH',  # Default to cash on manual completion
+                    status='PAID',
+                    paid_at=timezone.now()
+                )
+            # Reload order object to pick up signal changes
+            order.refresh_from_db()
             create_invoice_from_order(order)
             
         broadcast_order_update(order)
@@ -302,3 +372,43 @@ class OrderAddItemView(RestaurantAccessMixin, View):
         broadcast_order_update(order, message=f"Added {product.name} to Order #{order.order_number}", call_type='edit')
         
         return redirect(request.META.get('HTTP_REFERER', 'order_detail'))
+
+class NotificationAPIView(View):
+    def get(self, request, *args, **kwargs):
+        from django.http import JsonResponse
+        if not request.user.is_authenticated:
+            return JsonResponse({'count': 0, 'calls': [], 'orders': []})
+        
+        restaurant = getattr(request.user, 'restaurant', None)
+        if not restaurant:
+            return JsonResponse({'count': 0, 'calls': [], 'orders': []})
+            
+        from tables.models import WaiterCall
+        from orders.models import Order
+        
+        waiter_calls = WaiterCall.objects.filter(restaurant=restaurant, is_active=True).select_related('table').order_by('-created_at')
+        pending_orders = Order.objects.filter(restaurant=restaurant, status='NEW').order_by('-created_at')
+        
+        calls_data = []
+        for c in waiter_calls[:5]:
+            calls_data.append({
+                'id': c.id,
+                'table_number': c.table.table_number,
+                'created_at': c.created_at.strftime('%H:%M')
+            })
+            
+        orders_data = []
+        for o in pending_orders[:5]:
+            orders_data.append({
+                'id': o.id,
+                'table_number': o.table.table_number if o.table else None,
+                'created_at': o.created_at.strftime('%H:%M')
+            })
+            
+        total_count = waiter_calls.count() + pending_orders.count()
+        
+        return JsonResponse({
+            'count': total_count,
+            'calls': calls_data,
+            'orders': orders_data
+        })

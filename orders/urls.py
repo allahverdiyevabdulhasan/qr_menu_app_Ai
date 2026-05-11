@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     OrderListView, OrderDetailView, OrderStatusUpdateView,
     KitchenScreenView, WaiterPanelView, CashierPanelView, StaffOrderCreateView, WaiterCallClearView,
-    OrderItemUpdateView, OrderItemDeleteView, OrderAddItemView,
+    OrderItemUpdateView, OrderItemDeleteView, OrderAddItemView, NotificationAPIView,
 )
 
 # Staff-only Order URLs. Customer cart/checkout flows live in neymenu_ai/urls.py
@@ -19,4 +19,5 @@ urlpatterns = [
     path('call/<int:pk>/clear/', WaiterCallClearView.as_view(), name='waiter_call_clear'),
     path('item/<int:pk>/update/', OrderItemUpdateView.as_view(), name='order_item_update'),
     path('item/<int:pk>/delete/', OrderItemDeleteView.as_view(), name='order_item_delete'),
+    path('api/notifications/', NotificationAPIView.as_view(), name='api_notifications'),
 ]

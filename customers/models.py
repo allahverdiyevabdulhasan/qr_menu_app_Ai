@@ -29,6 +29,10 @@ class Customer(models.Model):
     def __str__(self):
         return self.name or self.phone or self.email or "Unknown Customer"
 
+    @property
+    def full_name(self):
+        return self.name or self.phone or self.email or "Unknown Customer"
+
     def get_segment(self):
         """
         Calculates customer segment dynamically.

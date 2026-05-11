@@ -34,6 +34,21 @@ class ExpenseListView(RestaurantAccessMixin, ListView):
         context['total_amount'] = qs.aggregate(t=Sum('amount'))['t'] or Decimal('0.00')
         context['category_choices'] = Expense.CATEGORY_CHOICES
         context['selected_category'] = self.request.GET.get('category', '')
+
+        # Calculate dynamic cards for expenses
+        restaurant = self.request.user.restaurant
+        today = timezone.now().date()
+
+        # All expenses in this month
+        monthly_qs = Expense.objects.filter(
+            restaurant=restaurant,
+            date__year=today.year,
+            date__month=today.month
+        )
+        context['this_month_total'] = monthly_qs.aggregate(t=Sum('amount'))['t'] or Decimal('0.00')
+        context['salary_payroll_total'] = monthly_qs.filter(category='SALARY').aggregate(t=Sum('amount'))['t'] or Decimal('0.00')
+        context['ingredients_total'] = monthly_qs.filter(category='INGREDIENT').aggregate(t=Sum('amount'))['t'] or Decimal('0.00')
+
         return context
 
 

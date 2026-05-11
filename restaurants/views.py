@@ -2,6 +2,8 @@ from django.views.generic import TemplateView, UpdateView, ListView, CreateView,
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from datetime import timedelta
 from .models import Restaurant, Branch, RestaurantSettings
 from .forms import RestaurantProfileForm, BranchForm, RestaurantSettingsForm
 
@@ -29,8 +31,58 @@ class RestaurantDashboardView(RestaurantAccessMixin, TemplateView):
         user = self.request.user
         if user.is_super_admin:
             context['restaurants'] = Restaurant.objects.all()
+            # Default to first restaurant for superadmin overview
+            restaurant = Restaurant.objects.first()
+            context['restaurant'] = restaurant
         else:
-            context['restaurant'] = user.restaurant
+            restaurant = user.restaurant
+            context['restaurant'] = restaurant
+
+        if restaurant:
+            # Calculate metrics
+            today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            today_end = today_start + timedelta(days=1)
+            yesterday_start = today_start - timedelta(days=1)
+            yesterday_end = today_start
+            thirty_days_ago = today_start - timedelta(days=30)
+
+            from analytics.services import (
+                get_revenue_metrics,
+                get_order_metrics,
+                get_net_profit,
+                get_top_products
+            )
+            from orders.models import Order
+
+            # Today vs Yesterday Revenue
+            today_rev = get_revenue_metrics(restaurant, start_date=today_start, end_date=today_end)
+            yesterday_rev = get_revenue_metrics(restaurant, start_date=yesterday_start, end_date=yesterday_end)
+            context['today_revenue'] = {'total': today_rev}
+            context['yesterday_revenue'] = {'total': yesterday_rev}
+
+            # Net Profit (last 30 days)
+            net_profit = get_net_profit(restaurant, start_date=thirty_days_ago)
+            context['net_profit'] = net_profit
+
+            # Orders (Today)
+            order_metrics = get_order_metrics(restaurant, start_date=today_start, end_date=today_end)
+            context['total_orders'] = order_metrics['total_orders']
+            context['completed_orders'] = order_metrics['completed_orders']
+
+            # Recent Orders (Today/Overall)
+            context['recent_orders'] = Order.objects.filter(restaurant=restaurant).order_by('-created_at')[:5]
+
+            # Top Products (last 30 days)
+            top_products_raw = get_top_products(restaurant, start_date=thirty_days_ago)
+            top_products = []
+            for p in top_products_raw:
+                top_products.append({
+                    'name': p['product__name'],
+                    'total_quantity': p['total_sold'],
+                    'total_revenue': p['revenue']
+                })
+            context['top_products'] = top_products
+
         return context
 
 class RestaurantProfileUpdateView(OwnerOnlyMixin, UpdateView):

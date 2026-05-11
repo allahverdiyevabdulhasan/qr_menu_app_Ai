@@ -18,10 +18,10 @@
 <div class="fade-in">
 
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
-    <p class="text-muted text-sm">{% trans "Monitor and categorize all restaurant costs." %}</p>
+    <p class="text-muted text-sm">Tüm restoran giderlerini izleyin ve kategorize edin.</p>
     <div style="display:flex; gap:10px;">
-      <a href="{% url 'expense_report' %}" class="btn btn-secondary btn-sm">📊 {% trans "Report" %}</a>
-      <a href="{% url 'expense_add' %}" class="btn btn-primary btn-sm">+ {% trans "Add Expense" %}</a>
+      <a href="{% url 'expense_report' %}" class="btn btn-secondary btn-sm">📊 Raporlar</a>
+      <a href="{% url 'expense_add' %}" class="btn btn-primary btn-sm">+ Gider Ekle</a>
     </div>
   </div>
 
@@ -29,24 +29,28 @@
   <div class="grid grid-4 mb-6">
     <div class="metric-card metric-danger">
       <div class="icon">💸</div>
-      <div class="label">{% trans "This Month" %}</div>
+      <div class="label">Bu Ayki Gider</div>
       <div class="value" style="font-size:1.4rem;">
-        {% with total=expenses|length %}— ₺{% endwith %}
+        {{ this_month_total|floatformat:2 }} ₺
       </div>
     </div>
     <div class="metric-card metric-warning">
       <div class="icon">🏢</div>
-      <div class="label">{% trans "Salary & Payroll" %}</div>
-      <div class="value" style="font-size:1.4rem;">— ₺</div>
+      <div class="label">Maaş & Personel</div>
+      <div class="value" style="font-size:1.4rem;">
+        {{ salary_payroll_total|floatformat:2 }} ₺
+      </div>
     </div>
     <div class="metric-card metric-info">
       <div class="icon">🛒</div>
-      <div class="label">{% trans "Ingredients" %}</div>
-      <div class="value" style="font-size:1.4rem;">— ₺</div>
+      <div class="label">Malzeme & Stok</div>
+      <div class="value" style="font-size:1.4rem;">
+        {{ ingredients_total|floatformat:2 }} ₺
+      </div>
     </div>
     <div class="metric-card metric-primary">
       <div class="icon">📋</div>
-      <div class="label">{% trans "Total Entries" %}</div>
+      <div class="label">Toplam Kayıt</div>
       <div class="value">{{ expenses|length }}</div>
     </div>
   </div>

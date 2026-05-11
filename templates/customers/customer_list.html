@@ -26,32 +26,32 @@
 <div class="fade-in">
 
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
-    <p class="text-muted text-sm">{% trans "Manage customer relationships and loyalty." %}</p>
+    <p class="text-muted text-sm">Müşteri ilişkilerini ve sadakat programlarını yönetin.</p>
     <div style="display:flex; gap:10px;">
-      <a href="{% url 'customer_segments' %}" class="btn btn-secondary btn-sm">🎯 {% trans "Segments" %}</a>
+      <a href="{% url 'customer_segments' %}" class="btn btn-secondary btn-sm">🎯 Segmentler</a>
     </div>
   </div>
 
   <div class="grid grid-4 mb-6">
     <div class="metric-card metric-primary">
       <div class="icon">👥</div>
-      <div class="label">{% trans "Total Customers" %}</div>
+      <div class="label">Toplam Müşteri</div>
       <div class="value">{{ customers|length }}</div>
     </div>
     <div class="metric-card metric-warning">
       <div class="icon">🥇</div>
-      <div class="label">{% trans "VIP / Gold" %}</div>
-      <div class="value">0</div>
+      <div class="label">VIP Müşteriler</div>
+      <div class="value">{{ vip_count|default:"0" }}</div>
     </div>
     <div class="metric-card metric-success">
       <div class="icon">🔄</div>
-      <div class="label">{% trans "Returning" %}</div>
-      <div class="value">0</div>
+      <div class="label">Geri Dönen</div>
+      <div class="value">{{ returning_count|default:"0" }}</div>
     </div>
     <div class="metric-card metric-info">
       <div class="icon">💰</div>
-      <div class="label">{% trans "Total Revenue" %}</div>
-      <div class="value" style="font-size:1.3rem;">— ₺</div>
+      <div class="label">Toplam Gelir</div>
+      <div class="value" style="font-size:1.3rem;">{{ total_revenue|floatformat:2 }} ₺</div>
     </div>
   </div>
 

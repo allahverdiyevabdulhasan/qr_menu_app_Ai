@@ -68,20 +68,30 @@
     </div>
   </div>
 
-  <div class="grid grid-3 mb-8" style="gap:24px;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 32px;">
+    <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+      <div class="bg-icon">⏳</div>
+      <div class="stat-label">Onay Bekleyen</div>
+      <div class="stat-value">{{ pending_approval_count }}</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+      <div class="bg-icon">🔥</div>
+      <div class="stat-label">Mutfakta</div>
+      <div class="stat-value">{{ preparing_count }}</div>
+    </div>
     <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
       <div class="bg-icon">✅</div>
       <div class="stat-label">Servise Hazır</div>
-      <div class="stat-value">{{ orders|length }}</div>
+      <div class="stat-value">{{ ready_count }}</div>
     </div>
     <div class="stat-card" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
       <div class="bg-icon">🚨</div>
       <div class="stat-label">Garson Çağrıları</div>
       <div class="stat-value">{{ waiter_calls|length }}</div>
     </div>
-    <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+    <div class="stat-card" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
       <div class="bg-icon">📅</div>
-      <div class="stat-label">Bekleyen Rezervasyonlar</div>
+      <div class="stat-label">Rezervasyonlar</div>
       <div class="stat-value">{{ reservations|length }}</div>
     </div>
   </div>
@@ -139,8 +149,133 @@
   </div>
   {% endif %}
 
+  {# ── Pending Approval Section ── #}
+  <h3 style="font-size:1.1rem; font-weight:900; text-transform:uppercase; color:#3b82f6; margin-bottom:16px;">⏳ Onay Bekleyen Yeni Siparişler ({{ pending_approval_count }})</h3>
+  <div class="waiter-grid mb-8">
+    {% for order in orders %}
+      {% if order.status == 'NEW' %}
+      <div class="waiter-card" style="border-top:5px solid #3b82f6;">
+        <div class="waiter-card-head" style="background: #eff6ff;">
+          <div>
+            <div class="table-number">{% if order.table %}🪑 Masa #{{ order.table.table_number }}{% else %}🥡 Paket Servis{% endif %}</div>
+            <div class="text-xs" style="color:#64748b; font-weight:600; margin-top:4px;">Sipariş #{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
+          </div>
+          <span class="ready-badge" style="background:#3b82f6; border-color:#3b82f6; color:#fff; font-size: 0.75rem;">YENİ</span>
+        </div>
+        
+        <div class="waiter-items">
+          {% for item in order.items.all %}
+          <div style="margin-bottom:6px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">
+            <div class="waiter-item">
+              <span style="color:var(--text-main);"><span class="waiter-item-qty" style="background:#dbeafe; color:#2563eb;">{{ item.quantity }}×</span>{{ item.product_name_snapshot }}</span>
+            </div>
+            {% if item.selected_options.modifier_names or item.selected_options.removed_ingredients or item.note %}
+              <div style="font-size:0.8rem; margin-top:6px; margin-left:36px;">
+                {% if item.selected_options.modifier_names %}
+                  <div style="color:#0284c7; font-weight:700;">➕ EKLE: {{ item.selected_options.modifier_names|join:", " }}</div>
+                {% endif %}
+                {% if item.selected_options.removed_ingredients %}
+                  <div style="color:#ef4444; font-weight:700;">❌ ÇIKAR: {{ item.selected_options.removed_ingredients|join:", " }}</div>
+                {% endif %}
+                {% if item.note %}<div style="color:#d97706; font-weight:600;">📝 {{ item.note }}</div>{% endif %}
+              </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="waiter-card-foot" style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:10px; width:100%;">
+            <form method="post" action="{% url 'order_status_update' order.pk %}" style="flex:1;">
+              {% csrf_token %}
+              <input type="hidden" name="status" value="ACCEPTED">
+              <button type="submit" class="btn btn-primary" style="width:100%; border-radius:12px; font-weight:800; font-size:0.95rem; padding:12px; background:#3b82f6; border:none; box-shadow:0 4px 12px rgba(59,130,246,0.2);">
+                ✅ Onayla
+              </button>
+            </form>
+            <form method="post" action="{% url 'order_status_update' order.pk %}" style="flex:1;">
+              {% csrf_token %}
+              <input type="hidden" name="status" value="CANCELLED">
+              <button type="submit" class="btn btn-danger" style="width:100%; border-radius:12px; font-weight:800; font-size:0.95rem; padding:12px; background:#ef4444; border:none; box-shadow:0 4px 12px rgba(239,68,68,0.2);">
+                ❌ İptal
+              </button>
+            </form>
+          </div>
+          <a href="{% url 'order_detail' order.id %}" class="btn btn-secondary" style="border-radius:12px; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none; padding:12px; text-align:center; width:100%;">
+            ✏️ Detay / Düzenle
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+    
+    {% if pending_approval_count == 0 %}
+    <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; background: #fff; border-radius: 24px; border: 1px dashed #cbd5e1; width: 100%;">
+      <div style="font-size: 3rem; margin-bottom: 12px;">⌛</div>
+      <h3 style="font-weight: 800; color: var(--text-muted); font-size: 1.1rem;">Onay bekleyen yeni sipariş yok.</h3>
+    </div>
+    {% endif %}
+  </div>
+
+  {# ── Preparing Section ── #}
+  <h3 style="font-size:1.1rem; font-weight:900; text-transform:uppercase; color:#f59e0b; margin-bottom:16px;">🔥 Mutfakta Hazırlanan Siparişler ({{ preparing_count }})</h3>
+  <div class="waiter-grid mb-8">
+    {% for order in orders %}
+      {% if order.status == 'ACCEPTED' or order.status == 'PREPARING' %}
+      <div class="waiter-card" style="border-top:5px solid #f59e0b;">
+        <div class="waiter-card-head" style="background: #fffbeb;">
+          <div>
+            <div class="table-number">{% if order.table %}🪑 Masa #{{ order.table.table_number }}{% else %}🥡 Paket Servis{% endif %}</div>
+            <div class="text-xs" style="color:#64748b; font-weight:600; margin-top:4px;">Sipariş #{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
+          </div>
+          <span class="ready-badge" style="background:#f59e0b; border-color:#f59e0b; color:#fff; font-size:0.75rem; font-weight:800; box-shadow:0 4px 10px rgba(245,158,11,0.2);">
+            {% if order.status == 'ACCEPTED' %}ONAYLANDI{% else %}HAZIRLANIYOR{% endif %}
+          </span>
+        </div>
+        
+        <div class="waiter-items">
+          {% for item in order.items.all %}
+          <div style="margin-bottom:6px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">
+            <div class="waiter-item">
+              <span style="color:var(--text-main);"><span class="waiter-item-qty" style="background:#fef3c7; color:#d97706;">{{ item.quantity }}×</span>{{ item.product_name_snapshot }}</span>
+            </div>
+            {% if item.selected_options.modifier_names or item.selected_options.removed_ingredients or item.note %}
+              <div style="font-size:0.8rem; margin-top:6px; margin-left:36px;">
+                {% if item.selected_options.modifier_names %}
+                  <div style="color:#0284c7; font-weight:700;">➕ EKLE: {{ item.selected_options.modifier_names|join:", " }}</div>
+                {% endif %}
+                {% if item.selected_options.removed_ingredients %}
+                  <div style="color:#ef4444; font-weight:700;">❌ ÇIKAR: {{ item.selected_options.removed_ingredients|join:", " }}</div>
+                {% endif %}
+                {% if item.note %}<div style="color:#d97706; font-weight:600;">📝 {{ item.note }}</div>{% endif %}
+              </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="waiter-card-foot" style="background: #fafaf9; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px;">
+          <div style="color:#64748b; font-size:0.85rem; font-weight:700; display:flex; align-items:center; gap:6px;">
+            ⏱️ {% if order.estimated_prep_time %}{{ order.estimated_prep_time }} dk{% else %}Şef hazırlıyor{% endif %}
+          </div>
+          <a href="{% url 'order_detail' order.id %}" class="btn btn-secondary btn-sm" style="border-radius:10px; font-weight:800; text-decoration:none; padding:8px 16px;">
+            ✏️ Düzenle
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+    
+    {% if preparing_count == 0 %}
+    <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; background: #fff; border-radius: 24px; border: 1px dashed #cbd5e1; width: 100%;">
+      <div style="font-size: 3rem; margin-bottom: 12px;">🍳</div>
+      <h3 style="font-weight: 800; color: var(--text-muted); font-size: 1.1rem;">Mutfakta hazırlanan sipariş yok.</h3>
+    </div>
+    {% endif %}
+  </div>
+
   {# ── Ready to Serve Section ── #}
-  <h3 style="font-size:1rem; font-weight:900; text-transform:uppercase; color:#10b981; margin-bottom:16px;">✅ Servise Hazır</h3>
+  <h3 style="font-size:1.1rem; font-weight:900; text-transform:uppercase; color:#10b981; margin-bottom:16px;">✅ Servise Hazır Siparişler ({{ ready_count }})</h3>
   <div class="waiter-grid mb-8">
     {% for order in orders %}
       {% if order.status == 'READY' %}
@@ -150,7 +285,7 @@
             <div class="table-number">{% if order.table %}🪑 Masa #{{ order.table.table_number }}{% else %}🥡 Paket Servis{% endif %}</div>
             <div class="text-xs" style="color:#64748b; font-weight:600; margin-top:4px;">Sipariş #{{ order.id }} · {{ order.created_at|date:"H:i" }}</div>
           </div>
-          <span class="ready-badge">Hazır</span>
+          <span class="ready-badge" style="background:#10b981; border-color:#10b981; color:#fff; font-size:0.75rem;">HAZIR</span>
         </div>
         
         <div class="waiter-items">
@@ -178,11 +313,11 @@
           <form method="post" action="{% url 'order_status_update' order.pk %}" style="flex:2;">
             {% csrf_token %}
             <input type="hidden" name="status" value="SERVED">
-            <button type="submit" class="btn btn-success btn-block" style="border-radius:12px; font-weight:800; font-size:1.05rem; padding:12px; background:#10b981; border:none; box-shadow:0 4px 12px rgba(16,185,129,0.2);">
+            <button type="submit" class="btn btn-success btn-block" style="border-radius:12px; font-weight:800; font-size:1.05rem; padding:12px; background:#10b981; border:none; box-shadow:0 4px 12px rgba(16,185,129,0.2); width:100%;">
               🍽️ Servis Edildi
             </button>
           </form>
-          <a href="{% url 'order_detail' order.id %}" class="btn btn-secondary" style="flex:1; border-radius:12px; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none;">
+          <a href="{% url 'order_detail' order.id %}" class="btn btn-secondary" style="flex:1; border-radius:12px; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none; padding:12px; text-align:center;">
             ✏️ İçine Bak
           </a>
         </div>
@@ -190,11 +325,10 @@
       {% endif %}
     {% endfor %}
     
-    {% if not orders %}
-    <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; background: #fff; border-radius: 24px; border: 1px dashed #cbd5e1;">
-      <div style="font-size: 4rem; margin-bottom: 16px;">☕</div>
-      <h3 style="font-weight: 900; color: var(--text-main); font-size: 1.5rem;">Şu an servise hazır sipariş yok.</h3>
-      <p style="color: #64748b; font-weight: 500;">Mutfak çalışmaya devam ediyor!</p>
+    {% if ready_count == 0 %}
+    <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; background: #fff; border-radius: 24px; border: 1px dashed #cbd5e1; width: 100%;">
+      <div style="font-size: 3rem; margin-bottom: 12px;">☕</div>
+      <h3 style="font-weight: 800; color: var(--text-muted); font-size: 1.1rem;">Şu an servise hazır sipariş yok.</h3>
     </div>
     {% endif %}
   </div>
@@ -208,9 +342,10 @@ const socketUrl = `${protocol}//${window.location.host}/ws/orders/${restaurantSl
 const orderSocket = new WebSocket(socketUrl);
 
 const sounds = {
-    waiter_call: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'),
-    new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'),
-    status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
+    waiter_call: new Audio('https://assets.mixkit.co/active_storage/sfx/2857/2857-preview.mp3'),
+    bill_request: new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3'),
+    new_order: new Audio('https://assets.mixkit.co/active_storage/sfx/911/911-preview.mp3'),
+    status_update: new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3')
 };
 
 let audioUnlocked = false;
@@ -242,13 +377,13 @@ orderSocket.onmessage = function(e) {
     sound.play().catch(e => console.log("Audio blocked:", e));
 
     if (Notification.permission === "granted") {
-        new Notification("Neyman: Garson Bildirimi", { body: data.message });
+        new Notification("Neyman: Bildirim", { body: data.message });
     }
 
     showNotification(data.message, data.call_type);
     
-    // Auto-refresh for UI update
-    setTimeout(() => location.reload(), 1500);
+    // Extended delay to allow audio and toast to be fully experienced before reloading
+    setTimeout(() => location.reload(), 6000);
 };
 
 function showNotification(msg, type) {
