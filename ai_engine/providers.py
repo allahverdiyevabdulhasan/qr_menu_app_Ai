@@ -222,75 +222,6 @@ class OpenAICompatibleProvider(BaseAIProvider):
             return ""
 
 
-# ---------------------------------------------------------------------------
-# Dify.ai Application Provider (real API — activated by Dify app- key)
-# ---------------------------------------------------------------------------
-
-class DifyProvider(BaseAIProvider):
-    """
-    Works with Dify.ai Applications (Chatflow or Chat apps).
-    Activated automatically when AI_API_KEY starts with 'app-'.
-    """
-
-    def __init__(self) -> None:
-        self.api_key = os.environ["AI_API_KEY"]
-        self.base_url = os.environ.get("AI_BASE_URL", "https://api.dify.ai/v1")
-
-    def complete(self, system_prompt: str, user_message: str, **kwargs) -> str:
-        try:
-            import httpx
-            
-            # Tüm yapay zeka yanıtlarının kesinlikle Türkçe olmasını zorunlu kılalım
-            turkish_instruction = (
-                "\n\nCRITICAL LANGUAGE REQUIREMENT: You MUST speak, answer, and output text ONLY in Turkish. "
-                "Even if the question is in English or context is in English, translate your thoughts and respond strictly in Turkish. "
-                "If you are generating a JSON structure, every user-facing string field (such as 'reason', 'summary', 'name', 'title', 'recommendation') MUST be in Turkish. "
-                "Do not use English or any other language for human-readable output under any circumstances."
-            )
-            system_prompt = f"{system_prompt}{turkish_instruction}"
-            
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-            }
-            combined_query = f"Sistem Talimatı:\n{system_prompt}\n\nKullanıcı Mesajı:\n{user_message}"
-            payload = {
-                "inputs": {},
-                "query": combined_query,
-                "user": "restaurant-owner",
-                "response_mode": "blocking"
-            }
-            resp = httpx.post(
-                f"{self.base_url}/chat-messages",
-                headers=headers,
-                json=payload,
-                timeout=45,
-            )
-            
-            logger.info("Dify Response Code: %s", resp.status_code)
-            logger.info("Dify Response Body: %s", resp.text)
-            
-            # Dify hatalarını yakalayıp dost canlısı Türkçe mesajlar dönelim
-            if resp.status_code == 400:
-                body_text = resp.text
-                if "Workflow not published" in body_text:
-                    logger.error("Dify error: Workflow not published.")
-                    return "Yapay Zeka Hatası: Dify panelinizde sağ üstteki 'Yayınla' (Publish) butonuna tıklamadığınız için bu özellik henüz kullanılamıyor. Lütfen Dify panelinizden uygulamanızı yayınlayın ve tekrar deneyin."
-                elif "Model is not configured" in body_text:
-                    logger.error("Dify error: Model is not configured.")
-                    return "Yapay Zeka Hatası: Dify panelinizde bir yapay zeka modeli (Örn: OpenAI, Claude, Gemini, DeepSeek vb.) yapılandırılmamış veya model sağlayıcınızın API anahtarı girilmemiş. Lütfen Dify panelinizde Ayarlar -> Model Sağlayıcıları (Model Provider) sayfasına giderek bir model kurun ve model sağlayıcınızın API anahtarını girin."
-                else:
-                    logger.error("Dify 400 error: %s", body_text)
-                    return f"Yapay Zeka Hatası (Dify): {body_text}"
-            
-            resp.raise_for_status()
-            return resp.json().get("answer", "")
-        except Exception as exc:
-            logger.error("Dify provider error: %s", exc)
-            return "Yapay Zeka Hatası: Şu anda yapay zeka servisine bağlanılamıyor. Lütfen Dify bağlantılarınızı kontrol edin."
-
-
-# ---------------------------------------------------------------------------
 # Provider resolver
 # ---------------------------------------------------------------------------
 
@@ -302,12 +233,6 @@ def get_provider() -> BaseAIProvider:
     """
     if os.environ.get("AI_API_KEY"):
         try:
-            api_key = os.environ["AI_API_KEY"]
-            if api_key.startswith("app-"):
-                provider = DifyProvider()
-                logger.info("AI: using DifyProvider")
-                return provider
-            
             provider = OpenAICompatibleProvider()
             logger.info("AI: using OpenAICompatibleProvider (model=%s)", provider.model)
             return provider
