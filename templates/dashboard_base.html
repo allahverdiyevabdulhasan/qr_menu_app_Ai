@@ -50,7 +50,7 @@
       </a>
       {% endif %}
 
-      <div class="sidebar-section">{% trans "Operations" %}</div>
+      <div class="sidebar-section">Operasyonlar</div>
 
       <a href="{% url 'order_list' %}"
         class="sidebar-link {% if request.resolver_match.url_name == 'order_list' %}active{% endif %}">
@@ -144,7 +144,7 @@
       {% endif %}
 
       {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_menu or request.user.can_manage_inventory or request.user.can_view_expenses or request.user.can_view_payroll or request.user.can_manage_customers or request.user.can_manage_settings or request.user.can_manage_branches %}
-      <div class="sidebar-section">{% trans "Management" %}</div>
+      <div class="sidebar-section">Yönetim</div>
 
 
 
@@ -237,7 +237,7 @@
       {% endif %}
 
       {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_ai_reports or request.user.can_manage_campaigns or request.user.can_view_reviews %}
-      <div class="sidebar-section">{% trans "Growth & AI" %}</div>
+      <div class="sidebar-section">Büyüme & Yapay Zeka</div>
 
       {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_ai_reports %}
       <a href="{% url 'ai_insights' %}"
@@ -290,7 +290,7 @@
       {% endif %}
 
       {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_settings %}
-      <div class="sidebar-section">{% trans "System Settings" %}</div>
+      <div class="sidebar-section">Sistem Ayarları</div>
       <a href="{% url 'restaurant_profile' %}"
         class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_profile' %}active{% endif %}">
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"

@@ -1,0 +1,357 @@
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
+
+{% block title %}Şubeler Arası Performans Karşılaştırması | NeyMenu AI{% endblock %}
+{% block page_title %}📊 Şubeler Arası Analiz & Karşılaştırma{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --dash-bg: #f8fafc;
+        --dash-primary: #6366f1;
+        --dash-success: #10b981;
+        --dash-warning: #f59e0b;
+        --dash-danger: #ef4444;
+        --dash-card-bg: #ffffff;
+        --dash-text: #0f172a;
+        --dash-text-muted: #64748b;
+        --dash-border: #e2e8f0;
+    }
+
+    body, .main-content, .page-content {
+        background-color: var(--dash-bg) !important;
+    }
+
+    .analytics-wrapper {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Filtre Çubuğu */
+    .filter-bar {
+        background: #fff;
+        padding: 16px 24px;
+        border-radius: 20px;
+        border: 1px solid var(--dash-border);
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        margin-bottom: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .filter-group { display: flex; align-items: center; gap: 12px; }
+    .filter-group label { font-size: 0.85rem; font-weight: 700; color: var(--dash-text-muted); }
+    .filter-select {
+        padding: 8px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--dash-border);
+        font-weight: 600;
+        outline: none;
+        cursor: pointer;
+    }
+
+    /* KPI Kartları */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .kpi-card {
+        background: #fff;
+        padding: 24px;
+        border-radius: 24px;
+        border: 1px solid var(--dash-border);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.04);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kpi-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-bottom: 16px;
+    }
+
+    .kpi-label { font-size: 0.85rem; font-weight: 700; color: var(--dash-text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 2rem; font-weight: 900; color: var(--dash-text); margin: 4px 0; }
+    .kpi-trend { font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+    .trend-up { color: var(--dash-success); }
+    .trend-down { color: var(--dash-danger); }
+
+    /* Grafikler Grid */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        margin-bottom: 32px;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 24px;
+        border: 1px solid var(--dash-border);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.04);
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 24px;
+        border-bottom: 1px solid var(--dash-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-header h3 { font-size: 1.1rem; font-weight: 800; margin: 0; }
+
+    .chart-box { padding: 24px; height: 350px; position: relative; }
+
+    /* Veri Tabloları */
+    .table-container { overflow-x: auto; }
+    .modern-table { width: 100%; border-collapse: collapse; }
+    .modern-table th {
+        padding: 16px 24px;
+        background: #f9fafb;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: var(--dash-text-muted);
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--dash-border);
+    }
+    .modern-table td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.9rem;
+    }
+    .modern-table tr:last-child td { border-bottom: none; }
+
+    /* Aktif/Pasif Rozetleri */
+    .badge {
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+    .badge-success { background: #ecfdf5; color: #059669; }
+    .badge-danger { background: #fef2f2; color: #dc2626; }
+
+    /* Sekme Barı */
+    .tab-bar {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--dash-border);
+        padding-bottom: 12px;
+    }
+    .tab-link {
+        color: var(--dash-text-muted);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 8px 16px;
+        border-radius: 12px;
+        transition: all 0.2s;
+    }
+    .tab-link:hover {
+        background: #fafafa;
+        color: var(--dash-text);
+    }
+    .tab-link.active {
+        background: var(--dash-primary);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+
+    @media (max-width: 1024px) {
+        .charts-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="analytics-wrapper fade-in">
+
+    <!-- Sekme Gezinmesi -->
+    <div class="tab-bar">
+        <a href="{% url 'analytics_dashboard' %}" class="tab-link">📊 Genel Analizler</a>
+        <a href="{% url 'branch_analytics_report' %}" class="tab-link active">🏢 Şubeler Arası Karşılaştırma</a>
+    </div>
+
+    <!-- Filtre Çubuğu -->
+    <div class="filter-bar">
+        <form method="get" id="filterForm" style="display:flex; gap:24px; align-items:center;">
+            <div class="filter-group">
+                <label>Zaman Aralığı:</label>
+                <select name="range" class="filter-select" onchange="this.form.submit()">
+                    <option value="today" {% if request.GET.range == 'today' %}selected{% endif %}>Bugün</option>
+                    <option value="last_7" {% if request.GET.range == 'last_7' %}selected{% endif %}>Son 7 Gün</option>
+                    <option value="last_30" {% if request.GET.range == 'last_30' or not request.GET.range %}selected{% endif %}>Son 30 Gün</option>
+                    <option value="this_month" {% if request.GET.range == 'this_month' %}selected{% endif %}>Bu Ay</option>
+                </select>
+            </div>
+        </form>
+        <div style="display:flex; gap:12px;">
+            <button class="btn btn-secondary" style="border-radius:12px; font-weight:700;" onclick="window.print()">📥 Raporu Yazdır</button>
+        </div>
+    </div>
+
+    <!-- Grafik Panelleri -->
+    <div class="charts-grid">
+        <!-- Satış Hacmi Karşılaştırması -->
+        <div class="card">
+            <div class="card-header">
+                <h3>💰 Şubeler Arası Toplam Ciro</h3>
+                <span style="font-size:0.75rem; color:var(--dash-text-muted); font-weight:700;">TL CİNSİNDEN GELİR</span>
+            </div>
+            <div class="chart-box">
+                <canvas id="salesCompareChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Müşteri Yorum Ortalaması Karşılaştırması -->
+        <div class="card">
+            <div class="card-header">
+                <h3>⭐ Şubeler Arası Müşteri Memnuniyeti</h3>
+                <span style="font-size:0.75rem; color:var(--dash-text-muted); font-weight:700;">ORTALAMA YILDIZ PUANI</span>
+            </div>
+            <div class="chart-box">
+                <canvas id="ratingCompareChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Şube Performans Detayları Tablosu -->
+    <div class="card" style="margin-top:32px;">
+        <div class="card-header">
+            <h3>🏢 Detaylı Şube Performans Göstergeleri</h3>
+        </div>
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Şube Adı</th>
+                        <th>Durum</th>
+                        <th>Toplam Ciro</th>
+                        <th>Tamamlanan Sipariş</th>
+                        <th>Ortalama Sepet Tutarı</th>
+                        <th style="text-align:right;">Müşteri Puanı (Yorumlar)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in branches_data %}
+                    <tr>
+                        <td style="font-weight:700; color:var(--dash-text);">{{ item.sube.name }}</td>
+                        <td>
+                            {% if item.sube.status == 'active' %}
+                            <span class="badge badge-success">Aktif</span>
+                            {% else %}
+                            <span class="badge badge-danger">Pasif</span>
+                            {% endif %}
+                        </td>
+                        <td style="font-weight:800; color:var(--dash-primary);">{{ item.ciro|floatformat:2 }} ₺</td>
+                        <td>{{ item.siparis_sayisi }} Sipariş</td>
+                        <td style="font-weight:600;">{{ item.sepet_ortalamasi|floatformat:2 }} ₺</td>
+                        <td style="text-align:right; font-weight:800; color:#eab308;">
+                            {% if item.ortalama_puan > 0 %}
+                            ⭐ {{ item.ortalama_puan|floatformat:1 }} / 5.0
+                            {% else %}
+                            <span style="color:var(--dash-text-muted); font-weight:500;">Yorum Yok</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:40px; color:var(--dash-text-muted);">
+                            Karşılaştırılacak şube verisi bulunamadı.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Ciro Karşılaştırma Grafiği
+    const salesCtx = document.getElementById('salesCompareChart').getContext('2d');
+    new Chart(salesCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ sube_adlari|safe }},
+            datasets: [{
+                label: 'Toplam Ciro (₺)',
+                data: {{ cirolar|safe }},
+                backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                borderColor: '#6366f1',
+                borderWidth: 2,
+                borderRadius: 12,
+                barThickness: 40
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' },
+                    ticks: { callback: function(value) { return value + ' ₺'; } }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // Puan Karşılaştırma Grafiği
+    const ratingCtx = document.getElementById('ratingCompareChart').getContext('2d');
+    new Chart(ratingCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ sube_adlari|safe }},
+            datasets: [{
+                label: 'Müşteri Memnuniyet Puanı',
+                data: {{ ortalama_puanlar|safe }},
+                backgroundColor: 'rgba(234, 179, 8, 0.8)',
+                borderColor: '#eab308',
+                borderWidth: 2,
+                borderRadius: 12,
+                barThickness: 40
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 5,
+                    grid: { color: '#f1f5f9' },
+                    ticks: { stepSize: 1 }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+{% endblock %}

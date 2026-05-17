@@ -153,3 +153,69 @@ class NetProfitReportView(AnalyticsBaseView):
         context['costs'] = context['revenue'] - context['net_profit'] # Simplified visualization
         
         return context
+
+
+class BranchAnalyticsReportView(AnalyticsBaseView):
+    template_name = 'analytics/branch_report.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_cashier and not request.user.can_view_analytics:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        r = context['restaurant']
+        start_date = context['start_date']
+        end_date = context['end_date']
+
+        from restaurants.models import Branch
+        from orders.models import Order
+        from reviews.models import Review
+        from django.db.models import Sum, Avg
+
+        branches = Branch.objects.filter(restaurant=r)
+        branches_data = []
+
+        # Grafik verileri için listeler
+        sube_adlari = []
+        cirolar = []
+        siparis_sayilari = []
+        sepet_ortalamalari = []
+        ortalama_puanlar = []
+
+        for branch in branches:
+            orders = Order.objects.filter(branch=branch, created_at__range=(start_date, end_date))
+            completed_orders = orders.filter(status='COMPLETED')
+            
+            total_sales = completed_orders.aggregate(Sum('total_amount'))['total_amount__sum'] or 0.0
+            total_orders_count = completed_orders.count()
+            avg_order_value = float(total_sales) / total_orders_count if total_orders_count > 0 else 0.0
+            
+            reviews = Review.objects.filter(order__branch=branch, created_at__range=(start_date, end_date))
+            avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0.0
+
+            branches_data.append({
+                'sube': branch,
+                'ciro': float(total_sales),
+                'siparis_sayisi': total_orders_count,
+                'sepet_ortalamasi': avg_order_value,
+                'ortalama_puan': float(avg_rating),
+                'durum': branch.get_status_display()
+            })
+
+            sube_adlari.append(branch.name)
+            cirolar.append(float(total_sales))
+            siparis_sayilari.append(total_orders_count)
+            sepet_ortalamalari.append(avg_order_value)
+            ortalama_puanlar.append(float(avg_rating))
+
+        context['branches_data'] = branches_data
+        context['sube_adlari'] = sube_adlari
+        context['cirolar'] = cirolar
+        context['siparis_sayilari'] = siparis_sayilari
+        context['sepet_ortalamalari'] = sepet_ortalamalari
+        context['ortalama_puanlar'] = ortalama_puanlar
+
+        return context

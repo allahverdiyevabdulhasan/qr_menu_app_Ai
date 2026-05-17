@@ -164,6 +164,33 @@
     .insight-title { font-weight: 800; color: #fff; margin-bottom: 4px; font-size: 0.95rem; }
     .insight-text { font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
 
+    /* Sekme Barı */
+    .tab-bar {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--dash-border);
+        padding-bottom: 12px;
+    }
+    .tab-link {
+        color: var(--dash-text-muted);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 8px 16px;
+        border-radius: 12px;
+        transition: all 0.2s;
+    }
+    .tab-link:hover {
+        background: #fafafa;
+        color: var(--dash-text);
+    }
+    .tab-link.active {
+        background: var(--dash-primary);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+
     @media (max-width: 1024px) {
         .charts-grid { grid-template-columns: 1fr; }
     }
@@ -172,6 +199,11 @@
 
 {% block content %}
 <div class="analytics-wrapper fade-in">
+    <!-- Sekme Gezinmesi -->
+    <div class="tab-bar">
+        <a href="{% url 'analytics_dashboard' %}" class="tab-link active">📊 Genel Analizler</a>
+        <a href="{% url 'branch_analytics_report' %}" class="tab-link">🏢 Şubeler Arası Karşılaştırma</a>
+    </div>
     <!-- Filter Bar -->
     <div class="filter-bar">
         <form method="get" id="filterForm" style="display:flex; gap:24px; align-items:center;">
