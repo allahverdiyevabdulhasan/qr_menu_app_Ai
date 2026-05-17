@@ -61,4 +61,4 @@ class ProductReviewCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return self.request.META.get('HTTP_REFERER', '/')
+        return reverse_lazy('public_menu', kwargs={'restaurant_slug': self.object.product.restaurant.slug})
