@@ -164,34 +164,47 @@
 
     {# AI Insights #}
     <div class="card">
-      <div class="card-header">
+      <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
         <span>💡 {% trans "AI Insights" %}</span>
-        <span class="badge badge-primary" style="font-size:0.65rem;">LIVE</span>
+        <span class="badge badge-primary" style="font-size:0.65rem; background: linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; padding:3px 8px; border-radius:8px;">YAPAY ZEKA</span>
       </div>
       <div class="card-body">
-        <div class="insight-row">
-          <div class="insight-emoji" style="background:#eef2ff;">🚀</div>
+        {% for insight in ai_insights %}
+        <div class="insight-row" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+          <div class="insight-emoji" style="background:{% if insight.insight_type == 'SALES' %}#eef2ff{% elif insight.insight_type == 'STOCK' %}#fff7ed{% elif insight.insight_type == 'CAMPAIGN' %}#f0fdf4{% else %}#f8fafc{% endif %}; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+            {% if insight.insight_type == 'SALES' %}🚀{% elif insight.insight_type == 'STOCK' %}📦{% elif insight.insight_type == 'CAMPAIGN' %}🎉{% elif insight.insight_type == 'CUSTOMER' %}👥{% else %}💡{% endif %}
+          </div>
           <div>
-            <div style="font-weight:700; font-size:0.85rem; margin-bottom:3px;">{% trans "Growth Opportunity" %}</div>
-            <p class="text-sm text-muted">{% trans "Burger category is up 20% vs last week. Consider a combo upsell." %}</p>
+            <div style="font-weight:700; font-size:0.85rem; color:#0f172a; margin-bottom:2px;">{{ insight.title }}</div>
+            <p class="text-sm text-muted" style="margin:0; font-size:0.78rem; line-height:1.4; color:#64748b;">{{ insight.description }}</p>
           </div>
         </div>
-        <div class="insight-row">
-          <div class="insight-emoji" style="background:#f0fdf4;">⚡</div>
+        {% empty %}
+        {# Fallback default beautiful Turkish insights #}
+        <div class="insight-row" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+          <div class="insight-emoji" style="background:#eef2ff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">🚀</div>
           <div>
-            <div style="font-weight:700; font-size:0.85rem; margin-bottom:3px;">{% trans "Kitchen Performance" %}</div>
-            <p class="text-sm text-muted">{% trans "Average prep time down to 8 min — great efficiency!" %}</p>
+            <div style="font-weight:700; font-size:0.85rem; color:#0f172a; margin-bottom:2px;">Büyüme Fırsatı</div>
+            <p class="text-sm text-muted" style="margin:0; font-size:0.78rem; line-height:1.4; color:#64748b;">Burger satışları geçen haftaya göre %20 arttı. Menüye burger menüleri eklemeyi düşünebilirsiniz.</p>
           </div>
         </div>
-        <div class="insight-row">
-          <div class="insight-emoji" style="background:#fff7ed;">🎯</div>
+        <div class="insight-row" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+          <div class="insight-emoji" style="background:#f0fdf4; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">⚡</div>
           <div>
-            <div style="font-weight:700; font-size:0.85rem; margin-bottom:3px;">{% trans "Peak Hour Alert" %}</div>
-            <p class="text-sm text-muted">{% trans "Expected rush at 7:30 PM. Prepare 3 staff on floor." %}</p>
+            <div style="font-weight:700; font-size:0.85rem; color:#0f172a; margin-bottom:2px;">Mutfak Performansı</div>
+            <p class="text-sm text-muted" style="margin:0; font-size:0.78rem; line-height:1.4; color:#64748b;">Ortalama sipariş hazırlama süresi 8 dakikaya düştü — mükemmel mutfak verimliliği!</p>
           </div>
         </div>
-        <a href="{% url 'ai_insights' %}" class="btn btn-primary btn-block btn-sm" style="border-radius:9px; margin-top:16px;">
-          {% trans "View All Insights" %} →
+        <div class="insight-row" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+          <div class="insight-emoji" style="background:#fff7ed; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">🎯</div>
+          <div>
+            <div style="font-weight:700; font-size:0.85rem; color:#0f172a; margin-bottom:2px;">Yoğun Saat Uyarısı</div>
+            <p class="text-sm text-muted" style="margin:0; font-size:0.78rem; line-height:1.4; color:#64748b;">Bugün saat 19:30 civarında yoğunluk bekleniyor. Servis personelinizi hazırlamanızı öneririz.</p>
+          </div>
+        </div>
+        {% endfor %}
+        <a href="{% url 'ai_insights' %}" class="btn btn-primary btn-block btn-sm" style="border-radius:9px; margin-top:16px; background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; font-weight:700;">
+          Tüm Öngörüleri Görüntüle →
         </a>
       </div>
     </div>

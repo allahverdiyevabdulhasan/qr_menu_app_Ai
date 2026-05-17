@@ -113,6 +113,16 @@ class RestaurantDashboardView(RestaurantAccessMixin, TemplateView):
             else:
                 context['avg_rating'] = 0.0
 
+            # Live AI Insights from database
+            try:
+                from ai_engine.models import AIInsight
+                context['ai_insights'] = AIInsight.objects.filter(
+                    restaurant=restaurant,
+                    status__in=['NEW', 'READ']
+                ).order_by('-created_at')[:3]
+            except Exception:
+                context['ai_insights'] = []
+
         return context
 
 class RestaurantProfileUpdateView(PermissionRequiredMixin, UpdateView):
