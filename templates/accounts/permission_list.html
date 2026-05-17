@@ -6,129 +6,138 @@
 {% block extra_css %}
 <style>
   .perms-container {
-    background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(30px);
     border-radius: 24px;
     padding: 30px;
     border: 1px solid var(--border);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
   }
 
   .page-header-premium {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
   }
 
   .page-title-main {
-    font-size: 1.85rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--text-dark), #4f46e5);
+    font-size: 2rem;
+    font-weight: 850;
+    background: linear-gradient(135deg, var(--text-dark), #6366f1);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0;
+    letter-spacing: -0.5px;
   }
 
   .premium-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 12px;
+    border-spacing: 0 16px;
+    margin-top: -12px;
   }
 
   .premium-table th {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--text-muted);
-    font-weight: 700;
-    padding: 15px 24px;
+    font-weight: 800;
+    padding: 12px 20px;
     border: none;
   }
 
   .premium-table tr.user-row {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 16px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
   }
 
   .premium-table tr.user-row:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.06);
+    transform: translateY(-3px) scale(1.005);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.08);
     border-color: var(--primary);
   }
 
   .premium-table tr.user-row td {
-    padding: 20px 24px;
+    padding: 18px 20px;
+    vertical-align: middle;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
   }
 
   .premium-table tr.user-row td:first-child {
     border-left: 1px solid var(--border);
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
   }
 
   .premium-table tr.user-row td:last-child {
     border-right: 1px solid var(--border);
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+  }
+
+  /* Badge Container to handle flexing correctly */
+  .badge-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
   }
 
   /* Custom Badges */
   .badge-premium {
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 30px;
-    font-size: 0.78rem;
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 750;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
     transition: all 0.2s ease;
   }
 
   /* Financial Badges */
   .badge-fin-success {
-    background: rgba(16, 185, 129, 0.08);
+    background: rgba(16, 185, 129, 0.06);
     color: #10b981;
     border: 1px solid rgba(16, 185, 129, 0.15);
   }
 
   .badge-fin-primary {
-    background: rgba(99, 102, 241, 0.08);
+    background: rgba(99, 102, 241, 0.06);
     color: #6366f1;
     border: 1px solid rgba(99, 102, 241, 0.15);
   }
 
   .badge-fin-warning {
-    background: rgba(245, 158, 11, 0.08);
+    background: rgba(245, 158, 11, 0.06);
     color: #f59e0b;
     border: 1px solid rgba(245, 158, 11, 0.15);
   }
 
   /* Module Badges */
   .badge-mod-info {
-    background: rgba(59, 130, 246, 0.08);
+    background: rgba(59, 130, 246, 0.06);
     color: #3b82f6;
     border: 1px solid rgba(59, 130, 246, 0.15);
   }
 
   /* User Info card */
   .user-avatar-circle {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
+    background: linear-gradient(135deg, #6366f1, #818cf8);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+    font-size: 1.15rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    flex-shrink: 0;
   }
 
   .user-card-flex {
@@ -138,31 +147,66 @@
   }
 
   .user-meta-name {
-    font-weight: 700;
+    font-weight: 800;
     color: var(--text-dark);
-    font-size: 1rem;
-    margin-bottom: 2px;
+    font-size: 1.05rem;
+    margin-bottom: 3px;
   }
 
-  /* Role Badge */
+  /* Dynamic Role Badges */
   .badge-role-pill {
-    background: #1e1b4b;
-    color: #e0e7ff;
-    padding: 6px 14px;
+    padding: 7px 16px;
     border-radius: 30px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    border: 1px solid rgba(224, 231, 255, 0.1);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  .role-admin {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .role-owner {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8b5cf6;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  .role-manager {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .role-waiter {
+    background: rgba(20, 184, 166, 0.1);
+    color: #14b8a6;
+    border: 1px solid rgba(20, 184, 166, 0.2);
+  }
+
+  .role-kitchen {
+    background: rgba(249, 115, 22, 0.1);
+    color: #f97316;
+    border: 1px solid rgba(249, 115, 22, 0.2);
+  }
+
+  .role-cashier {
+    background: rgba(236, 72, 153, 0.1);
+    color: #ec4899;
+    border: 1px solid rgba(236, 72, 153, 0.2);
   }
 
   /* Action Button */
   .btn-premium-action {
     background: linear-gradient(135deg, var(--primary), #818cf8);
     color: #fff !important;
-    font-weight: 700;
-    border-radius: 12px;
-    padding: 10px 18px;
+    font-weight: 800;
+    border-radius: 14px;
+    padding: 10px 20px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
     border: none;
@@ -170,11 +214,12 @@
     align-items: center;
     gap: 8px;
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .btn-premium-action:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
     filter: brightness(1.05);
   }
 </style>
@@ -183,10 +228,8 @@
 {% block content %}
 <div class="fade-in">
     <div class="page-header-premium">
-        <div>
-            <h2 class="page-title-main">👤 Personel Yetkileri</h2>
-            <p class="text-muted text-sm mt-1">Ekibinizin sistem modüllerine ve finansal verilere olan erişim yetkilerini detaylıca yönetin</p>
-        </div>
+        <h2 class="page-title-main">👤 Personel Yetkileri</h2>
+        <p class="text-muted text-sm mt-2">Ekibinizin sistem modüllerine ve finansal verilere olan erişim yetkilerini detaylıca yönetin</p>
     </div>
 
     <div class="perms-container">
@@ -194,11 +237,11 @@
             <table class="premium-table">
                 <thead>
                     <tr>
-                        <th>Kullanıcı</th>
-                        <th>Rol</th>
-                        <th>Finansal Erişim Yetkileri</th>
-                        <th>Erişebildiği Modüller</th>
-                        <th class="text-right">İşlemler</th>
+                        <th style="width: 25%;">Kullanıcı</th>
+                        <th style="width: 15%;">Rol</th>
+                        <th style="width: 20%;">Finansal Erişim Yetkileri</th>
+                        <th style="width: 25%;">Erişebildiği Modüller</th>
+                        <th style="width: 15%; text-align: right;">İşlemler</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -216,31 +259,29 @@
                             </div>
                         </td>
                         <td>
-                            <span class="badge-role-pill">
-                                {% if u.role == 'SUPER_ADMIN' %}
-                                    Süper Admin
-                                {% elif u.role == 'RESTAURANT_OWNER' %}
-                                    Restoran Sahibi
-                                {% elif u.role == 'MANAGER' %}
-                                    Yönetici
-                                {% elif u.role == 'WAITER' %}
-                                    Garson
-                                {% elif u.role == 'KITCHEN_STAFF' %}
-                                    Mutfak Personeli
-                                {% elif u.role == 'CASHIER' %}
-                                    Kasiyer
-                                {% else %}
-                                    {{ u.get_role_display|default:"Personel" }}
-                                {% endif %}
-                            </span>
+                            {% if u.role == 'SUPER_ADMIN' %}
+                                <span class="badge-role-pill role-admin">Süper Admin</span>
+                            {% elif u.role == 'RESTAURANT_OWNER' %}
+                                <span class="badge-role-pill role-owner">Restoran Sahibi</span>
+                            {% elif u.role == 'MANAGER' %}
+                                <span class="badge-role-pill role-manager">Yönetici</span>
+                            {% elif u.role == 'WAITER' %}
+                                <span class="badge-role-pill role-waiter">Garson</span>
+                            {% elif u.role == 'KITCHEN_STAFF' %}
+                                <span class="badge-role-pill role-kitchen">Mutfak Personeli</span>
+                            {% elif u.role == 'CASHIER' %}
+                                <span class="badge-role-pill role-cashier">Kasiyer</span>
+                            {% else %}
+                                <span class="badge-role-pill role-manager">{{ u.get_role_display|default:"Personel" }}</span>
+                            {% endif %}
                         </td>
                         <td>
-                            <div class="flex flex-wrap gap-2">
+                            <div class="badge-container">
                                 {% if u.can_view_daily_revenue %}
-                                    <span class="badge-premium badge-fin-success">📈 Günlük Ciro</span>
+                                    <span class="badge-premium badge-fin-success">📈 Ciro</span>
                                 {% endif %}
                                 {% if u.can_view_net_profit %}
-                                    <span class="badge-premium badge-fin-primary">💎 Net Kâr</span>
+                                    <span class="badge-premium badge-fin-primary">💎 Kâr</span>
                                 {% endif %}
                                 {% if u.can_view_expenses %}
                                     <span class="badge-premium badge-fin-warning">💰 Giderler</span>
@@ -251,24 +292,24 @@
                             </div>
                         </td>
                         <td>
-                            <div class="flex flex-wrap gap-2">
+                            <div class="badge-container">
                                 {% if u.can_view_kitchen_screen %}
-                                    <span class="badge-premium badge-mod-info">🍳 Mutfak Paneli</span>
+                                    <span class="badge-premium badge-mod-info">🍳 Mutfak</span>
                                 {% endif %}
                                 {% if u.can_view_waiter_panel %}
-                                    <span class="badge-premium badge-mod-info">🤵 Garson Paneli</span>
+                                    <span class="badge-premium badge-mod-info">🤵 Garson</span>
                                 {% endif %}
                                 {% if u.can_view_cashier_panel %}
-                                    <span class="badge-premium badge-mod-info">💵 Kasiyer Paneli</span>
+                                    <span class="badge-premium badge-mod-info">💵 Kasiyer</span>
                                 {% endif %}
                                 {% if u.can_manage_menu %}
-                                    <span class="badge-premium badge-mod-info">🍔 Menü Yönetimi</span>
+                                    <span class="badge-premium badge-mod-info">🍔 Menü</span>
                                 {% endif %}
                                 {% if u.can_manage_settings %}
-                                    <span class="badge-premium badge-mod-info">⚙️ Sistem Ayarları</span>
+                                    <span class="badge-premium badge-mod-info">⚙️ Ayarlar</span>
                                 {% endif %}
                                 {% if u.can_manage_branches %}
-                                    <span class="badge-premium badge-mod-info">🏢 Şube Yönetimi</span>
+                                    <span class="badge-premium badge-mod-info">🏢 Şubeler</span>
                                 {% endif %}
                             </div>
                         </td>
