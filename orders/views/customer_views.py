@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from decimal import Decimal
 from menu.models import Product
 from restaurants.models import Restaurant

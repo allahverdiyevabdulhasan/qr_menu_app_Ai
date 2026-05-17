@@ -397,3 +397,90 @@ class RestaurantManagerChatService:
             f"LIVE DATA CONTEXT:\n{context}"
         )
         return ai().complete(system_prompt, user_message, response_key="chat")
+
+
+# ---------------------------------------------------------------------------
+# 12. FrequentlyBoughtTogetherService
+# ---------------------------------------------------------------------------
+
+class FrequentlyBoughtTogetherService:
+    """
+    Suggests a complementary product to buy together with the current product,
+    along with a custom discounted bundle deal and Turkish promotional text.
+    """
+
+    def suggest_pairing(self, product) -> dict:
+        from menu.models import Product
+
+        # Get other active products in this restaurant
+        other_products = list(
+            Product.objects.filter(restaurant=product.restaurant, is_active=True, stock_status='AVAILABLE')
+            .exclude(id=product.id)
+            .values("id", "name", "price", "category__name")
+        )
+
+        if not other_products:
+            return {}
+
+        system_prompt = (
+            "You are an expert restaurant marketing and cross-selling engine. "
+            "Suggest EXACTLY ONE complementary product from the provided list to pair with the user's selected product. "
+            "Choose a product that makes culinary sense (e.g. a drink, side dish, sauce, or dessert to go with a main meal). "
+            "Return JSON: "
+            "{"
+            "  'pairing_product_name': str (exact name of the paired product from the list),"
+            "  'discount_percent': int (a realistic discount like 5, 10, 15, or 20 if bought together),"
+            "  'pitch': str (a highly engaging, short Turkish marketing phrase explaining why they pair well together, e.g. 'Tavuk Izgara'nın yanına çıtır çıtır patates kızartması ve buz gibi kola çok yakışır!')"
+            "}"
+        )
+        user_message = (
+            f"Selected Product: {product.name} (Price: {product.price} TL)\n"
+            f"Available Products List:\n{json.dumps(other_products, default=str)}"
+        )
+
+        result = ai().json_complete(system_prompt, user_message, response_key="combo")
+
+        # Safely match product name to actual object
+        if result and "pairing_product_name" in result:
+            matched_product = Product.objects.filter(
+                restaurant=product.restaurant,
+                name=result["pairing_product_name"],
+                is_active=True
+            ).first()
+
+            if matched_product:
+                discount_percent = int(result.get("discount_percent", 10))
+                original_total = product.price + matched_product.price
+                # Calculate discounted price
+                savings = (matched_product.price * discount_percent) / 100
+                discounted_total = original_total - savings
+
+                return {
+                    "product": matched_product,
+                    "discount_percent": discount_percent,
+                    "savings": savings,
+                    "discounted_total": discounted_total,
+                    "original_total": original_total,
+                    "pitch": result.get("pitch", "")
+                }
+
+        # Fallback to a default product if AI fails
+        fallback_product = Product.objects.filter(
+            restaurant=product.restaurant,
+            is_active=True,
+            stock_status='AVAILABLE'
+        ).exclude(id=product.id).first()
+
+        if fallback_product:
+            original_total = product.price + fallback_product.price
+            savings = fallback_product.price * 0.10  # 10%
+            return {
+                "product": fallback_product,
+                "discount_percent": 10,
+                "savings": savings,
+                "discounted_total": original_total - savings,
+                "original_total": original_total,
+                "pitch": f"Bu lezzetli yemeğin yanında {fallback_product.name} harika bir tercih olacaktır!"
+            }
+
+        return {}

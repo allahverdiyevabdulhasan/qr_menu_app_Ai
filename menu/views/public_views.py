@@ -67,14 +67,26 @@ class PublicProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        from ai_engine.services import FoodAdvisorService
+        from ai_engine.services import FoodAdvisorService, FrequentlyBoughtTogetherService
         
         product = self.get_object()
-        # The service advises based on a question, but for a single product view
-        # we can just ask it for a description or pairing advice.
-        advisor = FoodAdvisorService()
-        result = advisor.advise(product.restaurant, f"Tell me about {product.name} and what it pairs well with.")
         
-        context['ai_advice'] = result.get('reason', '')
+        # 1. AI eşleştirme ve sepet tavsiye motoru
+        try:
+            pairing_service = FrequentlyBoughtTogetherService()
+            context['recommendation'] = pairing_service.suggest_pairing(product)
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).warning("FrequentlyBoughtTogetherService failed: %s", e)
+            context['recommendation'] = {}
+            
+        # 2. Genel yapay zeka tavsiyesi
+        try:
+            advisor = FoodAdvisorService()
+            result = advisor.advise(product.restaurant, f"Tell me about {product.name} and what it pairs well with.")
+            context['ai_advice'] = result.get('reason', '')
+        except Exception as e:
+            context['ai_advice'] = ''
+            
         context['restaurant'] = product.restaurant
         return context
