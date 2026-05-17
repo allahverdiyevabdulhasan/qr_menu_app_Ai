@@ -29,6 +29,7 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - ALLOWED_HOSTS=localhost,127.0.0.1,173.212.232.21
       - CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1,http://173.212.232.21,http://localhost:8000,http://127.0.0.1:8000
+      - AI_API_KEY=qO-X8Uih_HiApSR5BBwF06mYmNwViSrXvkzkwvqkFx0
     depends_on:
       - db
       - redis
