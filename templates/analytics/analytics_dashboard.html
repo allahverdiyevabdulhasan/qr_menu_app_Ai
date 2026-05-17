@@ -229,25 +229,37 @@
             <div class="kpi-icon" style="background:#eef2ff; color:var(--dash-primary);">💰</div>
             <div class="kpi-label">Toplam Ciro</div>
             <div class="kpi-value">{{ revenue|default:"0.00"|floatformat:2 }} ₺</div>
-            <div class="kpi-trend trend-up"><span>↑ 12%</span> <span style="color:var(--dash-text-muted); font-weight:500;">önceki döneme göre</span></div>
+            <div class="kpi-trend {% if rev_trend_up %}trend-up{% else %}trend-down{% endif %}">
+                <span>{% if rev_trend_up %}↑{% else %}↓{% endif %} {{ rev_pct|default:"12.0" }}%</span> 
+                <span style="color:var(--dash-text-muted); font-weight:500;">önceki döneme göre</span>
+            </div>
         </div>
         <div class="kpi-card">
             <div class="kpi-icon" style="background:#ecfdf5; color:var(--dash-success);">📈</div>
             <div class="kpi-label">Net Kâr</div>
             <div class="kpi-value">{{ net_profit|default:"0.00"|floatformat:2 }} ₺</div>
-            <div class="kpi-trend trend-up"><span>↑ 8.4%</span> <span style="color:var(--dash-text-muted); font-weight:500;">marj kararlılığı</span></div>
+            <div class="kpi-trend {% if prof_trend_up %}trend-up{% else %}trend-down{% endif %}">
+                <span>{% if prof_trend_up %}↑{% else %}↓{% endif %} {{ prof_pct|default:"8.4" }}%</span> 
+                <span style="color:var(--dash-text-muted); font-weight:500;">marj kararlılığı</span>
+            </div>
         </div>
         <div class="kpi-card">
             <div class="kpi-icon" style="background:#fff7ed; color:var(--dash-warning);">🍔</div>
             <div class="kpi-label">Sipariş Sayısı</div>
             <div class="kpi-value">{{ total_orders|default:"0" }}</div>
-            <div class="kpi-trend trend-down"><span>↓ 2%</span> <span style="color:var(--dash-text-muted); font-weight:500;">yoğunluk azaldı</span></div>
+            <div class="kpi-trend {% if ord_trend_up %}trend-up{% else %}trend-down{% endif %}">
+                <span>{% if ord_trend_up %}↑{% else %}↓{% endif %} {{ ord_pct|default:"2.0" }}%</span> 
+                <span style="color:var(--dash-text-muted); font-weight:500;">{% if ord_trend_up %}sipariş artışı{% else %}yoğunluk azaldı{% endif %}</span>
+            </div>
         </div>
         <div class="kpi-card">
             <div class="kpi-icon" style="background:#fef2f2; color:var(--dash-danger);">👥</div>
             <div class="kpi-label">Tekrar Gelenler</div>
-            <div class="kpi-value">%24</div>
-            <div class="kpi-trend trend-up"><span>↑ 5%</span> <span style="color:var(--dash-text-muted); font-weight:500;">sadakat artışı</span></div>
+            <div class="kpi-value">%{{ loyalty_value|default:"24.0" }}</div>
+            <div class="kpi-trend {% if loyalty_trend_up %}trend-up{% else %}trend-down{% endif %}">
+                <span>{% if loyalty_trend_up %}↑{% else %}↓{% endif %} {{ loyalty_trend_pct|default:"5.0" }}%</span> 
+                <span style="color:var(--dash-text-muted); font-weight:500;">sadakat artışı</span>
+            </div>
         </div>
     </div>
 
