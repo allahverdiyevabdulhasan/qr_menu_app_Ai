@@ -17,6 +17,7 @@ class PublicMenuView(ListView):
         context = super().get_context_data(**kwargs)
         context['restaurant'] = self.restaurant
         context['featured_products'] = Product.objects.filter(restaurant=self.restaurant, is_active=True, is_featured=True)
+        context['table_token'] = self.request.session.get('table_token', '')
         return context
 
 class PublicCategoryProductsView(ListView):

@@ -47,7 +47,7 @@ class BudgetRecommendationService:
             Product.objects.filter(
                 restaurant=restaurant,
                 is_active=True,
-                stock_status='AVAILABLE',
+                stock_status__in=['in_stock', 'low_stock'],
             ).values("id", "name", "price", "calories", "is_vegetarian",
                      "is_vegan", "is_gluten_free", "spicy_level", "allergens")
         )
@@ -414,7 +414,7 @@ class FrequentlyBoughtTogetherService:
 
         # Get other active products in this restaurant
         other_products = list(
-            Product.objects.filter(restaurant=product.restaurant, is_active=True, stock_status='AVAILABLE')
+            Product.objects.filter(restaurant=product.restaurant, is_active=True, stock_status__in=['in_stock', 'low_stock'])
             .exclude(id=product.id)
             .values("id", "name", "price", "category__name")
         )
@@ -468,7 +468,7 @@ class FrequentlyBoughtTogetherService:
         fallback_product = Product.objects.filter(
             restaurant=product.restaurant,
             is_active=True,
-            stock_status='AVAILABLE'
+            stock_status__in=['in_stock', 'low_stock']
         ).exclude(id=product.id).first()
 
         if fallback_product:

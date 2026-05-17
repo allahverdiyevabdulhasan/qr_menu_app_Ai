@@ -628,11 +628,16 @@ function applyAllFilters() {
 
 function callWaiter() {
     const restaurantSlug = "{{ restaurant.slug }}";
-    const pathParts = window.location.pathname.split('/').filter(p => p !== "");
-    // Expecting: [m, slug, token] or [en, m, slug, token]
-    let tableToken = "";
-    if (pathParts[0] === 'm') tableToken = pathParts[2];
-    else if (pathParts[1] === 'm') tableToken = pathParts[3];
+    let tableToken = "{{ table_token|default:'' }}";
+    if (!tableToken) {
+        tableToken = "{{ request.session.table_token|default:'' }}";
+    }
+    if (!tableToken) {
+        const pathParts = window.location.pathname.split('/').filter(p => p !== "");
+        // Expecting: [m, slug, token] or [en, m, slug, token]
+        if (pathParts[0] === 'm') tableToken = pathParts[2];
+        else if (pathParts[1] === 'm') tableToken = pathParts[3];
+    }
 
     if (!tableToken || tableToken.length < 32) {
         alert("{% trans 'Please scan a table QR code to call a waiter.' %}");
@@ -656,10 +661,15 @@ function callWaiter() {
 
 function requestBill() {
     const restaurantSlug = "{{ restaurant.slug }}";
-    const pathParts = window.location.pathname.split('/').filter(p => p !== "");
-    let tableToken = "";
-    if (pathParts[0] === 'm') tableToken = pathParts[2];
-    else if (pathParts[1] === 'm') tableToken = pathParts[3];
+    let tableToken = "{{ table_token|default:'' }}";
+    if (!tableToken) {
+        tableToken = "{{ request.session.table_token|default:'' }}";
+    }
+    if (!tableToken) {
+        const pathParts = window.location.pathname.split('/').filter(p => p !== "");
+        if (pathParts[0] === 'm') tableToken = pathParts[2];
+        else if (pathParts[1] === 'm') tableToken = pathParts[3];
+    }
 
     if (!tableToken || tableToken.length < 32) {
         alert("{% trans 'Please scan a table QR code to request a bill.' %}");
