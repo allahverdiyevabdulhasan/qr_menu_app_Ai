@@ -41,12 +41,35 @@ class BaseAIProvider(ABC):
         Returns None when parsing fails.
         """
         raw = self.complete(system_prompt, user_message, **kwargs)
+        if not raw:
+            return None
+            
+        # Robust JSON extraction: find first '{' or '[' and last '}' or ']'
         try:
-            # Strip markdown code fences that some models add
+            start_idx = -1
+            end_idx = -1
+            
+            # Find first occurrence of '{' or '['
+            for i, char in enumerate(raw):
+                if char in ('{', '['):
+                    start_idx = i
+                    break
+            
+            # Find last occurrence of '}' or ']'
+            for i in range(len(raw) - 1, -1, -1):
+                if raw[i] in ('}', ']'):
+                    end_idx = i
+                    break
+            
+            if start_idx != -1 and end_idx != -1 and start_idx < end_idx:
+                clean = raw[start_idx:end_idx + 1]
+                return json.loads(clean)
+                
+            # Fallback to simple strip if indices not found
             clean = raw.strip().lstrip("```json").lstrip("```").rstrip("```").strip()
             return json.loads(clean)
-        except (json.JSONDecodeError, TypeError):
-            logger.warning("AI provider returned non-JSON: %s", raw[:200])
+        except (json.JSONDecodeError, TypeError) as e:
+            logger.warning("AI provider returned non-JSON or parsing failed: %s (Error: %s)", raw[:300], e)
             return None
 
 
@@ -179,8 +202,13 @@ class OpenAICompatibleProvider(BaseAIProvider):
                     {"role": "user", "content": user_message},
                 ],
                 "temperature": kwargs.get("temperature", 0.7),
-                "max_tokens": kwargs.get("max_tokens", 800),
             }
+            
+            # Google Gemini OpenAI-compatible API'sinde max_tokens parametresi hatalı çalışıp
+            # yanıtın yarıda kesilmesine (finish_reason: length) neden olduğu için Gemini'da eklemiyoruz
+            if not self.api_key.startswith("AIzaSy"):
+                payload["max_tokens"] = kwargs.get("max_tokens", 800)
+                
             resp = httpx.post(
                 f"{self.base_url}/chat/completions",
                 headers=headers,
