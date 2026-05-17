@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns, set_language
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
-from menu.views.public_views import PublicMenuView, PublicCategoryProductsView, PublicProductDetailView
+from menu.views.public_views import PublicMenuView, PublicCategoryProductsView, PublicProductDetailView, PublicProductAIDataView
 from ai_engine.views.public_views import PublicAIBudgetRecommendationView, PublicAIFoodAdvisorView
 from orders.views.customer_views import (
     CartView, CartAddView, CartAddComboView, CartUpdateView, CartClearView,
@@ -42,6 +42,7 @@ urlpatterns = [
         path('', PublicMenuView.as_view(), name='public_menu'),
         path('c/<int:category_id>/', PublicCategoryProductsView.as_view(), name='public_category'),
         path('p/<int:pk>/', PublicProductDetailView.as_view(), name='public_product'),
+        path('p/<int:pk>/ai-data/', PublicProductAIDataView.as_view(), name='public_product_ai_data'),
         path('ai/budget/', PublicAIBudgetRecommendationView.as_view(), name='ai_budget_recommendation'),
         path('ai/advisor/', PublicAIFoodAdvisorView.as_view(), name='ai_food_advisor'),
         path('cart/', CartView.as_view(), name='cart_view'),
