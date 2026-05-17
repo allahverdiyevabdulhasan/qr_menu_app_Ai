@@ -176,6 +176,53 @@ class OpenAICompatibleProvider(BaseAIProvider):
 
 
 # ---------------------------------------------------------------------------
+# Dify.ai Application Provider (real API — activated by Dify app- key)
+# ---------------------------------------------------------------------------
+
+class DifyProvider(BaseAIProvider):
+    """
+    Works with Dify.ai Applications (Chatflow or Chat apps).
+    Activated automatically when AI_API_KEY starts with 'app-'.
+    """
+
+    def __init__(self) -> None:
+        self.api_key = os.environ["AI_API_KEY"]
+        self.base_url = os.environ.get("AI_BASE_URL", "https://api.dify.ai/v1")
+
+    def complete(self, system_prompt: str, user_message: str, **kwargs) -> str:
+        try:
+            import httpx
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            }
+            combined_query = f"Sistem Talimatı:\n{system_prompt}\n\nKullanıcı Mesajı:\n{user_message}"
+            payload = {
+                "inputs": {},
+                "query": combined_query,
+                "user": "restaurant-owner",
+                "response_mode": "blocking"
+            }
+            resp = httpx.post(
+                f"{self.base_url}/chat-messages",
+                headers=headers,
+                json=payload,
+                timeout=45,
+            )
+            
+            # Eğer workflow yayınlanmadıysa dost canlısı bir hata mesajı dönelim
+            if resp.status_code == 400 and "Workflow not published" in resp.text:
+                logger.error("Dify error: Workflow not published in the Dify dashboard.")
+                return "Yapay Zeka Hatası: Dify panelinizde sağ üstteki 'Yayınla' (Publish) butonuna tıklamadığınız için bu özellik henüz kullanılamıyor. Lütfen Dify panelinizden uygulamanızı yayınlayın ve tekrar deneyin."
+            
+            resp.raise_for_status()
+            return resp.json().get("answer", "")
+        except Exception as exc:
+            logger.error("Dify provider error: %s", exc)
+            return ""
+
+
+# ---------------------------------------------------------------------------
 # Provider resolver
 # ---------------------------------------------------------------------------
 
@@ -187,11 +234,17 @@ def get_provider() -> BaseAIProvider:
     """
     if os.environ.get("AI_API_KEY"):
         try:
+            api_key = os.environ["AI_API_KEY"]
+            if api_key.startswith("app-"):
+                provider = DifyProvider()
+                logger.info("AI: using DifyProvider")
+                return provider
+            
             provider = OpenAICompatibleProvider()
             logger.info("AI: using OpenAICompatibleProvider (model=%s)", provider.model)
             return provider
         except Exception as exc:
-            logger.warning("Could not init OpenAICompatibleProvider (%s). Using Mock.", exc)
+            logger.warning("Could not init AI Provider (%s). Using Mock.", exc)
     logger.info("AI: using MockAIProvider (no AI_API_KEY set)")
     return MockAIProvider()
 
