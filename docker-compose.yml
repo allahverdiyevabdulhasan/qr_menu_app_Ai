@@ -29,7 +29,7 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - ALLOWED_HOSTS=localhost,127.0.0.1,173.212.232.21
       - CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1,http://173.212.232.21,http://localhost:8000,http://127.0.0.1:8000
-      - AI_API_KEY=AIzaSyD3oUGlPDQCbB9fAJx1Fizk4oObvHpFESw
+      - AI_API_KEY=AIzaSyCE-w7g3JSNc0X6uSGu7BVrWOSPoPiEKcw
       - SERPER_API_KEY=2d48e5dd562067bb1e5ea2fac0611f02dcf07906
     depends_on:
       - db
