@@ -20,8 +20,10 @@ class OwnerOnlyMixin(LoginRequiredMixin, UserPassesTestMixin):
     raise_exception = True
     def test_func(self):
         user = self.request.user
-        # Managers can view settings but only owners/admins can edit
-        return user.is_authenticated and (user.is_super_admin or user.is_owner or user.is_manager)
+        # Managers and users with explicit branch management permission can edit branches
+        return user.is_authenticated and (
+            user.is_super_admin or user.is_owner or user.is_manager or getattr(user, 'can_manage_branches', False)
+        )
 
 class PermissionRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     permission_name = None
@@ -145,7 +147,7 @@ class BranchListView(RestaurantAccessMixin, ListView):
         user = self.request.user
         if user.is_super_admin:
             return Branch.objects.all()
-        elif user.is_owner or user.is_manager:
+        elif user.is_owner or user.is_manager or getattr(user, 'can_manage_branches', False):
             return Branch.objects.filter(restaurant=user.restaurant)
         return Branch.objects.none()
 

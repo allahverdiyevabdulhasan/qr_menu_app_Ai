@@ -91,7 +91,8 @@ class RolePermissionUpdateView(ManagerRequiredMixin, UpdateView):
         'can_view_net_profit', 'can_view_expenses', 'can_view_payroll', 'can_view_analytics',
         'can_view_kitchen_screen', 'can_view_waiter_panel', 'can_view_cashier_panel',
         'can_manage_menu', 'can_manage_inventory', 'can_manage_customers',
-        'can_view_ai_reports', 'can_manage_campaigns', 'can_view_reviews', 'can_manage_settings'
+        'can_view_ai_reports', 'can_manage_campaigns', 'can_view_reviews', 'can_manage_settings',
+        'can_manage_branches'
     ]
 
     template_name = 'accounts/permission_form.html'

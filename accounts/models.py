@@ -39,6 +39,7 @@ class User(AbstractUser):
     can_manage_campaigns = models.BooleanField(_("Can Manage Campaigns"), default=False)
     can_view_reviews = models.BooleanField(_("Can View Reviews"), default=False)
     can_manage_settings = models.BooleanField(_("Can Manage Settings"), default=False)
+    can_manage_branches = models.BooleanField(_("Can Manage Branches"), default=False)
 
 
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)

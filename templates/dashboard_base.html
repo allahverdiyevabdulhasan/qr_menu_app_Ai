@@ -127,7 +127,7 @@
 
 
 
-      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_settings %}
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_settings or request.user.can_manage_branches %}
       <div class="sidebar-section">Şubeler</div>
       <a href="{% url 'branch_list' %}"
         class="sidebar-link {% if 'branch' in request.resolver_match.url_name|default:'' %}active{% endif %}">
@@ -146,7 +146,7 @@
       {% endif %}
 
       {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_menu or request.user.can_manage_inventory
-      or request.user.can_view_expenses or request.user.can_view_payroll or request.user.can_manage_customers or request.user.can_manage_settings %}
+      or request.user.can_view_expenses or request.user.can_view_payroll or request.user.can_manage_customers or request.user.can_manage_settings or request.user.can_manage_branches %}
       <div class="sidebar-section">{% trans "Management" %}</div>
 
 
