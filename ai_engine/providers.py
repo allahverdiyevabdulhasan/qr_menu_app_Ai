@@ -143,8 +143,17 @@ class OpenAICompatibleProvider(BaseAIProvider):
 
     def __init__(self) -> None:
         self.api_key = os.environ["AI_API_KEY"]
-        self.base_url = os.environ.get("AI_BASE_URL", "https://api.openai.com/v1")
-        self.model = os.environ.get("AI_MODEL", "gpt-4o-mini")
+        
+        # Google Gemini otomatik algılama ve yapılandırma
+        if self.api_key.startswith("AIzaSy"):
+            self.base_url = os.environ.get("AI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai")
+            self.model = os.environ.get("AI_MODEL", "gemini-2.5-flash")
+            logger.info("AI: Gemini API key detected! Auto-configuring Gemini model %s", self.model)
+        else:
+            self.base_url = os.environ.get("AI_BASE_URL", "https://api.openai.com/v1")
+            self.model = os.environ.get("AI_MODEL", "gpt-4o-mini")
+            
+        self.base_url = self.base_url.rstrip("/")
 
     def complete(self, system_prompt: str, user_message: str, **kwargs) -> str:
         try:
