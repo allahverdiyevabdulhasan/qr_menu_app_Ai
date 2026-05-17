@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Stok Hareketleri — Kanatçı Mustafa{% endblock %}
+{% block title %}Stok Hareketleri — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Stok Hareketleri{% endblock %}
 
 {% block content %}

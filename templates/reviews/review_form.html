@@ -1,7 +1,7 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}Değerlendirme Yap — Kanatçı Mustafa{% endblock %}
+{% block title %}Değerlendirme Yap — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 
 {% block content %}
 <div style="background: var(--bg); padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 15px;">

@@ -1,6 +1,6 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Track Order" %} #{{ order.order_number|slice:"-6:" }}{% endblock %}
+{% block title %}{% trans "Order Tracking" %} #{{ order.order_number|slice:"-6:" }}{% endblock %}
 {% block extra_css %}
 <style>
   :root {
@@ -64,7 +64,7 @@
 {% block content %}
 <div class="tracking-container fade-in">
     <div class="tracking-header">
-        <div class="tracking-subtitle">{% trans "Track Order" %}</div>
+        <div class="tracking-subtitle">{% trans "Order Tracking" %}</div>
         <h1 class="tracking-title">{{ order.tracking_code }}</h1>
     </div>
 
@@ -74,7 +74,7 @@
             <div class="v-step-icon">📝</div>
             <div class="v-step-content">
                 <div class="v-step-label">{% trans "Received" %}</div>
-                <div class="v-step-desc">{% trans "Your order is in the system." %}</div>
+                <div class="v-step-desc">{% trans "Your order has been received." %}</div>
             </div>
         </div>
 
@@ -84,7 +84,7 @@
                 <div class="v-step-label">{% trans "Preparing" %}</div>
                 <div class="v-step-desc" id="prep-desc">
                     {% if order.estimated_prep_time %}
-                        ⏱ {% trans "Estimated" %}: {{ order.estimated_prep_time }} {% trans "mins" %}
+                        ⏱ {% trans "Estimated" %}: {{ order.estimated_prep_time }} {% trans "minutes" %}
                     {% else %}
                         {% trans "Chef is preparing your meal." %}
                     {% endif %}
@@ -96,7 +96,7 @@
             <div class="v-step-icon">🛎️</div>
             <div class="v-step-content">
                 <div class="v-step-label">{% trans "Ready" %}</div>
-                <div class="v-step-desc">{% trans "Your order is ready to serve!" %}</div>
+                <div class="v-step-desc">{% trans "Your order is ready!" %}</div>
             </div>
         </div>
 
@@ -104,7 +104,7 @@
             <div class="v-step-icon">🍽️</div>
             <div class="v-step-content">
                 <div class="v-step-label">{% trans "Served" %}</div>
-                <div class="v-step-desc">{% trans "Enjoy your delicious meal!" %}</div>
+                <div class="v-step-desc">{% trans "Enjoy your meal!" %}</div>
             </div>
         </div>
     </div>
@@ -134,7 +134,7 @@
             ➕ {% trans "Order More" %}
         </a>
         <a href="{% url 'review_add' order_number=order.order_number %}" style="display:block; text-align:center; background:var(--primary); color:#fff; padding:18px; border-radius:20px; font-weight:900; text-decoration:none; box-shadow:0 10px 20px rgba(99,102,241,0.2);">
-            ⭐ {% trans "Rate our service" %}
+            ⭐ {% trans "Rate Our Service" %}
         </a>
     </div>
 </div>
@@ -165,7 +165,7 @@ function updateUI(status, prepTime) {
     if (status === 'PREPARING') {
         steps[1].classList.add('active');
         if (prepTime) {
-            document.getElementById('prep-desc').innerText = `⏱ {% trans "Estimated" %}: ${prepTime} {% trans "mins" %}`;
+            document.getElementById('prep-desc').innerText = `⏱ {% trans "Estimated" %}: ${prepTime} {% trans "minutes" %}`;
         }
     } else if (['READY', 'SERVED', 'COMPLETED'].includes(status)) {
         steps[1].classList.add('done');

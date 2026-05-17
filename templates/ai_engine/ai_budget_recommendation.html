@@ -1,7 +1,7 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "AI Budget Helper" %} — {{ restaurant.name }}{% endblock %}
+{% block title %}{% trans "Yapay Zeka Bütçe Yardımcısı" %} — {{ restaurant.name }}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -145,32 +145,32 @@
 <div class="budget-layout">
 
     <div class="ai-hero">
-        <h1>🤖 {% trans "AI Budget Advisor" %}</h1>
-        <p>{% trans "Tell us your budget — we'll design the perfect meal." %}</p>
+        <h1>🤖 {% trans "Yapay Zeka Bütçe Danışmanı" %}</h1>
+        <p>{% trans "Bütçenizi söyleyin — sizin için en iyi menüyü tasarlayalım." %}</p>
     </div>
 
     <div class="floating-card">
         <form method="post" id="budgetForm">
             {% csrf_token %}
 
-            <label class="input-label">💰 {% trans "Your budget" %}</label>
+            <label class="input-label">💰 {% trans "Bütçeniz" %}</label>
             <input type="number" name="budget" step="0.5" class="premium-input"
-                   placeholder="{% trans 'e.g. 50' %}" required
+                   placeholder="{% trans 'örn. 50' %}" required
                    value="{% if request.POST.budget %}{{ request.POST.budget }}{% endif %}">
 
-            <label class="input-label">👥 {% trans "Number of people" %}</label>
+            <label class="input-label">👥 {% trans "Kişi sayısı" %}</label>
             <input type="number" name="people_count" value="{{ request.POST.people_count|default:'1' }}"
                    min="1" class="premium-input" required>
 
-            <label class="input-label">🍽️ {% trans "Dietary preferences" %}</label>
+            <label class="input-label">🍽️ {% trans "Beslenme tercihleri" %}</label>
             <textarea name="preferences" class="premium-input" rows="2"
-                      placeholder="{% trans 'e.g. High protein, no gluten, vegetarian…' %}">{{ request.POST.preferences }}</textarea>
+                       placeholder="{% trans 'örn. Yüksek protein, glutensiz, vejetaryen…' %}">{{ request.POST.preferences }}</textarea>
 
             {# Sporcu Modu #}
             <div class="sport-option-row">
               <label for="sportMode">
-                💪 {% trans "Athlete mode" %}
-                <span style="font-weight:400; font-size:0.78rem; color:#047857;">— {% trans "prioritize high-protein options" %}</span>
+                💪 {% trans "Sporcu modu" %}
+                <span style="font-weight:400; font-size:0.78rem; color:#047857;">— {% trans "yüksek proteinli seçeneklere öncelik ver" %}</span>
               </label>
               <label class="toggle">
                 <input type="checkbox" name="athlete_mode" id="sportMode"
@@ -180,19 +180,19 @@
             </div>
 
             <button type="submit" class="gen-btn">
-                <span>✨</span> <span>{% trans "Generate Perfect Menu" %}</span>
+                <span>✨</span> <span>{% trans "Mükemmel Menüyü Oluştur" %}</span>
             </button>
         </form>
     </div>
 
     {% if result.combinations %}
     <div class="results-section">
-        <h2 class="results-title">🎯 {% trans "AI Recommended Meals" %}</h2>
+        <h2 class="results-title">🎯 {% trans "AI Önerilen Menüler" %}</h2>
 
         {% for combo in result.combinations %}
         <div class="combo-card" style="animation-delay:{{ forloop.counter0 }}00ms;">
             <div class="combo-top">
-                <span class="ai-badge">✨ {% trans "AI Pick" %} #{{ forloop.counter }}</span>
+                <span class="ai-badge">✨ {% trans "AI Seçimi" %} #{{ forloop.counter }}</span>
                 <span class="price-pill">{{ combo.total_price }} ₺</span>
             </div>
 
@@ -213,7 +213,7 @@
                 <input type="hidden" name="product_ids" value="{{ p.id }}">
                 {% endfor %}
                 <button type="submit" class="btn btn-primary btn-block" style="border-radius:14px; height:52px; font-size:0.95rem; font-weight:800;">
-                    🛒 {% trans "Add all to Cart" %}
+                    🛒 {% trans "Hepsini Sepete Ekle" %}
                 </button>
             </form>
         </div>
@@ -226,8 +226,8 @@
 {# Loading overlay #}
 <div id="loadingScreen">
     <div class="ai-loader"></div>
-    <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:8px;">{% trans "AI is thinking..." %}</h3>
-    <p style="color:var(--text-muted); font-size:0.88rem;">{% trans "Crafting your perfect meal combination." %}</p>
+    <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:8px;">{% trans "Yapay Zeka düşünüyor..." %}</h3>
+    <p style="color:var(--text-muted); font-size:0.88rem;">{% trans "Sizin için en iyi yemek kombinasyonunu hazırlıyor." %}</p>
 </div>
 
 <script>

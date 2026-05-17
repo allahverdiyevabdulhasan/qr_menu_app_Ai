@@ -307,7 +307,7 @@
                 </div>
 
                 <p style="font-size:0.95rem; color:#475569; line-height:1.7; margin-bottom:28px;">
-                    {{ product.description|default:_("Freshly prepared with high-quality ingredients, a signature favorite.") }}
+                    {{ product.description|default:_("Freshly prepared with high-quality ingredients, our signature flavor.") }}
                 </p>
 
                 {# ── AI Insight ── #}
@@ -317,12 +317,12 @@
                         <span style="font-weight:800; color:#4c1d95; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px;">{% trans "AI Insight" %}</span>
                     </div>
                     <p style="font-size:0.9rem; color:#334155; font-weight:600; line-height:1.5; margin:0;">
-                        {{ ai_advice|default:_("Our AI recommends pairing this with a fresh seasonal salad for a balanced meal.") }}
+                        {{ ai_advice|default:_("Our AI suggests pairing this with a fresh seasonal salad for a balanced meal.") }}
                     </p>
                 </div>
 
                 {# ── Nutritional Values ── #}
-                <div class="section-title">{% trans "Nutritional Info" %}</div>
+                <div class="section-title">{% trans "Nutritional Values" %}</div>
                 <div class="nutri-grid">
                     <div class="nutri-item">
                         <div style="font-size:1.4rem;">🔥</div>
@@ -337,7 +337,7 @@
                     <div class="nutri-item">
                         <div style="font-size:1.4rem;">🍞</div>
                         <div class="nutri-val">{{ product.carbs|default:"—" }}{% if product.carbs %}g{% endif %}</div>
-                        <div class="nutri-lbl">{% trans "Carbs" %}</div>
+                        <div class="nutri-lbl">{% trans "Carbohydrates" %}</div>
                     </div>
                     <div class="nutri-item">
                         <div style="font-size:1.4rem;">🧈</div>

@@ -21,7 +21,7 @@
     </div>
 
     <div style="display:flex; align-items:center; gap:10px;">
-      {# Language switcher #}
+      {% comment %} Language switcher - Hidden as per user request
       <form method="post" action="{% url 'set_language' %}" style="display:flex; gap:4px;">
         {% csrf_token %}
         <input name="next" type="hidden" value="{{ request.path }}">
@@ -35,13 +35,14 @@
           <option value="ar" {% if LANGUAGE_CODE == 'ar' %}selected{% endif %}>🇸🇦 AR</option>
         </select>
       </form>
+      {% endcomment %}
 
       {# Track Order Button #}
       {% if restaurant.slug %}
       <button onclick="openTrackingModal()"
               style="display:flex; align-items:center; gap:6px; background:rgba(99, 102, 241, 0.1); color:var(--primary); border:1.5px solid rgba(99, 102, 241, 0.2);
                      padding:8px 14px; border-radius:20px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.3s; font-family:'Poppins', sans-serif;">
-        📋 <span class="hide-mobile">Sipariş Takip</span>
+        📋 <span class="hide-mobile">{% trans "Order Tracking" %}</span>
       </button>
       {% endif %}
 
@@ -61,7 +62,7 @@
 
   <!-- Neyman Footer -->
   <footer style="text-align: center; padding: 40px 20px 100px; font-size: 0.8rem; color: #94a3b8; width: 100%;">
-      Powered by <a href="https://neymantech.com" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none;">Neyman Enterprise Technologies</a>
+      {% trans "Powered by" %} <a href="https://neymantech.com" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none;">Neyman Enterprise Technologies</a>
   </footer>
 
   {# ── Sticky Cart (floating bottom) only show if items in cart and not on cart/checkout pages ── #}
@@ -91,16 +92,16 @@
       
       <div style="text-align: center; margin-bottom: 24px;">
         <span style="font-size: 3rem; display: block; margin-bottom: 12px;">🔍</span>
-        <h3 style="font-size: 1.35rem; font-weight: 900; color: var(--dark); font-family: 'Outfit', sans-serif; margin-bottom: 8px;">Sipariş Takibi</h3>
-        <p style="font-size: 0.88rem; color: var(--text-muted); font-weight: 600; line-height: 1.45;">Siparişinizin anlık hazırlık durumunu öğrenmek için sipariş numaranızı veya takip kodunuzu girin.</p>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: var(--dark); font-family: 'Outfit', sans-serif; margin-bottom: 8px;">{% trans "Order Tracking" %}</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); font-weight: 600; line-height: 1.45;">{% trans "Enter your order number or tracking code to learn the real-time status of your order." %}</p>
       </div>
       
       <div style="margin-bottom: 24px;">
-        <label style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">Sipariş No / Takip Kodu</label>
-        <input type="text" id="modal-order-number" style="width: 100%; padding: 14px 18px; border-radius: 16px; border: 1.5px solid var(--border); font-size: 1.05rem; font-weight: 800; outline: none; transition: all 0.3s; margin-top: 6px; text-align: center; color: var(--dark); text-transform: uppercase;" placeholder="Örn: 1024 veya TRK-XYZ" onkeypress="if(event.key === 'Enter') submitTracking()">
+        <label style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">{% trans "Order No / Tracking Code" %}</label>
+        <input type="text" id="modal-order-number" style="width: 100%; padding: 14px 18px; border-radius: 16px; border: 1.5px solid var(--border); font-size: 1.05rem; font-weight: 800; outline: none; transition: all 0.3s; margin-top: 6px; text-align: center; color: var(--dark); text-transform: uppercase;" placeholder="{% trans 'e.g. 1024 or TRK-XYZ' %}" onkeypress="if(event.key === 'Enter') submitTracking()">
       </div>
       
-      <button onclick="submitTracking()" style="width: 100%; padding: 16px; border-radius: 16px; background: var(--primary-gradient); color: #fff; font-size: 1rem; font-weight: 800; border: none; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px rgba(99,102,241,0.25);">Takip Et</button>
+      <button onclick="submitTracking()" style="width: 100%; padding: 16px; border-radius: 16px; background: var(--primary-gradient); color: #fff; font-size: 1rem; font-weight: 800; border: none; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px rgba(99,102,241,0.25);">{% trans "Track" %}</button>
     </div>
   </div>
 
@@ -127,7 +128,7 @@
     function submitTracking() {
         const orderNum = document.getElementById('modal-order-number').value.trim();
         if (!orderNum) {
-            alert('Lütfen geçerli bir sipariş numarası veya takip kodu girin.');
+            alert('{% trans "Please enter a valid order number or tracking code." %}');
             return;
         }
         const restaurantSlug = "{{ restaurant.slug }}";

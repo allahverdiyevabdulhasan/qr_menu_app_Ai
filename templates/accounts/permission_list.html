@@ -19,6 +19,7 @@
                             <th>{% trans "User" %}</th>
                             <th>{% trans "Role" %}</th>
                             <th>{% trans "Financial Access" %}</th>
+                            <th>{% trans "Module Access" %}</th>
                             <th class="text-right">{% trans "Actions" %}</th>
                         </tr>
                     </thead>
@@ -40,6 +41,16 @@
                                     {% if not u.can_view_daily_revenue and not u.can_view_net_profit %}<span class="text-muted text-xs">{% trans "No financial access" %}</span>{% endif %}
                                 </div>
                             </td>
+                            <td>
+                                <div class="flex flex-wrap gap-1">
+                                    {% if u.can_view_kitchen_screen %}<span class="badge badge-info text-xs">{% trans "Kitchen" %}</span>{% endif %}
+                                    {% if u.can_view_waiter_panel %}<span class="badge badge-info text-xs">{% trans "Waiter" %}</span>{% endif %}
+                                    {% if u.can_view_cashier_panel %}<span class="badge badge-info text-xs">{% trans "Cashier" %}</span>{% endif %}
+                                    {% if u.can_manage_menu %}<span class="badge badge-info text-xs">{% trans "Menu" %}</span>{% endif %}
+                                    {% if u.can_manage_settings %}<span class="badge badge-info text-xs">{% trans "Settings" %}</span>{% endif %}
+                                </div>
+                            </td>
+
                             <td class="text-right">
                                 <a href="{% url 'role_permission_edit' u.pk %}" class="btn btn-sm btn-secondary">
                                     🔐 {% trans "Manage Permissions" %}

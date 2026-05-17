@@ -15,7 +15,10 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         user = self.request.user
         if user.is_super_admin:
-            return reverse_lazy('admin:index') # or a custom super admin dashboard
+            # If super admin is linked to a restaurant, show restaurant dashboard
+            if user.restaurant:
+                return reverse_lazy('restaurant_dashboard')
+            return reverse_lazy('super_admin_dashboard')
         elif user.is_owner or user.is_manager:
             return reverse_lazy('restaurant_dashboard')
         elif user.is_customer:
@@ -85,8 +88,12 @@ class RolePermissionUpdateView(ManagerRequiredMixin, UpdateView):
     model = User
     fields = [
         'can_view_daily_revenue', 'can_view_monthly_revenue', 'can_view_yearly_revenue',
-        'can_view_net_profit', 'can_view_expenses', 'can_view_payroll', 'can_view_analytics'
+        'can_view_net_profit', 'can_view_expenses', 'can_view_payroll', 'can_view_analytics',
+        'can_view_kitchen_screen', 'can_view_waiter_panel', 'can_view_cashier_panel',
+        'can_manage_menu', 'can_manage_inventory', 'can_manage_customers',
+        'can_view_ai_reports', 'can_manage_campaigns', 'can_view_reviews', 'can_manage_settings'
     ]
+
     template_name = 'accounts/permission_form.html'
     success_url = reverse_lazy('role_permission_list')
 

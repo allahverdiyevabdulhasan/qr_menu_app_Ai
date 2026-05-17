@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Ödeme Geçmişi — Kanatçı Mustafa{% endblock %}
+{% block title %}Ödeme Geçmişi — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Ödeme İşlemleri{% endblock %}
 
 {% block content %}

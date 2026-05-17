@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NeyMenu AI\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 00:00+0300\n"
+"POT-Creation-Date: 2026-05-15 18:02+0300\n"
 "PO-Revision-Date: 2026-05-03 00:00+0300\n"
 "Last-Translator: NeyMenu AI Team\n"
 "Language-Team: Turkish\n"
@@ -17,209 +17,1982 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Overview"
-msgstr "Genel Bakış"
-
-msgid "Analytics"
-msgstr "Analitik"
-
-msgid "Operations"
-msgstr "Operasyonlar"
-
-msgid "Orders"
-msgstr "Siparişler"
-
-msgid "Kitchen"
-msgstr "Mutfak"
-
-msgid "Waiter"
-msgstr "Garson"
-
-msgid "Cashier"
-msgstr "Kasiyer"
-
-msgid "Management"
-msgstr "Yönetim"
-
-msgid "Menu Items"
-msgstr "Menü Öğeleri"
-
-msgid "Inventory"
-msgstr "Envanter"
-
-msgid "Expenses"
-msgstr "Giderler"
-
-msgid "CRM"
-msgstr "Müşteri Yönetimi"
-
-msgid "Growth & AI"
-msgstr "Büyüme ve Yapay Zeka"
-
-msgid "AI Insights"
-msgstr "Yapay Zeka Öngörüleri"
-
-msgid "AI Assistant"
-msgstr "Yapay Zeka Asistanı"
-
-msgid "Campaigns"
-msgstr "Kampanyalar"
-
-msgid "Reviews"
-msgstr "Değerlendirmeler"
-
-msgid "System"
-msgstr "Sistem"
-
-msgid "Settings"
-msgstr "Ayarlar"
-
-msgid "Logout"
-msgstr "Çıkış Yap"
-
-msgid "Dashboard"
-msgstr "Pano"
-
-msgid "Live Menu"
-msgstr "Canlı Menü"
-
-msgid "View Cart"
-msgstr "Sepeti Görüntüle"
-
-msgid "Login"
-msgstr "Giriş Yap"
-
 msgid "Username"
 msgstr "Kullanıcı Adı"
 
 msgid "Password"
 msgstr "Şifre"
 
+#, fuzzy
+#| msgid "Super Admin Dashboard"
+msgid "Super Admin"
+msgstr "Süper Yönetici Panosu"
+
+#, fuzzy
+#| msgid "Restaurant Name"
+msgid "Restaurant Owner"
+msgstr "Restoran Adı"
+
+#, fuzzy
+#| msgid "Management"
+msgid "Manager"
+msgstr "Yönetim"
+
+msgid "Waiter"
+msgstr "Garson"
+
+#, fuzzy
+#| msgid "Kitchen"
+msgid "Kitchen Staff"
+msgstr "Mutfak"
+
+msgid "Cashier"
+msgstr "Kasiyer"
+
+msgid "Customer"
+msgstr "Müşteri"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Restaurant"
+msgstr "Restoran"
+
+msgid "Branch"
+msgstr "Şube"
+
+msgid "Avatar"
+msgstr "Profil Resmi"
+
+msgid "Is Verified"
+msgstr "Doğrulandı"
+
+msgid "Can View Daily Revenue"
+msgstr ""
+
+msgid "Can View Monthly Revenue"
+msgstr ""
+
+msgid "Can View Yearly Revenue"
+msgstr ""
+
+msgid "Can View Net Profit"
+msgstr "Net Karı Görebilir"
+
+#, fuzzy
+#| msgid "Save Expense"
+msgid "Can View Expenses"
+msgstr "Gideri Kaydet"
+
+#, fuzzy
+#| msgid "Staff & Payroll"
+msgid "Can View Payroll"
+msgstr "Personel & Maaş"
+
+#, fuzzy
+#| msgid "Sales Analytics"
+msgid "Can View Analytics"
+msgstr "Satış Analitiği"
+
+msgid "Created At"
+msgstr ""
+
+#, fuzzy
+#| msgid "Update Status"
+msgid "Updated At"
+msgstr "Durumu Güncelle"
+
+#, fuzzy
+#| msgid "Username"
+msgid "User"
+msgstr "Kullanıcı Adı"
+
+#, fuzzy
+#| msgid "Username"
+msgid "Users"
+msgstr "Kullanıcı Adı"
+
+#, fuzzy
+#| msgid "Sales Today"
+msgid "Sales"
+msgstr "Bugünkü Satışlar"
+
+msgid "Stock"
+msgstr "Stok"
+
+#, fuzzy
+#| msgid "Campaigns"
+msgid "Campaign"
+msgstr "Kampanyalar"
+
+#, fuzzy
+#| msgid "General Settings"
+msgid "General"
+msgstr "Genel Ayarlar"
+
+msgid "New"
+msgstr "Yeni"
+
+#, fuzzy
+#| msgid "Ready"
+msgid "Read"
+msgstr "Hazır"
+
+msgid "Dismissed"
+msgstr "Kapatıldı"
+
+msgid "High"
+msgstr "Yüksek"
+
+msgid "Medium"
+msgstr "Orta"
+
+msgid "Low"
+msgstr ""
+
+#, fuzzy
+#| msgid "AI Assistant"
+msgid "Assistant"
+msgstr "Yapay Zeka Asistanı"
+
+#, fuzzy
+#| msgid "Total Discount"
+msgid "Percent Discount"
+msgstr "Toplam İndirim"
+
+#, fuzzy
+#| msgid "Discount"
+msgid "Fixed Discount"
+msgstr "İndirim"
+
+msgid "Combo Offer"
+msgstr "Kombo Teklifi"
+
+msgid "Time Based"
+msgstr "Zaman Bazlı"
+
+#, fuzzy
+#| msgid "Sort Order"
+msgid "First Order"
+msgstr "Sıralama"
+
+msgid "Student"
+msgstr "Öğrenci"
+
+#, fuzzy
+msgid "Takeaway"
+msgstr ""
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Paket\n"
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Paket Servis"
+
+msgid "Birthday"
+msgstr "Doğum Günü"
+
+#, fuzzy
+#| msgid "Suggested"
+msgid "AI Suggested"
+msgstr "Önerilen"
+
+msgid "Percent"
+msgstr "Yüzde"
+
+#, fuzzy
+#| msgid "Amount"
+msgid "Fixed Amount"
+msgstr "Tutar"
+
+msgid "Name"
+msgstr "Ad"
+
+msgid "Email"
+msgstr "E-posta"
+
+msgid "Birth Date"
+msgstr "Doğum Tarihi"
+
+msgid "Preferred Language"
+msgstr "Tercih Edilen Dil"
+
+#, fuzzy
+#| msgid "Loyalty Program"
+msgid "Loyalty Points"
+msgstr "Sadakat Programı"
+
+msgid "Total Spent"
+msgstr "Toplam Harcama"
+
+#, fuzzy
+#| msgid "Order List"
+msgid "Order Count"
+msgstr "Sipariş Listesi"
+
+#, fuzzy
+#| msgid "Order Items"
+msgid "Last Order Date"
+msgstr "Sipariş Kalemleri"
+
+msgid "Notes"
+msgstr "Notlar"
+
+msgid "Ingredient & Raw Material"
+msgstr "Malzeme ve Hammadde"
+
+msgid "Salary & Payroll"
+msgstr "Maaş ve Bordro"
+
+msgid "Rent & Lease"
+msgstr "Kira ve Kiralama"
+
+msgid "Utility (Water, Gas, Electricity)"
+msgstr "Faturalar (Su, Gaz, Elektrik)"
+
+msgid "Packaging Materials"
+msgstr "Paketleme Malzemeleri"
+
+msgid "Taxes & Fees"
+msgstr "Vergiler ve Harçlar"
+
+msgid "Marketing & Ads"
+msgstr "Pazarlama ve Reklam"
+
+msgid "Maintenance & Repairs"
+msgstr "Bakım ve Onarım"
+
+msgid "Other"
+msgstr "Diğer"
+
+msgid "Rent"
+msgstr "Kira"
+
+#, fuzzy
+#| msgid "Rating"
+msgid "Marketing"
+msgstr "Puan"
+
+msgid "Utility"
+msgstr "Altyapı/Fatura"
+
+msgid "Ingredients"
+msgstr "İçerikler"
+
+#, fuzzy
+#| msgid "Customer"
+msgid "Customer Order"
+msgstr "Müşteri"
+
+#, fuzzy
+#| msgid "Salary & Payroll"
+msgid "Salary Payment"
+msgstr "Maaş ve Bordro"
+
+msgid "Kilogram"
+msgstr "Kilogram"
+
+msgid "Gram"
+msgstr "Gram"
+
+#, fuzzy
+#| msgid "Waiter"
+msgid "Liter"
+msgstr "Garson"
+
+msgid "Milliliter"
+msgstr "Mililitre"
+
+msgid "Piece"
+msgstr "Adet"
+
+msgid "Package"
+msgstr "Paket"
+
+#, fuzzy
+#| msgid "Stock"
+msgid "In Stock"
+msgstr "Stok"
+
+#, fuzzy
+#| msgid "Stock"
+msgid "Low Stock"
+msgstr "Stok"
+
+msgid "Out of Stock"
+msgstr "Stokta Yok"
+
+#, fuzzy
+#| msgid "Stock"
+msgid "Stock In"
+msgstr "Stok"
+
+#, fuzzy
+#| msgid "Stock"
+msgid "Stock Out"
+msgstr "Stok"
+
+msgid "Adjustment"
+msgstr "Ayarlama"
+
+#, fuzzy
+#| msgid "Orders"
+msgid "Order Usage"
+msgstr "Siparişler"
+
+#, fuzzy
+#| msgid "Invoices"
+msgid "Sales Invoice"
+msgstr "Faturalar"
+
+#, fuzzy
+#| msgid "Purchase Records"
+msgid "Payroll Record"
+msgstr "Satın Alma Kayıtları"
+
+#, fuzzy
+#| msgid "Invoices"
+msgid "Invoice Type"
+msgstr "Faturalar"
+
+#, fuzzy
+#| msgid "Phone Number"
+msgid "Invoice Number"
+msgstr "Telefon Numarası"
+
+msgid "Amount"
+msgstr "Tutar"
+
+#, fuzzy
+#| msgid "Total Amount"
+msgid "Tax Amount"
+msgstr "Toplam Tutar"
+
+#, fuzzy
+#| msgid "Discount"
+msgid "Discount Amount"
+msgstr "İndirim"
+
+msgid "Total Amount"
+msgstr "Toplam Tutar"
+
+#, fuzzy
+#| msgid "Mark Paid"
+msgid "Is Paid"
+msgstr "Ödendi Olarak İşaretle"
+
+msgid "PDF File"
+msgstr "PDF Dosyası"
+
+#, fuzzy
+#| msgid "Invoices"
+msgid "Invoice"
+msgstr "Faturalar"
+
+msgid "Invoices"
+msgstr "Faturalar"
+
+#, fuzzy
+#| msgid "Points Required"
+msgid "Points Earned"
+msgstr "Gereken Puan"
+
+msgid "Per Amount Spent"
+msgstr "Harcanan Tutar Başına"
+
+msgid "Earn"
+msgstr "Kazan"
+
+msgid "Redeem"
+msgstr "Kullan"
+
+msgid "Bonus"
+msgstr "Bonus"
+
+msgid "Expire"
+msgstr "Süresi Dolmak"
+
+#, fuzzy
+#| msgid "Delete Product"
+msgid "Free Product"
+msgstr "Ürünü Sil"
+
+msgid "Regular"
+msgstr "Normal"
+
+msgid "Silver"
+msgstr "Gümüş"
+
+msgid "Gold"
+msgstr "Altın"
+
+msgid "VIP"
+msgstr "VIP"
+
+#, fuzzy
+#| msgid "Categories"
+msgid "All Categories"
+msgstr "Kategoriler"
+
+msgid "Vegetarian"
+msgstr "Vejeteryan"
+
+msgid "Vegan"
+msgstr "Vegan"
+
+#, fuzzy
+#| msgid "Gluten-Free"
+msgid "Gluten Free"
+msgstr "Glutensiz"
+
+msgid "Diet"
+msgstr "Diyet"
+
+msgid "Min Spicy Level (0-5)"
+msgstr "Min Acı Seviyesi (0-5)"
+
+#, fuzzy
+#| msgid "Price"
+msgid "Min Price"
+msgstr "Fiyat"
+
+#, fuzzy
+#| msgid "Price"
+msgid "Max Price"
+msgstr "Fiyat"
+
+msgid "In Stock Only"
+msgstr "Sadece Stokta Olanlar"
+
+msgid "Description"
+msgstr "Açıklama"
+
+msgid "Sort Order"
+msgstr "Sıralama"
+
+#, fuzzy
+#| msgid "Tables Active"
+msgid "Is Active"
+msgstr "Aktif Masalar"
+
+msgid "Category"
+msgstr "Kategori"
+
+msgid "Categories"
+msgstr "Kategoriler"
+
+msgid "Price"
+msgstr "Fiyat"
+
+#, fuzzy
+#| msgid "Total Price"
+msgid "Cost Price"
+msgstr "Toplam Fiyat"
+
+msgid "Image"
+msgstr "Görsel"
+
+msgid "Calories"
+msgstr "Kalori"
+
+#, fuzzy
+#| msgid "Protein"
+msgid "Protein (g)"
+msgstr "Protein"
+
+#, fuzzy
+#| msgid "Carbs"
+msgid "Carbs (g)"
+msgstr "Karbonhidrat"
+
+msgid "Fat (g)"
+msgstr "Yağ (g)"
+
+msgid "Allergens"
+msgstr "Alerjenler"
+
+msgid "Preparation Time (mins)"
+msgstr "Hazırlama Süresi (dk)"
+
+#, fuzzy
+#| msgid "Popular"
+msgid "Is Popular"
+msgstr "Popüler"
+
+msgid "Is Featured"
+msgstr "Öne Çıkan"
+
+#, fuzzy
+#| msgid "Discount"
+msgid "Is Discounted"
+msgstr "İndirim"
+
+msgid "Stock Status"
+msgstr "Stok Durumu"
+
+msgid "Spicy Level (0-5)"
+msgstr "Acı Seviyesi (0-5)"
+
+#, fuzzy
+#| msgid "Vegetarian"
+msgid "Is Vegetarian"
+msgstr "Vejeteryan"
+
+#, fuzzy
+#| msgid "Vegan"
+msgid "Is Vegan"
+msgstr "Vegan"
+
+#, fuzzy
+#| msgid "Gluten-Free"
+msgid "Is Gluten Free"
+msgstr "Glutensiz"
+
+msgid "Is Diet"
+msgstr "Diyet Ürünü"
+
+msgid "Product"
+msgstr "Ürün"
+
+#, fuzzy
+#| msgid "Product"
+msgid "Products"
+msgstr "Ürün"
+
+#, fuzzy
+#| msgid "Product Name"
+msgid "Group Name"
+msgstr "Ürün Adı"
+
+#, fuzzy
+#| msgid "Required"
+msgid "Is Required"
+msgstr "Zorunlu"
+
+msgid "Minimum Choices"
+msgstr "Minimum Seçim Sayısı"
+
+msgid "Maximum Choices"
+msgstr "Maximum Seçim Sayısı"
+
+msgid "Modifier Group"
+msgstr "Seçenek Grubu"
+
+msgid "Modifier Groups"
+msgstr "Seçenek Grupları"
+
+msgid "Modifier Name"
+msgstr "Seçenek Adı"
+
+#, fuzzy
+#| msgid "Total Price"
+msgid "Additional Price"
+msgstr "Toplam Fiyat"
+
+#, fuzzy
+#| msgid "Product Reports"
+msgid "Product Modifier"
+msgstr "Ürün Raporları"
+
+#, fuzzy
+#| msgid "Product Reports"
+msgid "Product Modifiers"
+msgstr "Ürün Raporları"
+
+msgid "Single Choice"
+msgstr "Tekli Seçim"
+
+msgid "Multiple Choice"
+msgstr "Çoklu Seçim"
+
+#, fuzzy
+#| msgid "Optional"
+msgid "Option Type"
+msgstr "İsteğe Bağlı"
+
+#, fuzzy
+#| msgid "Product Options"
+msgid "Product Option"
+msgstr "Ürün Seçenekleri"
+
+msgid "Product Options"
+msgstr "Ürün Seçenekleri"
+
+msgid "Ingredient Name"
+msgstr "İçerik Adı"
+
+#, fuzzy
+#| msgid "Remove"
+msgid "Is Removable"
+msgstr "Olmasın"
+
+msgid "Turkish"
+msgstr "Türkçe"
+
+#, fuzzy
+msgid "Dine In"
+msgstr ""
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Restoranda\n"
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Masa Servisi"
+
+#, fuzzy
+#| msgid "Pre-Order"
+msgid "Pre Order"
+msgstr "Ön Sipariş"
+
+msgid "Accepted"
+msgstr "Kabul Edildi"
+
+msgid "Preparing"
+msgstr "Hazırlanıyor"
+
+msgid "Ready"
+msgstr "Hazır"
+
+msgid "Served"
+msgstr "Servis Edildi"
+
+#, fuzzy
+#| msgid "Complete Order"
+msgid "Completed"
+msgstr "Siparişi Tamamla"
+
+msgid "Cancelled"
+msgstr "İptal Edildi"
+
+msgid "Refunded"
+msgstr "İade Edildi"
+
+#, fuzzy
+#| msgid "Unpaid Orders"
+msgid "Unpaid"
+msgstr "Ödenmemiş Siparişler"
+
+#, fuzzy
+#| msgid "Mark Paid"
+msgid "Paid"
+msgstr "Ödendi Olarak İşaretle"
+
+msgid "Partial"
+msgstr "Kısmi"
+
+msgid "Estimated preparation time in minutes"
+msgstr "Dakika cinsinden tahmini hazırlama süresi"
+
+#, fuzzy
+#| msgid "Order History"
+msgid "Order Stage History"
+msgstr "Sipariş Geçmişi"
+
+#, fuzzy
+#| msgid "Order History"
+msgid "Order Stage Histories"
+msgstr "Sipariş Geçmişi"
+
+msgid "Combo added to cart successfully."
+msgstr "Kombo sepete başarıyla eklendi."
+
+#, fuzzy
+#| msgid "New Order Received!"
+msgid "New order received!"
+msgstr "Yeni Sipariş Geldi!"
+
+#, fuzzy
+#| msgid "Order Items"
+msgid "Order items updated"
+msgstr "Sipariş Kalemleri"
+
+#, fuzzy
+#| msgid "Order Served"
+msgid "Order item removed"
+msgstr "Sipariş Servis Edildi"
+
+msgid "Cash"
+msgstr "Nakit"
+
+msgid "Card"
+msgstr "Kart"
+
+msgid "Online"
+msgstr "Online"
+
+msgid "Pending"
+msgstr "Bekliyor"
+
+msgid "Failed"
+msgstr "Başarısız"
+
+#, fuzzy
+#| msgid "Confirm"
+msgid "Confirmed"
+msgstr "Onayla"
+
+msgid "Seated"
+msgstr "Masaya Oturtuldu"
+
+msgid "No Show"
+msgstr "Gelmedi"
+
+#, fuzzy
+#| msgid "Customer"
+msgid "Customer Name"
+msgstr "Müşteri"
+
+#, fuzzy
+#| msgid "Customer"
+msgid "Customer Phone"
+msgstr "Müşteri"
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "Reservation Date"
+msgstr "Rezervasyonlar"
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "Reservation Time"
+msgstr "Rezervasyonlar"
+
+msgid "Guest Count"
+msgstr "Misafir Sayısı"
+
+msgid "Status"
+msgstr "Durum"
+
+#, fuzzy
+#| msgid "Notes"
+msgid "Note"
+msgstr "Notlar"
+
+msgid "Reservation"
+msgstr "Rezervasyon"
+
+msgid "Reservations"
+msgstr "Rezervasyonlar"
+
+msgid "Owner"
+msgstr "Sahibi"
+
+msgid "Slug"
+msgstr "URL Uzantısı"
+
+#, fuzzy
+#| msgid "Logout"
+msgid "Logo"
+msgstr "Çıkış Yap"
+
+msgid "Address"
+msgstr "Adres"
+
+#, fuzzy
+#| msgid "Table Number"
+msgid "Tax Number"
+msgstr "Masa Numarası"
+
+msgid "Default Language"
+msgstr "Varsayılan Dil"
+
+msgid "Currency"
+msgstr "Para Birimi"
+
+msgid "Opening Hours"
+msgstr "Açılış Saatleri"
+
+#, fuzzy
+#| msgid "Action"
+msgid "Active"
+msgstr "İşlem"
+
+#, fuzzy
+#| msgid "Negative"
+msgid "Inactive"
+msgstr "Negatif"
+
+#, fuzzy
+#| msgid "Subscriptions"
+msgid "Subscription Plan"
+msgstr "Abonelikler"
+
+#, fuzzy
+#| msgid "Restaurant"
+msgid "Restaurants"
+msgstr "Restoran"
+
+#, fuzzy
+#| msgid "Branch"
+msgid "Branches"
+msgstr "Şube"
+
+msgid "Allow Dine-in Orders"
+msgstr "Restoranda Siparişe İzin Ver"
+
+msgid "Allow Takeaway Orders"
+msgstr "Paket Servise İzin Ver"
+
+#, fuzzy
+#| msgid "Pre-Order"
+msgid "Allow Pre-orders"
+msgstr "Ön Sipariş"
+
+#, fuzzy
+#| msgid "Recommendation Success"
+msgid "Allow AI Recommendations"
+msgstr "Öneri Başarısı"
+
+#, fuzzy
+#| msgid "Loyalty Program"
+msgid "Allow Loyalty Program"
+msgstr "Sadakat Programı"
+
+#, fuzzy
+#| msgid "Reviews"
+msgid "Allow Reviews"
+msgstr "Değerlendirmeler"
+
+#, fuzzy
+#| msgid "Service Charge"
+msgid "Service Charge Percent"
+msgstr "Hizmet Bedeli"
+
+msgid "Tax Percent"
+msgstr "Vergi Yüzdesi"
+
+msgid "Average Preparation Time (mins)"
+msgstr "Ortalama Hazırlama Süresi (dk)"
+
+msgid "Theme Color"
+msgstr "Tema Rengi"
+
+#, fuzzy
+#| msgid "Calories"
+msgid "Show Calories"
+msgstr "Kalori"
+
+#, fuzzy
+#| msgid "Allergens"
+msgid "Show Allergens"
+msgstr "Alerjenler"
+
+msgid "Enable WhatsApp Ordering"
+msgstr "WhatsApp Siparişini Etkinleştir"
+
+msgid "WhatsApp Number"
+msgstr "WhatsApp Numarası"
+
+msgid "Include country code, e.g. +90555..."
+msgstr "Ülke kodu dahil edin, örn. +90555..."
+
+#, fuzzy
+#| msgid "Tables Active"
+msgid "Enable Stripe"
+msgstr "Aktif Masalar"
+
+msgid "Stripe Public Key"
+msgstr "Stripe Public Key"
+
+msgid "Stripe Secret Key"
+msgstr "Stripe Secret Key"
+
+msgid "Enable PayPal"
+msgstr "PayPal'ı Etkinleştir"
+
+#, fuzzy
+#| msgid "Total Clients"
+msgid "PayPal Client ID"
+msgstr "Toplam Müşteri"
+
+#, fuzzy
+#| msgid "Restaurant Tables"
+msgid "Restaurant Settings"
+msgstr "Restoran Masaları"
+
+msgid "Profile Settings"
+msgstr "Profil Ayarları"
+
+msgid "Positive"
+msgstr "Pozitif"
+
+msgid "Neutral"
+msgstr "Nötr"
+
+msgid "Negative"
+msgstr "Negatif"
+
+#, fuzzy
+#| msgid "Read Full Analysis"
+msgid "Pending AI Analysis"
+msgstr "Tam Analizi Oku"
+
+msgid "Taste"
+msgstr "Lezzet"
+
+msgid "Delay"
+msgstr "Gecikme"
+
+#, fuzzy
+#| msgid "Service Fee"
+msgid "Service"
+msgstr "Servis Ücreti"
+
+msgid "Cleanliness"
+msgstr "Temizlik"
+
+#, fuzzy
+#| msgid "Action"
+msgid "Portion"
+msgstr "İşlem"
+
+msgid "Packaging"
+msgstr "Paketleme"
+
+msgid "Staff"
+msgstr "Personel"
+
+msgid "Daily"
+msgstr "Günlük"
+
+msgid "Weekly"
+msgstr "Haftalık"
+
+#, fuzzy
+#| msgid "Month"
+msgid "Monthly"
+msgstr "Ay"
+
+msgid "Salary Type"
+msgstr "Maaş Tipi"
+
+#, fuzzy
+#| msgid "Total Amount"
+msgid "Salary Amount"
+msgstr "Toplam Tutar"
+
+#, fuzzy
+#| msgid "Date"
+msgid "Hire Date"
+msgstr "Tarih"
+
+#, fuzzy
+#| msgid "Staff & Payroll"
+msgid "Staff Profile"
+msgstr "Personel & Maaş"
+
+#, fuzzy
+#| msgid "Staff & Payroll"
+msgid "Staff Profiles"
+msgstr "Personel & Maaş"
+
+#, fuzzy
+#| msgid "Salary & Payroll"
+msgid "Salary Period"
+msgstr "Maaş ve Bordro"
+
+msgid "Payment Date"
+msgstr "Ödeme Tarihi"
+
+#, fuzzy
+#| msgid "Update Status"
+msgid "Payment Status"
+msgstr "Durumu Güncelle"
+
+#, fuzzy
+#| msgid "Purchase Records"
+msgid "Payroll Records"
+msgstr "Satın Alma Kayıtları"
+
+#, fuzzy
+#| msgid "Total Price"
+msgid "Monthly Price"
+msgstr "Toplam Fiyat"
+
+#, fuzzy
+#| msgid "Our Branches"
+msgid "Max Branches"
+msgstr "Şubelerimiz"
+
+#, fuzzy
+#| msgid "Tables"
+msgid "Max Tables"
+msgstr "Masalar"
+
+msgid "AI Features"
+msgstr "Yapay Zeka Özellikleri"
+
+msgid "Inventory Management"
+msgstr "Envanter Yönetimi"
+
+msgid "CRM & Loyalty"
+msgstr "Müşteri Yönetimi ve Sadakat"
+
+msgid "Expired"
+msgstr "Süresi Dolmuş"
+
+msgid "Trial"
+msgstr "Deneme"
+
+#, fuzzy
+#| msgid "Urgent Tickets"
+msgid "Urgent"
+msgstr "Acil Talepler"
+
+msgid "Open"
+msgstr "Açık"
+
+msgid "In Progress"
+msgstr "Devam Ediyor"
+
+msgid "Resolved"
+msgstr "Çözüldü"
+
+#, fuzzy
+#| msgid "Close"
+msgid "Closed"
+msgstr "Kapat"
+
+msgid "Available"
+msgstr "Mevcut"
+
+msgid "Occupied"
+msgstr "Dolu"
+
+#, fuzzy
+#| msgid "Served"
+msgid "Reserved"
+msgstr "Servis Edildi"
+
+#, fuzzy
+#| msgid "Table"
+msgid "Disabled"
+msgstr "Masa"
+
+msgid "Table Number"
+msgstr "Masa Numarası"
+
+#, fuzzy
+#| msgid "Table Number"
+msgid "Table Name"
+msgstr "Masa Numarası"
+
+msgid "QR Code"
+msgstr "QR Kod"
+
+#, fuzzy
+#| msgid "QR Code"
+msgid "QR Code URL"
+msgstr "QR Kod"
+
+msgid "Capacity"
+msgstr "Kapasite"
+
+msgid "Table"
+msgstr "Masa"
+
+msgid "Tables"
+msgstr "Masalar"
+
+msgid "Arrived"
+msgstr "Geldi"
+
+#, fuzzy
+#| msgid "Customer List"
+msgid "Customer Email"
+msgstr "Müşteri Listesi"
+
+msgid "Reservation Full Date/Time"
+msgstr "Rezervasyon Tam Tarih/Saat"
+
+msgid "Number of People"
+msgstr "Kişi Sayısı"
+
+msgid "Login"
+msgstr "Giriş Yap"
+
+msgid "The Future of Restaurant Management"
+msgstr "Restoran Yönetiminin Geleceği"
+
 msgid "Welcome back"
 msgstr "Hoş geldiniz"
 
-msgid "Welcome back,"
-msgstr "Hoş geldiniz,"
+#, fuzzy
+#| msgid "Reviews Dashboard"
+msgid "Access Dashboard"
+msgstr "Değerlendirmeler Panosu"
 
-msgid "Welcome!"
-msgstr "Hoş geldiniz!"
+msgid "Enterprise Grade Security"
+msgstr "Kurumsal Seviye Güvenlik"
 
-msgid "Restaurant Dashboard"
-msgstr "Restoran Panosu"
+#, fuzzy
+#| msgid "Roles & Permissions"
+msgid "Manage Permissions"
+msgstr "Roller & İzinler"
 
-msgid "Today Revenue"
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to list"
+msgstr "Listeye Geri Dön"
+
+#, fuzzy
+#| msgid "Roles & Permissions"
+msgid "Permissions for"
+msgstr "Roller & İzinler"
+
+msgid "Financial Visibility"
+msgstr "Finansal Görünürlük"
+
+#, fuzzy
+#| msgid "Today Revenue"
+msgid "Daily Revenue"
 msgstr "Bugünkü Gelir"
 
-msgid "Total Revenue"
+msgid "Allow viewing daily sales totals"
+msgstr "Günlük satış toplamlarını görüntülemeye izin ver"
+
+#, fuzzy
+#| msgid "Total Revenue"
+msgid "Monthly Revenue"
 msgstr "Toplam Gelir"
 
-msgid "Total Orders"
-msgstr "Toplam Sipariş"
+msgid "Allow viewing monthly performance"
+msgstr "Aylık performansı görüntülemeye izin ver"
 
-msgid "Total Customers"
-msgstr "Toplam Müşteri"
+#, fuzzy
+#| msgid "Today Revenue"
+msgid "Yearly Revenue"
+msgstr "Bugünkü Gelir"
+
+msgid "Allow viewing annual growth"
+msgstr "Yıllık büyümeyi görüntülemeye izin ver"
+
+#, fuzzy
+#| msgid "Net Profit (This Month)"
+msgid "Net Profit"
+msgstr "Net Kar (Bu Ay)"
+
+msgid "Allow viewing final profit after all costs"
+msgstr "Tüm maliyetlerden sonraki nihai karı görüntülemeye izin ver"
+
+msgid "Expenses"
+msgstr "Giderler"
+
+msgid "Allow viewing operational costs"
+msgstr "Operasyonel maliyetleri görüntülemeye izin ver"
+
+#, fuzzy
+#| msgid "Staff & Payroll"
+msgid "Payroll"
+msgstr "Personel & Maaş"
+
+msgid "Allow viewing staff salary records"
+msgstr "Personel maaş kayıtlarını görüntülemeye izin ver"
+
+#, fuzzy
+#| msgid "Sales Analytics"
+msgid "Advanced Analytics"
+msgstr "Satış Analitiği"
+
+msgid "Allow access to detailed reports and charts"
+msgstr "Detaylı raporlara ve grafiklere erişime izin ver"
+
+#, fuzzy
+#| msgid "Roles & Permissions"
+msgid "Update Permissions"
+msgstr "Roller & İzinler"
+
+msgid "Cancel"
+msgstr "İptal"
+
+msgid "Roles & Permissions"
+msgstr "Roller & İzinler"
+
+#, fuzzy
+#| msgid "Roles & Permissions"
+msgid "Staff Permissions"
+msgstr "Roller & İzinler"
+
+msgid "Manage granular financial visibility for your team"
+msgstr "Ekibiniz için ayrıntılı finansal görünürlüğü yönetin"
+
+msgid "Financial Access"
+msgstr "Finansal Erişim"
+
+#, fuzzy
+#| msgid "Action"
+msgid "Actions"
+msgstr "İşlem"
+
+msgid "Daily Rev"
+msgstr ""
+
+msgid "No financial access"
+msgstr ""
+
+#, fuzzy
+#| msgid "No records found"
+msgid "No staff members found"
+msgstr "Kayıt bulunamadı"
+
+msgid "Yapay Zeka Bütçe Yardımcısı"
+msgstr ""
+
+msgid "Yapay Zeka Bütçe Danışmanı"
+msgstr ""
+
+msgid "Bütçenizi söyleyin — sizin için en iyi menüyü tasarlayalım."
+msgstr ""
+
+msgid "Bütçeniz"
+msgstr ""
+
+msgid "örn. 50"
+msgstr ""
+
+msgid "Kişi sayısı"
+msgstr ""
+
+msgid "Beslenme tercihleri"
+msgstr ""
+
+msgid "örn. Yüksek protein, glutensiz, vejetaryen…"
+msgstr ""
+
+msgid "Sporcu modu"
+msgstr ""
+
+msgid "yüksek proteinli seçeneklere öncelik ver"
+msgstr ""
+
+msgid "Mükemmel Menüyü Oluştur"
+msgstr ""
+
+msgid "AI Önerilen Menüler"
+msgstr ""
+
+msgid "AI Seçimi"
+msgstr ""
+
+msgid "Hepsini Sepete Ekle"
+msgstr ""
+
+msgid "Yapay Zeka düşünüyor..."
+msgstr ""
+
+msgid "Sizin için en iyi yemek kombinasyonunu hazırlıyor."
+msgstr ""
+
+msgid "AI Campaign Suggestions"
+msgstr "Yapay Zeka Kampanya Önerileri"
+
+msgid "Create Campaign"
+msgstr "Kampanya Oluştur"
+
+msgid "Rate limit reached. Please try again in an hour."
+msgstr "İstek sınırına ulaşıldı. Lütfen bir saat sonra tekrar deneyin."
+
+msgid ""
+"Based on your recent sales analytics, here are AI-generated campaign ideas:"
+msgstr ""
+"Son satış analizlerinize dayanarak, işte yapay zeka tarafından oluşturulan "
+"kampanya fikirleri:"
+
+msgid "Save as Campaign"
+msgstr "Kampanya Olarak Kaydet"
+
+msgid "No suggestions available. Add more sales data for better AI insights."
+msgstr ""
+"Öneri bulunmuyor. Daha iyi yapay zeka analizleri için daha fazla satış "
+"verisi ekleyin."
+
+msgid "Yapay Zeka Menü Danışmanı"
+msgstr ""
+
+msgid "AI Menü Danışmanı"
+msgstr ""
+
+msgid "Yapay Zeka Danışmanı"
+msgstr ""
+
+msgid ""
+"Her şeyi sorabilirsiniz — \"Akşam yemeği için ne önerirsin?\", \"15 ₺ altı "
+"acılı ne var?\""
+msgstr ""
+
+msgid "Bir soru sorun…"
+msgstr ""
+
+msgid "AI'ya Sor"
+msgstr ""
+
+msgid "En popüler yemek hangisi?"
+msgstr ""
+
+msgid "20 ₺ altı en iyi seçenek"
+msgstr ""
+
+msgid "Yüksek proteinli öğün"
+msgstr ""
+
+msgid "Vejetaryen önerisi"
+msgstr ""
+
+msgid "10 dakikadan hızlılar"
+msgstr ""
+
+msgid "Yapay Zeka Cevabı"
+msgstr ""
+
+msgid "AI Tarafından Oluşturuldu"
+msgstr ""
+
+msgid "Önerilen Ürünler"
+msgstr ""
+
+msgid "Önerilen"
+msgstr ""
+
+msgid "AI Insights"
+msgstr "Yapay Zeka Öngörüleri"
+
+msgid "AI Intelligence Hub"
+msgstr ""
+
+msgid "Actionable insights generated from your restaurant data."
+msgstr ""
+
+msgid "Suggest Campaign"
+msgstr "Kampanya Öner"
+
+msgid "Chat with Manager"
+msgstr ""
+
+msgid "ago"
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+#, fuzzy
+#| msgid "Recommended Items"
+msgid "Action Recommended"
+msgstr "Önerilen Ürünler"
+
+msgid "System Fully Optimized"
+msgstr "Sistem Tamamen Optimize Edildi"
+
+msgid ""
+"No new insights detected. Your restaurant is performing at its peak "
+"efficiency based on current data."
+msgstr ""
+
+msgid "Run Deep Scan"
+msgstr "Derin Tarama Yap"
+
+#, fuzzy
+#| msgid "Restaurant Name"
+msgid "AI Restaurant Manager"
+msgstr "Restoran Adı"
+
+msgid "Hello!"
+msgstr ""
+
+msgid ""
+"I am your AI Restaurant Manager. I have access to your live sales, "
+"inventory, and customer data."
+msgstr ""
+
+msgid "How can I help you grow your business today?"
+msgstr ""
+
+msgid "How are my sales today?"
+msgstr ""
 
 msgid "Sales Today"
 msgstr "Bugünkü Satışlar"
 
-msgid "This Month"
-msgstr "Bu Ay"
+msgid "Which products are performing poorly?"
+msgstr "Hangi ürünler düşük performans gösteriyor?"
 
-msgid "Today"
-msgstr "Bugün"
+#, fuzzy
+#| msgid "Product Performance"
+msgid "Low Performance"
+msgstr "Ürün Performansı"
 
-msgid "Yesterday"
-msgstr "Dün"
+msgid "What should I order for stock tomorrow?"
+msgstr "Yarın stok için ne sipariş etmeliyim?"
 
-msgid "Recent Orders"
-msgstr "Son Siparişler"
+msgid "Stock Needs"
+msgstr "Stok İhtiyaçları"
 
-msgid "Recent Activity"
-msgstr "Son Aktivite"
+msgid "Analyze my customer loyalty"
+msgstr ""
 
-msgid "Quick Actions"
-msgstr "Hızlı İşlemler"
+#, fuzzy
+#| msgid "Profitability Analysis"
+msgid "Loyalty Analysis"
+msgstr "Karlılık Analizi"
 
-msgid "Top Performing Dishes"
-msgstr "En İyi Yemekler"
+msgid "Ask your AI manager..."
+msgstr ""
 
-msgid "Top Selling Products"
-msgstr "En Çok Satan Ürünler"
+msgid "Profitability Analysis"
+msgstr "Karlılık Analizi"
 
-msgid "Revenue"
+#, fuzzy
+#| msgid "Net Profit (This Month)"
+msgid "Net Profit Insights"
+msgstr "Net Kar (Bu Ay)"
+
+msgid "Profitability Report"
+msgstr "Karlılık Raporu"
+
+#, fuzzy
+#| msgid "Revenue Report"
+msgid "Generate Report"
+msgstr "Gelir Raporu"
+
+msgid "Calculate"
+msgstr ""
+
+#, fuzzy
+#| msgid "Revenue"
+msgid "Gross Revenue"
 msgstr "Gelir"
 
-msgid "Revenue Breakdown"
-msgstr "Gelir Dağılımı"
+#, fuzzy
+#| msgid "Estimated"
+msgid "Estimated Costs"
+msgstr "Tahmini"
 
-msgid "Revenue by Type"
-msgstr "Türe Göre Gelir"
+#, fuzzy
+#| msgid "Segment Distribution"
+msgid "Margin Distribution"
+msgstr "Segment Dağılımı"
 
-msgid "Revenue Distribution Chart"
-msgstr "Gelir Dağılım Grafiği"
+msgid "Margin Optimization"
+msgstr ""
 
-msgid "Revenue Dynamics"
-msgstr "Gelir Dinamikleri"
+msgid ""
+"Your current net margin is healthy. To improve further, consider bundling "
+"high-margin side dishes with popular main courses."
+msgstr ""
+"Mevcut net marjınız sağlıklı. Daha fazla iyileştirmek için yüksek marjlı yan "
+"yemekleri popüler ana yemeklerle birleştirin."
 
-msgid "Revenue Insights"
-msgstr "Gelir Öngörüleri"
+#, python-format
+msgid ""
+"Costs have increased by 5%% compared to last period. Check inventory waste "
+"reports for potential optimizations."
+msgstr ""
 
-msgid "Revenue Report"
-msgstr "Gelir Raporu"
+msgid "Costs"
+msgstr ""
+
+msgid "Product Performance"
+msgstr "Ürün Performansı"
 
 msgid "Sales Analytics"
 msgstr "Satış Analitiği"
 
-msgid "Sales by Category"
-msgstr "Kategoriye Göre Satışlar"
+msgid "Product Reports"
+msgstr "Ürün Raporları"
 
-msgid "Order List"
-msgstr "Sipariş Listesi"
+#, fuzzy
+#| msgid "Inventory"
+msgid "Inventory Sync"
+msgstr "Envanter"
 
-msgid "Order Detail"
-msgstr "Sipariş Detayı"
+#, fuzzy
+#| msgid "Analytics"
+msgid "Analyze"
+msgstr "Analitik"
 
-msgid "Order History"
-msgstr "Sipariş Geçmişi"
+msgid "Top Selling Products"
+msgstr "En Çok Satan Ürünler"
 
-msgid "Order Info"
-msgstr "Sipariş Bilgisi"
+msgid "Sold"
+msgstr "Satıldı"
 
-msgid "Order Items"
-msgstr "Sipariş Kalemleri"
+msgid "Revenue"
+msgstr "Gelir"
 
-msgid "Order More"
-msgstr "Daha Fazla Sipariş Ver"
+#, fuzzy
+#| msgid "No records found"
+msgid "No sales data found."
+msgstr "Kayıt bulunamadı"
 
-msgid "Order Note (Optional)"
-msgstr "Sipariş Notu (İsteğe Bağlı)"
+#, fuzzy
+#| msgid "Top Selling Products"
+msgid "Low Performing Products"
+msgstr "En Çok Satan Ürünler"
 
-msgid "Order Number"
-msgstr "Sipariş Numarası"
+#, fuzzy
+#| msgid "Which products are performing poorly?"
+msgid "All products performing well."
+msgstr "Hangi ürünler düşük performans gösteriyor?"
 
-msgid "Order Placed!"
-msgstr "Sipariş Alındı!"
+msgid "Revenue Report"
+msgstr "Gelir Raporu"
 
-msgid "Order Served"
-msgstr "Sipariş Servis Edildi"
+#, fuzzy
+#| msgid "Sales Analytics"
+msgid "Financial Analytics"
+msgstr "Satış Analitiği"
 
-msgid "Order Summary"
-msgstr "Sipariş Özeti"
+msgid "Revenue Insights"
+msgstr "Gelir Öngörüleri"
+
+#, fuzzy
+#| msgid "Export"
+msgid "Export PDF"
+msgstr "Dışa Aktar"
+
+#, fuzzy
+#| msgid "Filter"
+msgid "Apply Filters"
+msgstr "Filtrele"
+
+msgid "Total Volume"
+msgstr "Toplam Hacim"
+
+msgid "Revenue Breakdown"
+msgstr "Gelir Dağılımı"
+
+msgid "Pre-Order"
+msgstr "Ön Sipariş"
+
+msgid "Revenue Distribution Chart"
+msgstr "Gelir Dağılım Grafiği"
+
+msgid "Revenue by Type"
+msgstr "Türe Göre Gelir"
+
+#, fuzzy
+#| msgid "Campaigns"
+msgid "Edit Campaign"
+msgstr "Kampanyalar"
+
+#, fuzzy
+#| msgid "Campaigns"
+msgid "Add Campaign"
+msgstr "Kampanyalar"
+
+#, fuzzy
+#| msgid "Campaigns"
+msgid "New Campaign"
+msgstr "Kampanyalar"
+
+msgid "Create special offers to attract more customers and increase sales."
+msgstr ""
+
+#, fuzzy
+#| msgid "Campaigns"
+msgid "Campaign Title"
+msgstr "Kampanyalar"
+
+#, fuzzy
+#| msgid "Campaigns"
+msgid "Campaign Type"
+msgstr "Kampanyalar"
+
+#, fuzzy
+#| msgid "Discount"
+msgid "Discount Value"
+msgstr "İndirim"
+
+msgid "Start Date"
+msgstr ""
+
+#, fuzzy
+#| msgid "Date"
+msgid "End Date"
+msgstr "Tarih"
+
+msgid "Min. Order Amount"
+msgstr ""
+
+#, fuzzy
+#| msgid "Campaigns"
+msgid "Campaign is Active"
+msgstr "Kampanyalar"
+
+#, fuzzy
+#| msgid "Save as Campaign"
+msgid "Save Campaign"
+msgstr "Kampanya Olarak Kaydet"
+
+msgid "Campaigns"
+msgstr "Kampanyalar"
+
+msgid "Manage discounts, promotions and loyalty campaigns."
+msgstr ""
+
+msgid "Coupons"
+msgstr ""
+
+msgid "Total Campaigns"
+msgstr "Toplam Kampanya"
+
+msgid "Total Discount"
+msgstr "Toplam İndirim"
+
+msgid "Coupons Used"
+msgstr ""
+
+msgid "Discount"
+msgstr "İndirim"
+
+msgid "Type"
+msgstr "Tür"
+
+#, fuzzy
+#| msgid "Order"
+msgid "Min. Order"
+msgstr "Sipariş"
+
+msgid "Period"
+msgstr "Dönem"
+
+msgid "Edit"
+msgstr "Düzenle"
+
+#, fuzzy
+#| msgid "Total Campaigns"
+msgid "No campaigns yet"
+msgstr "Toplam Kampanya"
+
+msgid "Create your first promotion to attract more customers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit Product"
+msgid "Edit Coupon"
+msgstr "Ürün Düzenle"
+
+msgid "Add Coupon"
+msgstr ""
+
+msgid "New Coupon"
+msgstr ""
+
+msgid "Create discount codes for marketing campaigns."
+msgstr ""
+
+msgid "Coupon Code"
+msgstr ""
+
+#, fuzzy
+#| msgid "Discount"
+msgid "Discount Type"
+msgstr "İndirim"
+
+msgid "Usage Limit"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save Changes"
+msgid "Save Coupon"
+msgstr "Değişiklikleri Kaydet"
+
+msgid "Create and manage unique discount codes for your customers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Total Value"
+msgid "Value"
+msgstr "Toplam Değer"
+
+#, fuzzy
+#| msgid "Message"
+msgid "Usage"
+msgstr "Mesaj"
+
+msgid "Valid Until"
+msgstr ""
+
+msgid "No coupons created yet."
+msgstr ""
+
+msgid "Super Admin Dashboard"
+msgstr "Süper Yönetici Panosu"
+
+msgid "Platform Overview"
+msgstr "Platform Genel Bakış"
+
+msgid "SaaS Control Center"
+msgstr "SaaS Kontrol Merkezi"
+
+msgid "Global platform monitoring and management"
+msgstr ""
+
+msgid "Plans"
+msgstr "Planlar"
+
+msgid "Support"
+msgstr "Destek"
+
+msgid "Total Clients"
+msgstr "Toplam Müşteri"
+
+msgid "Active across all regions"
+msgstr ""
+
+msgid "MRR - Current Month"
+msgstr ""
+
+msgid "Subscriptions"
+msgstr "Abonelikler"
+
+msgid "Paid & Trialing"
+msgstr "Ödendi ve Deneme"
+
+msgid "Pending Tickets"
+msgstr "Bekleyen Talepler"
+
+msgid "Requires immediate action"
+msgstr "Acil müdahale gerektirir"
+
+#, fuzzy
+#| msgid "Restaurant"
+msgid "Newest Restaurants"
+msgstr "Restoran"
+
+#, fuzzy
+#| msgid "Management"
+msgid "Manage"
+msgstr "Yönetim"
+
+msgid "Plan"
+msgstr "Plan"
+
+#, fuzzy
+msgid "Growth"
+msgstr ""
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Büyüme ve Yapay Zeka\n"
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Büyüme & Yapay Zeka"
+
+msgid "Urgent Tickets"
+msgstr "Acil Talepler"
+
+msgid "Open Queue"
+msgstr ""
+
+msgid "Subject"
+msgstr "Konu"
+
+msgid "Priority"
+msgstr "Öncelik"
+
+msgid "No critical tickets right now."
+msgstr ""
 
 msgid "Order Tracking"
 msgstr "Sipariş Takibi"
 
-msgid "Order"
+msgid "Powered by"
+msgstr ""
+
+msgid "View Cart"
+msgstr "Sepeti Görüntüle"
+
+msgid ""
+"Enter your order number or tracking code to learn the real-time status of "
+"your order."
+msgstr ""
+"Siparişinizin anlık durumunu öğrenmek için sipariş numaranızı veya takip "
+"kodunuzu girin."
+
+msgid "Order No / Tracking Code"
+msgstr "Sipariş No / Takip Kodu"
+
+msgid "e.g. 1024 or TRK-XYZ"
+msgstr "Örn: 1024 veya TRK-XYZ"
+
+msgid "Track"
+msgstr "Takip Et"
+
+msgid "Please enter a valid order number or tracking code."
+msgstr "Lütfen geçerli bir sipariş numarası veya takip kodu girin."
+
+#, fuzzy
+#| msgid "Customer List"
+msgid "Customer Profile"
+msgstr "Müşteri Listesi"
+
+#, fuzzy
+#| msgid "Customer List"
+msgid "Customer Insights"
+msgstr "Müşteri Listesi"
+
+#, fuzzy
+#| msgid "Customer"
+msgid "Anonymous Customer"
+msgstr "Müşteri"
+
+msgid "Back to List"
+msgstr "Listeye Geri Dön"
+
+msgid "Profile Information"
+msgstr "Profil Bilgileri"
+
+msgid "Phone Number"
+msgstr "Telefon Numarası"
+
+#, fuzzy
+#| msgid "Address"
+msgid "Email Address"
+msgstr "Adres"
+
+msgid "Total Orders"
+msgstr "Toplam Sipariş"
+
+#, fuzzy
+#| msgid "Sort Order"
+msgid "Last Order"
+msgstr "Sıralama"
+
+msgid "Never"
+msgstr ""
+
+msgid "Quick Actions"
+msgstr "Hızlı İşlemler"
+
+msgid "View Order History"
+msgstr "Sipariş Geçmişini Görüntüle"
+
+msgid "Send Promotion"
+msgstr "Promosyon Gönder"
+
+#, fuzzy
+#| msgid "Customer"
+msgid "CRM — Customers"
+msgstr "Müşteri"
+
+msgid "CRM"
+msgstr "Müşteri Yönetimi"
+
+#, fuzzy
+#| msgid "Search dishes..."
+msgid "Search customers..."
+msgstr "Yemek ara..."
+
+msgid "Orders"
+msgstr "Siparişler"
+
+msgid "Tier"
+msgstr "Seviye"
+
+msgid "Last Visit"
+msgstr ""
+
+msgid "Action"
+msgstr "İşlem"
+
+msgid "View"
+msgstr "Görüntüle"
+
+#, fuzzy
+#| msgid "Total Customers"
+msgid "No customers yet"
+msgstr "Toplam Müşteri"
+
+msgid "Customers appear after their first order."
+msgstr ""
+
+msgid "Order History"
+msgstr "Sipariş Geçmişi"
+
+#, fuzzy
+#| msgid "View Order History"
+msgid "Customer Order History"
+msgstr "Sipariş Geçmişini Görüntüle"
+
+msgid "Purchase Records"
+msgstr "Satın Alma Kayıtları"
+
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to Customers"
+msgstr "Listeye Geri Dön"
+
+#, fuzzy
+#| msgid "Order"
+msgid "Order #"
 msgstr "Sipariş"
 
-msgid "Orders Pending"
-msgstr "Bekleyen Siparişler"
+msgid "Date"
+msgstr "Tarih"
 
-msgid "Orders ready to be served"
-msgstr "Servis edilmeye hazır siparişler"
+#, fuzzy
+#| msgid "QR Code Details"
+msgid "View Details"
+msgstr "QR Kod Detayları"
 
-msgid "Orders will appear here when customers scan the QR code."
-msgstr "Müşteriler QR kodu tararken siparişler burada görünecek."
+msgid "No order history found for this customer."
+msgstr ""
+
+msgid "Segmentation"
+msgstr "Segmentasyon"
+
+#, fuzzy
+#| msgid "Segmentation"
+msgid "Customer Segmentation"
+msgstr "Segmentasyon"
+
+msgid "Audience Analysis"
+msgstr ""
+
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to CRM"
+msgstr "Listeye Geri Dön"
+
+#, fuzzy
+#| msgid "Customer"
+msgid "Customers"
+msgstr "Müşteri"
+
+msgid "Segment Distribution"
+msgstr "Segment Dağılımı"
+
+#, fuzzy, python-format
+#| msgid ""
+#| "Your 'VIP' segment has grown by 12% this month. Consider launching a "
+#| "dedicated loyalty campaign to maintain this momentum."
+msgid ""
+"Your 'VIP' segment has grown by 12%% this month. Consider launching a "
+"dedicated loyalty campaign to maintain this momentum."
+msgstr ""
+"'VIP' segmentiniz bu ay %12 büyüdü. Bu ivmeyi korumak için özel bir sadakat "
+"kampanyası başlatmayı düşünün."
+
+#, fuzzy, python-format
+#| msgid ""
+#| "The 'Inactive' segment represents 15% of your database. A re-engagement "
+#| "coupon could recover lost revenue."
+msgid ""
+"The 'Inactive' segment represents 15%% of your database. A re-engagement "
+"coupon could recover lost revenue."
+msgstr ""
+"'Pasif' segmenti veritabanınızın %15'ini oluşturuyor. Yeniden katılım kuponu "
+"kayıp geliri geri kazandırabilir."
+
+#, fuzzy
+msgid "Dashboard"
+msgstr ""
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Pano\n"
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Kontrol Paneli"
+
+msgid "Analytics & Reports"
+msgstr "Analizler & Raporlar"
+
+msgid "Operations"
+msgstr "Operasyonlar"
 
 msgid "Kitchen Screen"
 msgstr "Mutfak Ekranı"
@@ -230,215 +2003,219 @@ msgstr "Garson Paneli"
 msgid "Cashier Panel"
 msgstr "Kasiyer Paneli"
 
-msgid "Process payments and manage order status."
-msgstr "Ödemeleri işleyin ve sipariş durumunu yönetin."
+msgid "Management"
+msgstr "Yönetim"
 
-msgid "Place Order Now"
-msgstr "Siparişi Ver"
+msgid "Menu Items"
+msgstr "Menü Öğeleri"
 
-msgid "Track My Order"
-msgstr "Siparişimi Takip Et"
+msgid "Stock & Inventory"
+msgstr "Stok & Envanter"
 
-msgid "Track Order"
-msgstr "Siparişi Takip Et"
+msgid "Expense Management"
+msgstr "Gider Yönetimi"
 
-msgid "View Order History"
-msgstr "Sipariş Geçmişini Görüntüle"
+msgid "Staff & Payroll"
+msgstr "Personel & Maaş"
 
-msgid "Status"
-msgstr "Durum"
+msgid "Customers (CRM)"
+msgstr "Müşteriler (CRM)"
 
-msgid "Pending"
-msgstr "Bekliyor"
+#, fuzzy
+msgid "Growth & AI"
+msgstr ""
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Büyüme ve Yapay Zeka\n"
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Büyüme & Yapay Zeka"
 
-msgid "Preparing"
-msgstr "Hazırlanıyor"
+msgid "AI Reports"
+msgstr "Yapay Zeka Raporları"
 
-msgid "Ready"
-msgstr "Hazır"
+msgid "AI Assistant"
+msgstr "Yapay Zeka Asistanı"
 
-msgid "Ready to Serve"
-msgstr "Servis'e Hazır"
+msgid "Reviews"
+msgstr "Değerlendirmeler"
 
-msgid "Served"
-msgstr "Servis Edildi"
+msgid "System Settings"
+msgstr "Sistem Ayarları"
 
-msgid "Cancelled"
-msgstr "İptal Edildi"
+msgid "General Settings"
+msgstr "Genel Ayarlar"
 
-msgid "Received"
-msgstr "Alındı"
+msgid "Live Menu"
+msgstr "Canlı Menü"
 
-msgid "Start Preparing"
-msgstr "Hazırlamaya Başla"
+msgid "Notifications"
+msgstr "Bildirimler"
 
-msgid "Mark as Ready"
-msgstr "Hazır Olarak İşaretle"
+msgid "New Order Received!"
+msgstr "Yeni Sipariş Geldi!"
 
-msgid "Update Status"
-msgstr "Durumu Güncelle"
+msgid "Waiter Call!"
+msgstr "Garson Çağrısı!"
 
-msgid "Product Management"
-msgstr "Ürün Yönetimi"
+msgid "is calling a waiter."
+msgstr "garson çağırıyor."
 
-msgid "Product Name"
-msgstr "Ürün Adı"
+msgid "Everything is good! No notifications."
+msgstr "Her şey yolunda! Bildirim yok."
 
-msgid "Product Options"
-msgstr "Ürün Seçenekleri"
+msgid "Go to Waiter Panel"
+msgstr "Garson Paneline Git"
 
-msgid "Product Performance"
-msgstr "Ürün Performansı"
+msgid "Logout"
+msgstr "Çıkış Yap"
 
-msgid "Product Reports"
-msgstr "Ürün Raporları"
+msgid "All rights reserved."
+msgstr "Tüm hakları saklıdır."
 
-msgid "Product"
-msgstr "Ürün"
+msgid "Delete Expense"
+msgstr "Gideri Sil"
 
-msgid "products across"
-msgstr "ürünler genelinde"
+msgid "Are you sure you want to delete"
+msgstr "Silmek istediğinizden emin misiniz?"
 
-msgid "Total Products"
-msgstr "Toplam Ürün"
+msgid "Yes, Delete"
+msgstr "Evet, Sil"
 
-msgid "Add Product"
-msgstr "Ürün Ekle"
+#, fuzzy
+#| msgid "Add Expense"
+msgid "Edit Expense"
+msgstr "Gider Ekle"
 
-msgid "Edit Product"
-msgstr "Ürün Düzenle"
+msgid "Add Expense"
+msgstr "Gider Ekle"
+
+#, fuzzy
+#| msgid "Add Expense"
+msgid "Add New Expense"
+msgstr "Gider Ekle"
+
+msgid "Update Expense Details"
+msgstr "Gider Detaylarını Güncelle"
+
+msgid "New Expenditure"
+msgstr ""
+
+msgid "Save Expense"
+msgstr "Gideri Kaydet"
+
+#, fuzzy
+#| msgid "Expenses"
+msgid "Expense List"
+msgstr "Giderler"
+
+#, fuzzy
+#| msgid "Time"
+msgid "All Time"
+msgstr "Süre"
+
+msgid "This Month"
+msgstr "Bu Ay"
+
+msgid "Last 30 Days"
+msgstr ""
+
+msgid "Title"
+msgstr "Başlık"
+
+#, fuzzy
+#| msgid "No expense records this month."
+msgid "No expenses recorded"
+msgstr "Bu ay gider kaydı yok."
+
+msgid "records"
+msgstr "kayıt"
+
+msgid "Expense Report"
+msgstr "Gider Raporu"
+
+msgid "Today's Expenses"
+msgstr "Bugünün Giderleri"
+
+msgid "This Month's Expenses"
+msgstr "Bu Ayın Giderleri"
+
+msgid "Net Profit (This Month)"
+msgstr "Net Kar (Bu Ay)"
+
+msgid "Revenue − Costs − Discounts − Expenses"
+msgstr "Gelir − Maliyetler − İndirimler − Giderler"
+
+msgid "Monthly Breakdown by Category"
+msgstr "Kategoriye Göre Aylık Dağılım"
+
+msgid "No expense records this month."
+msgstr "Bu ay gider kaydı yok."
+
+msgid "Log an Expense"
+msgstr "Gider Kaydet"
+
+#, fuzzy
+#| msgid "Edit"
+msgid "Edit Item"
+msgstr "Düzenle"
+
+#, fuzzy
+#| msgid "Order Items"
+msgid "Add Item"
+msgstr "Sipariş Kalemleri"
+
+#, fuzzy
+#| msgid "Update Inventory Details"
+msgid "Edit Inventory Item"
+msgstr "Envanter Detaylarını Güncelle"
+
+#, fuzzy
+#| msgid "Inventory"
+msgid "Add Inventory Item"
+msgstr "Envanter"
+
+msgid "Update Inventory Details"
+msgstr "Envanter Detaylarını Güncelle"
+
+#, fuzzy
+#| msgid "Stock & Inventory"
+msgid "New Stock Entry"
+msgstr "Stok & Envanter"
 
 msgid "Save Item"
 msgstr "Öğeyi Kaydet"
 
-msgid "Save Product Changes"
-msgstr "Ürün Değişikliklerini Kaydet"
-
-msgid "Delete Product"
-msgstr "Ürünü Sil"
-
-msgid "Price"
-msgstr "Fiyat"
-
-msgid "Price (?)"
-msgstr "Fiyat (?)"
-
-msgid "Total Price"
-msgstr "Toplam Fiyat"
-
-msgid "Total Amount"
-msgstr "Toplam Tutar"
-
-msgid "Subtotal"
-msgstr "Ara Toplam"
-
-msgid "Total"
-msgstr "Toplam"
-
-msgid "Service Charge"
-msgstr "Hizmet Bedeli"
-
-msgid "Total Discount"
-msgstr "Toplam İndirim"
-
-msgid "Discount"
-msgstr "İndirim"
-
-msgid "Category"
-msgstr "Kategori"
-
-msgid "Add Category"
-msgstr "Kategori Ekle"
-
-msgid "Save Category"
-msgstr "Kategoriyi Kaydet"
-
-msgid "Update Category Details"
-msgstr "Kategori Detaylarını Güncelle"
-
-msgid "Description"
-msgstr "Açıklama"
-
-msgid "Availability"
-msgstr "Müsaitlik"
-
-msgid "Available"
-msgstr "Mevcut"
-
-msgid "Out of Stock"
-msgstr "Stokta Yok"
-
-msgid "Visibility & Stock"
-msgstr "Görünürlük ve Stok"
-
-msgid "Popular Item"
-msgstr "Popüler Ürün"
-
-msgid "Popular"
-msgstr "Popüler"
-
-msgid "Spicy"
-msgstr "Baharatlı"
-
-msgid "Vegan"
-msgstr "Vegan"
-
-msgid "Vegetarian"
-msgstr "Vejeteryan"
-
-msgid "Gluten-Free"
-msgstr "Glutensiz"
-
-msgid "Calories"
-msgstr "Kalori"
-
-msgid "Protein"
-msgstr "Protein"
-
-msgid "Carbs"
-msgstr "Karbonhidrat"
-
-msgid "Fat"
-msgstr "Yağ"
-
-msgid "Allergens"
-msgstr "Alerjenler"
-
-msgid "Prep Time"
-msgstr "Hazırlama Süresi"
-
-msgid "Sort Order"
-msgstr "Sıralama"
-
-msgid "Image"
-msgstr "Görsel"
-
-msgid "Inventory Management"
-msgstr "Envanter Yönetimi"
-
-msgid "Stock"
-msgstr "Stok"
-
-msgid "Stock Alerts"
-msgstr "Stok Uyarıları"
-
-msgid "Stock Needs"
-msgstr "Stok İhtiyaçları"
-
-msgid "Stock Status"
-msgstr "Stok Durumu"
-
-msgid "Start tracking your stock."
-msgstr "Stoğunuzu takip etmeye başlayın."
+msgid "Inventory"
+msgstr "Envanter"
 
 msgid "Track all stock levels and supplier info."
 msgstr "Tüm stok seviyelerini ve tedarikçi bilgilerini takip edin."
 
-msgid "There are no low stock alerts at this time."
-msgstr "Şu anda düşük stok uyarısı bulunmuyor."
+msgid "Total Items"
+msgstr "Toplam Öğe"
 
-msgid "Restock"
-msgstr "Yeniden Stokla"
+msgid "Total Value"
+msgstr "Toplam Değer"
+
+#, fuzzy
+#| msgid "Inventory"
+msgid "Inventory Stock"
+msgstr "Envanter"
+
+#, fuzzy
+#| msgid "Stock Alerts"
+msgid "Alerts"
+msgstr "Stok Uyarıları"
+
+#, fuzzy
+#| msgid "Save Item"
+msgid "Item"
+msgstr "Öğeyi Kaydet"
+
+msgid "Current Qty"
+msgstr ""
+
+msgid "Min. Qty"
+msgstr ""
 
 msgid "Unit Cost"
 msgstr "Birim Maliyet"
@@ -446,113 +2223,206 @@ msgstr "Birim Maliyet"
 msgid "Supplier"
 msgstr "Tedarikçi"
 
-msgid "Update Inventory Details"
-msgstr "Envanter Detaylarını Güncelle"
-
-msgid "In"
-msgstr "Giriş"
-
 msgid "Out"
 msgstr "Çıkış"
 
-msgid "Expense Management"
-msgstr "Gider Yönetimi"
+msgid "No inventory items"
+msgstr ""
 
-msgid "Add Expense"
-msgstr "Gider Ekle"
+msgid "Start tracking your stock."
+msgstr "Stoğunuzu takip etmeye başlayın."
 
-msgid "Save Expense"
-msgstr "Gideri Kaydet"
+msgid "Stock Alerts"
+msgstr "Stok Uyarıları"
 
-msgid "Update Expense Details"
-msgstr "Gider Detaylarını Güncelle"
+#, fuzzy
+#| msgid "Stock Alerts"
+msgid "Critical Stock Alerts"
+msgstr "Stok Uyarıları"
 
-msgid "Expense"
-msgstr "Gider"
+#, fuzzy
+#| msgid "Stock Needs"
+msgid "Low Stock Items"
+msgstr "Stok İhtiyaçları"
 
-msgid "Over Budget"
-msgstr "Bütçeyi Aştı"
+#, fuzzy
+#| msgid "Stock & Inventory"
+msgid "Back to Inventory"
+msgstr "Stok & Envanter"
 
-msgid "Budget"
-msgstr "Bütçe"
+msgid "Current Quantity"
+msgstr ""
 
-msgid "Amount"
-msgstr "Tutar"
+#, fuzzy
+#| msgid "Points Required"
+msgid "Minimum Required"
+msgstr "Gereken Puan"
 
-msgid "Date"
-msgstr "Tarih"
+msgid "Restock"
+msgstr "Yeniden Stokla"
 
-msgid "Month"
-msgstr "Ay"
+msgid "All stock levels are healthy!"
+msgstr ""
 
-msgid "Period"
-msgstr "Dönem"
+msgid "There are no low stock alerts at this time."
+msgstr "Şu anda düşük stok uyarısı bulunmuyor."
 
-msgid "Salary & Payroll"
-msgstr "Maaş ve Bordro"
+#, fuzzy
+#| msgid "Invoices"
+msgid "Invoice Detail"
+msgstr "Faturalar"
 
-msgid "Customer Management"
-msgstr "Müşteri Yönetimi"
+#, fuzzy
+#| msgid "Invoices"
+msgid "Print Invoice"
+msgstr "Faturalar"
 
-msgid "Customer List"
-msgstr "Müşteri Listesi"
+msgid "INVOICE"
+msgstr ""
 
-msgid "Customer"
-msgstr "Müşteri"
+msgid "Bill To"
+msgstr ""
 
-msgid "Total Clients"
-msgstr "Toplam Müşteri"
+msgid "Guest"
+msgstr ""
 
-msgid "Total Spent"
-msgstr "Toplam Harcama"
+msgid "Order"
+msgstr "Sipariş"
 
-msgid "Total Entries"
-msgstr "Toplam Kayıt"
+msgid "PAID"
+msgstr ""
 
-msgid "Segment"
-msgstr "Segment"
+#, fuzzy
+#| msgid "Staff & Payroll"
+msgid "Staff Payroll Record"
+msgstr "Personel & Maaş"
 
-msgid "Segmentation"
-msgstr "Segmentasyon"
+msgid "Subtotal"
+msgstr "Ara Toplam"
 
-msgid "Segments"
-msgstr "Segmentler"
+msgid "Total"
+msgstr "Toplam"
 
-msgid "Segment Distribution"
-msgstr "Segment Dağılımı"
+msgid "Thank you for using NeyMenu AI!"
+msgstr ""
 
-msgid "VIP / Gold"
-msgstr "VIP / Gold"
+msgid "Invoice & Billing"
+msgstr ""
 
-msgid "Returning"
-msgstr "Geri Dönen"
+msgid "View all generated sales and payroll invoices"
+msgstr ""
 
-msgid "Negative"
-msgstr "Negatif"
+#, fuzzy
+#| msgid "Invoices"
+msgid "Invoice #"
+msgstr "Faturalar"
 
-msgid "Positive"
-msgstr "Pozitif"
+msgid "Linked To"
+msgstr ""
 
-msgid "Send Promotion"
-msgstr "Promosyon Gönder"
+#, fuzzy
+#| msgid "Order Detail"
+msgid "View Detail"
+msgstr "Sipariş Detayı"
 
-msgid "Loyalty Program"
+msgid "No invoices generated"
+msgstr ""
+
+msgid ""
+"Invoices are created automatically when orders are completed or payroll is "
+"recorded."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rewards"
+msgid "Loyalty Rewards"
+msgstr "Ödüller"
+
+#, fuzzy
+#| msgid "Loyalty Program"
+msgid "My Loyalty Profile"
+msgstr "Sadakat Programı"
+
+msgid "Earn points with every order and redeem them for delicious rewards!"
+msgstr ""
+
+msgid "Current Balance"
+msgstr ""
+
+msgid "Points"
+msgstr "Puan"
+
+msgid "Redeemable Rewards"
+msgstr "Kullanılabilir Ödüller"
+
+msgid "Keep ordering to unlock more rewards!"
+msgstr ""
+
+msgid "Transaction History"
+msgstr "İşlem Geçmişi"
+
+#, fuzzy
+#| msgid "Transaction History"
+msgid "No transactions yet."
+msgstr "İşlem Geçmişi"
+
+#, fuzzy
+msgid "Loyalty Dashboard"
+msgstr ""
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Pano\n"
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Kontrol Paneli"
+
+#, fuzzy
+#| msgid "Loyalty Program"
+msgid "Loyalty Program Management"
 msgstr "Sadakat Programı"
 
 msgid "Program Overview"
 msgstr "Program Genel Bakış"
 
-msgid "Points"
-msgstr "Puan"
-
-msgid "Points Required"
-msgstr "Gereken Puan"
-
-msgid "Redeemable Rewards"
-msgstr "Kullanılabilir Ödüller"
-
-msgid "Rewards"
+#, fuzzy
+#| msgid "Rewards"
+msgid "All Rewards"
 msgstr "Ödüller"
+
+#, fuzzy
+#| msgid "Save Reward"
+msgid "New Reward"
+msgstr "Ödülü Kaydet"
+
+msgid "Recent Activity"
+msgstr "Son Aktivite"
+
+msgid "No recent transactions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Save Reward"
+msgid "Active Rewards"
+msgstr "Ödülü Kaydet"
+
+msgid "Required"
+msgstr "Zorunlu"
+
+msgid "Active,Inactive"
+msgstr ""
+
+#, fuzzy
+#| msgid "No records found"
+msgid "No rewards defined."
+msgstr "Kayıt bulunamadı"
+
+#, fuzzy
+#| msgid "Save Reward"
+msgid "Create Reward"
+msgstr "Ödülü Kaydet"
+
+#, fuzzy
+#| msgid "System Configuration"
+msgid "Loyalty Reward Configuration"
+msgstr "Sistem Yapılandırması"
 
 msgid "Reward Definition"
 msgstr "Ödül Tanımı"
@@ -560,29 +2430,974 @@ msgstr "Ödül Tanımı"
 msgid "Save Reward"
 msgstr "Ödülü Kaydet"
 
-msgid "Tier"
-msgstr "Seviye"
+msgid "Rewards"
+msgstr "Ödüller"
 
-msgid "Campaign Management"
-msgstr "Kampanya Yönetimi"
+#, fuzzy
+#| msgid "Customer List"
+msgid "Customer Rewards"
+msgstr "Müşteri Listesi"
 
-msgid "Total Campaigns"
-msgstr "Toplam Kampanya"
+#, fuzzy
+#| msgid "Rewards"
+msgid "Add Reward"
+msgstr "Ödüller"
 
-msgid "Suggest Campaign"
-msgstr "Kampanya Öner"
+msgid "Points Required"
+msgstr "Gereken Puan"
 
-msgid "Review Management"
-msgstr "Değerlendirme Yönetimi"
+#, fuzzy
+#| msgid "No records found"
+msgid "No rewards defined yet."
+msgstr "Kayıt bulunamadı"
+
+#, fuzzy
+#| msgid "Add Category"
+msgid "Edit Category"
+msgstr "Kategori Ekle"
+
+msgid "Add Category"
+msgstr "Kategori Ekle"
+
+#, fuzzy
+#| msgid "Save Category"
+msgid "New Category"
+msgstr "Kategoriyi Kaydet"
+
+msgid "Organize your menu items into logical groups for your customers."
+msgstr ""
+
+msgid "Languages"
+msgstr ""
+
+#, fuzzy
+#| msgid "Category"
+msgid "Category Name"
+msgstr "Kategori"
+
+msgid "Category Name (Turkish)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Description"
+msgid "Description (Turkish)"
+msgstr "Açıklama"
+
+msgid "Category Name (English)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Description"
+msgid "Description (English)"
+msgstr "Açıklama"
+
+msgid "Category Name (Arabic)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Description"
+msgid "Description (Arabic)"
+msgstr "Açıklama"
+
+msgid "Category Name (Azerbaijani)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Description"
+msgid "Description (Azerbaijani)"
+msgstr "Açıklama"
+
+msgid "Visible"
+msgstr ""
+
+msgid "Save Category"
+msgstr "Kategoriyi Kaydet"
+
+#, fuzzy
+#| msgid "Categories"
+msgid "Menu Categories"
+msgstr "Kategoriler"
+
+msgid "Manage your menu sections and their display order."
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "Delete"
+msgstr "Sil"
+
+#, fuzzy
+#| msgid "Categories"
+msgid "No categories yet"
+msgstr "Kategoriler"
+
+msgid "Create categories to organize your menu items."
+msgstr ""
+
+#, fuzzy
+#| msgid "Save Category"
+msgid "Create First Category"
+msgstr "Kategoriyi Kaydet"
+
+msgid "Admin"
+msgstr ""
+
+msgid "Product Management"
+msgstr "Ürün Yönetimi"
+
+msgid "Overview"
+msgstr "Genel Bakış"
+
+#, fuzzy
+#| msgid "Category"
+msgid "No Category"
+msgstr "Kategori"
+
+msgid "Edit Product"
+msgstr "Ürün Düzenle"
+
+#, fuzzy
+#| msgid "Optional"
+msgid "Option Name"
+msgstr "İsteğe Bağlı"
+
+#, fuzzy
+#| msgid "Total Price"
+msgid "Extra Price"
+msgstr "Toplam Fiyat"
+
+msgid "No options added yet."
+msgstr ""
+
+#, fuzzy
+#| msgid "Order Note (Optional)"
+msgid "Add New Option"
+msgstr "Sipariş Notu (İsteğe Bağlı)"
+
+msgid "Add"
+msgstr "Ekle"
+
+msgid "Add Product"
+msgstr "Ürün Ekle"
+
+msgid "Product Content & Languages"
+msgstr ""
+
+#, fuzzy
+#| msgid "Product Name"
+msgid "Product Name (Primary)"
+msgstr "Ürün Adı"
+
+msgid ""
+"This name will be used as a fallback for all languages if they are left "
+"blank."
+msgstr ""
+
+msgid "AI Generate"
+msgstr ""
+
+#, fuzzy
+#| msgid "Product Name"
+msgid "Product Name (Turkish)"
+msgstr "Ürün Adı"
+
+#, fuzzy
+#| msgid "Product Name"
+msgid "Product Name (English)"
+msgstr "Ürün Adı"
+
+#, fuzzy
+#| msgid "Product Name"
+msgid "Product Name (Arabic)"
+msgstr "Ürün Adı"
+
+#, fuzzy
+#| msgid "Product Name"
+msgid "Product Name (Azerbaijani)"
+msgstr "Ürün Adı"
+
+msgid "AI is writing a premium description for the selected language..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Category"
+msgid "Category & Pricing"
+msgstr "Kategori"
+
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Quick Add"
+msgstr "Hızlı İşlemler"
+
+#, fuzzy
+#| msgid "Price (?)"
+msgid "Price (₺)"
+msgstr "Fiyat (?)"
+
+msgid "Visibility & Stock"
+msgstr "Görünürlük ve Stok"
+
+msgid "Flags"
+msgstr ""
+
+msgid "Popular Item"
+msgstr "Popüler Ürün"
+
+msgid "Featured in Hero"
+msgstr ""
+
+msgid "Media"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cart Nutritional Values"
+msgid "Nutritional Info"
+msgstr "Sepet Besin Değerleri"
+
+msgid "Prep Time"
+msgstr "Hazırlama Süresi"
+
+msgid "AI will automatically calculate protein, fat, and carbs if left blank."
+msgstr ""
+
+msgid "Save Product Changes"
+msgstr "Ürün Değişikliklerini Kaydet"
+
+msgid "Please enter a product name first."
+msgstr "Lütfen önce bir ürün adı girin."
+
+msgid "products across"
+msgstr "ürünler genelinde"
+
+#, fuzzy
+#| msgid "Categories"
+msgid "categories"
+msgstr "Kategoriler"
+
+msgid "Total Products"
+msgstr "Toplam Ürün"
+
+#, fuzzy
+#| msgid "Price"
+msgid "Avg Price"
+msgstr "Fiyat"
+
+#, fuzzy
+#| msgid "Search dishes..."
+msgid "Search products..."
+msgstr "Yemek ara..."
+
+msgid "Popular"
+msgstr "Popüler"
+
+#, fuzzy
+#| msgid "Total Products"
+msgid "No products yet"
+msgstr "Toplam Ürün"
+
+msgid "Add your first menu item."
+msgstr ""
+
+msgid "Welcome!"
+msgstr "Hoş geldiniz!"
+
+msgid ""
+"Enter your budget, and we'll show you the most suitable products. Athlete "
+"mode highlights nutritional values."
+msgstr ""
+
+#, fuzzy
+#| msgid "Your budget"
+msgid "Your Budget"
+msgstr "Bütçeniz"
+
+msgid "Athlete Mode"
+msgstr ""
+
+#, fuzzy
+#| msgid "Shows Cal · Protein · Carbs on each card"
+msgid "Shows Calories · Protein · Carbohydrates on each card"
+msgstr "Her kartta Kalori · Protein · Karbonhidrat gösterir"
+
+msgid "Show My Menu"
+msgstr "Menümü Göster"
+
+#, fuzzy
+#| msgid "Skip - show everything"
+msgid "Skip — Show everything"
+msgstr "Atla - her şeyi göster"
+
+msgid "AI-Powered Dining Experience"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save Branch"
+msgid "Main Branch"
+msgstr "Şubeyi Kaydet"
+
+#, fuzzy
+#| msgid "Budget"
+msgid "Budget Filter"
+msgstr "Bütçe Filtresi"
+
+msgid "Artificial Intelligence"
+msgstr "Yapay Zeka"
+
+#, fuzzy
+#| msgid "Live Menu"
+msgid "AI Menu"
+msgstr "AI Menü"
+
+msgid "Budget"
+msgstr "Bütçe"
+
+msgid "Reset"
+msgstr "Sıfırla"
+
+msgid "Call Waiter"
+msgstr "Garson Çağır"
+
+msgid "Request Bill"
+msgstr "Hesap İste"
+
+#, fuzzy
+#| msgid "Search dishes..."
+msgid "Search for food..."
+msgstr "Yemek ara..."
+
+msgid "All"
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete"
+msgid "Athlete"
+msgstr "Sil"
+
+#, fuzzy
+#| msgid "Over Budget"
+msgid "Exceeds Budget"
+msgstr "Bütçeyi Aştı"
+
+msgid "View Details and Add"
+msgstr ""
+
+msgid "Please scan a table QR code to call a waiter."
+msgstr ""
+
+#, fuzzy
+#| msgid "Waiter Call!"
+msgid "Waiter called."
+msgstr "Garson Çağrısı!"
+
+msgid "Please scan a table QR code to request a bill."
+msgstr ""
+
+msgid "Bill requested."
+msgstr ""
+
+msgid "Freshly prepared with high-quality ingredients, our signature flavor."
+msgstr ""
+
+#, fuzzy
+#| msgid "AI Insights"
+msgid "AI Insight"
+msgstr "Yapay Zeka Öngörüleri"
+
+msgid ""
+"Our AI suggests pairing this with a fresh seasonal salad for a balanced meal."
+msgstr ""
+
+#, fuzzy
+#| msgid "Cart Nutritional Values"
+msgid "Nutritional Values"
+msgstr "Sepet Besin Değerleri"
+
+msgid "Protein"
+msgstr "Protein"
+
+msgid "Carbohydrates"
+msgstr "Karbonhidrat"
+
+msgid "Fat"
+msgstr "Yağ"
+
+#, fuzzy
+#| msgid "Customer List"
+msgid "Customer Reviews"
+msgstr "Müşteri Listesi"
+
+msgid "No reviews yet"
+msgstr ""
+
+msgid "Be the first to share your experience!"
+msgstr ""
+
+msgid "Write a Review"
+msgstr "Yorum Yap"
+
+msgid "Remove Ingredients"
+msgstr ""
+
+msgid "Special Note"
+msgstr "Özel Not"
+
+msgid "e.g. Please make it extra spicy or no onions..."
+msgstr "Örn. Lütfen ekstra acı olsun veya soğan olmasın..."
+
+msgid "Quantity"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add Category"
+msgid "Add to Cart"
+msgstr "Kategori Ekle"
+
+msgid "Your Basket"
+msgstr "Sepetiniz"
+
+msgid "items"
+msgstr "ürün"
+
+msgid "Remove"
+msgstr "Olmasın"
+
+msgid "Cart Nutritional Values"
+msgstr "Sepet Besin Değerleri"
+
+msgid "Service Fee"
+msgstr "Servis Ücreti"
+
+msgid "Calculated at checkout"
+msgstr "Ödeme adımlarında hesaplanır"
+
+msgid "Clear cart"
+msgstr "Sepeti temizle"
+
+msgid "Continue to Checkout"
+msgstr "Ödemeye Devam Et"
+
+msgid "Your Basket is Empty"
+msgstr "Sepetiniz Boş"
+
+msgid "Hungry? Browse our menu and pick something delicious!"
+msgstr "Aç mısınız? Menümüzü inceleyin ve leziz bir şeyler seçin!"
+
+msgid "Browse Menu"
+msgstr "Menüyü İncele"
+
+msgid "Checkout"
+msgstr ""
+
+msgid "Almost Ready!"
+msgstr "Neredeyse Hazır!"
+
+msgid "Review your order details and place your order."
+msgstr "Sipariş bilgilerinizi kontrol edin ve siparişinizi verin."
+
+msgid "Delivery Preference"
+msgstr "Teslimat Tercihi"
+
+#, fuzzy
+msgid "Dine-in"
+msgstr ""
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Restoranda\n"
+"#-#-#-#-#  django.po (NeyMenu AI)  #-#-#-#-#\n"
+"Masa Servisi"
+
+msgid "Ordering Method"
+msgstr "Sipariş Yöntemi"
+
+msgid "Standard (Web)"
+msgstr "Standart (Web)"
+
+msgid "Your Information"
+msgstr "Bilgileriniz"
+
+msgid "Full Name"
+msgstr "Ad Soyad"
+
+msgid "e.g. Ali Ahmedov"
+msgstr "Örn. Ali Ahmedov"
+
+msgid "e.g. +90 500 123 45 67"
+msgstr "Örn. +90 500 123 45 67"
+
+msgid "Select your table..."
+msgstr "Masanızı seçin..."
+
+msgid "Table Order"
+msgstr "Masa Siparişi"
+
+msgid "Order Note (Optional)"
+msgstr "Sipariş Notu (İsteğe Bağlı)"
+
+msgid "e.g. No onions, make it spicy etc..."
+msgstr "Örn. Soğan olmasın, acısı bol olsun vb..."
+
+msgid "Order Summary"
+msgstr "Sipariş Özeti"
+
+msgid "Complete Order"
+msgstr "Siparişi Tamamla"
+
+msgid "By placing this order, you agree to our Terms of Service."
+msgstr "Bu siparişi vererek Hizmet Koşullarımızı kabul etmiş olursunuz."
+
+msgid "Payment"
+msgstr ""
+
+#, fuzzy
+#| msgid "Complete Order"
+msgid "Complete Your Payment"
+msgstr "Siparişi Tamamla"
+
+msgid "Please select your preferred payment method to complete order"
+msgstr ""
+
+#, fuzzy
+#| msgid "Total Today"
+msgid "Total to Pay"
+msgstr "Bugün Toplam"
+
+msgid "Pay with Stripe (Simulated)"
+msgstr ""
+
+msgid "Pay with PayPal (Simulated)"
+msgstr ""
+
+msgid "No online payment gateways are configured for this restaurant."
+msgstr ""
+
+msgid "Skip payment (Pay at counter)"
+msgstr ""
+
+msgid "Order Received!"
+msgstr "Sipariş Alındı!"
+
+msgid "Your order has been sent to the kitchen."
+msgstr "Siparişiniz mutfağa iletildi."
+
+msgid "Tracking Code"
+msgstr "Takip Kodu"
+
+msgid "Keep this number to track your order"
+msgstr "Siparişinizi takip etmek için bu numarayı saklayın"
+
+msgid "Track My Order"
+msgstr "Siparişimi Takip Et"
+
+msgid "Received"
+msgstr "Alındı"
+
+msgid "Your order has been received."
+msgstr "Siparişiniz sisteme ulaştı."
+
+msgid "Estimated"
+msgstr "Tahmini"
+
+msgid "minutes"
+msgstr "dakika"
+
+msgid "Chef is preparing your meal."
+msgstr "Şef yemeğinizi hazırlıyor."
+
+msgid "Your order is ready!"
+msgstr "Siparişiniz servise hazır!"
+
+msgid "Enjoy your meal!"
+msgstr "Afiyet olsun!"
+
+msgid "Order More"
+msgstr "Daha Fazla Sipariş Ver"
+
+msgid "Rate Our Service"
+msgstr "Hizmetimizi Değerlendirin"
+
+msgid "Onayla"
+msgstr ""
+
+msgid "Servis Edildi"
+msgstr ""
+
+msgid "Ödendi / Kapat"
+msgstr ""
+
+msgid "Hızlı İşlemler"
+msgstr ""
+
+msgid "İptal Et"
+msgstr ""
+
+msgid "Order Detail"
+msgstr "Sipariş Detayı"
+
+#, fuzzy
+#| msgid "Track Order"
+msgid "Back to Orders"
+msgstr "Siparişi Takip Et"
+
+msgid "Order Items"
+msgstr "Sipariş Kalemleri"
+
+#, fuzzy
+#| msgid "Update Status"
+msgid "Update Qty"
+msgstr "Durumu Güncelle"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete"
+msgid "Are you sure you want to remove this item?"
+msgstr "Silmek istediğinizden emin misiniz?"
+
+#, fuzzy
+#| msgid "Remove"
+msgid "Remove Item"
+msgstr "Olmasın"
+
+msgid "Add Extra Item"
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete Product"
+msgid "Select product..."
+msgstr "Ürünü Sil"
+
+msgid "Qty"
+msgstr ""
+
+msgid "Order Info"
+msgstr "Sipariş Bilgisi"
+
+msgid "Time"
+msgstr "Süre"
+
+#, fuzzy
+#| msgid "Notes"
+msgid "Note:"
+msgstr "Notlar"
+
+msgid "Update Status"
+msgstr "Durumu Güncelle"
+
+#, fuzzy
+#| msgid "Add Branch"
+msgid "Edit Branch"
+msgstr "Şube Ekle"
+
+msgid "Add Branch"
+msgstr "Şube Ekle"
+
+msgid "Update Branch Details"
+msgstr "Şube Detaylarını Güncelle"
+
+#, fuzzy
+#| msgid "Save Branch"
+msgid "Create New Branch"
+msgstr "Şubeyi Kaydet"
+
+msgid "Save Branch"
+msgstr "Şubeyi Kaydet"
+
+msgid "Restaurant Branches"
+msgstr "Restoran Şubeleri"
+
+msgid "Our Branches"
+msgstr "Şubelerimiz"
+
+#, fuzzy
+#| msgid "Add Branch"
+msgid "Add New Branch"
+msgstr "Şube Ekle"
+
+msgid "None"
+msgstr ""
+
+#, fuzzy
+#| msgid "No records found"
+msgid "No branches found."
+msgstr "Kayıt bulunamadı"
+
+msgid "Welcome back,"
+msgstr "Hoş geldiniz,"
+
+msgid "Ask AI"
+msgstr ""
+
+msgid "Kitchen"
+msgstr "Mutfak"
+
+msgid "Today Revenue"
+msgstr "Bugünkü Gelir"
+
+msgid "Yesterday"
+msgstr "Dün"
+
+#, fuzzy
+#| msgid "Period"
+msgid "Current Period"
+msgstr "Dönem"
+
+#, fuzzy
+#| msgid "Rating"
+msgid "Avg. Rating"
+msgstr "Puan"
+
+msgid "Based on reviews"
+msgstr ""
+
+msgid "Recent Orders"
+msgstr "Son Siparişler"
+
+msgid "View All"
+msgstr "Tümünü Görüntüle"
+
+#, fuzzy
+#| msgid "Your order is ready!"
+msgid "No orders yet today"
+msgstr "Siparişiniz servise hazır!"
+
+#, fuzzy
+#| msgid "Upsell Opportunity"
+msgid "Growth Opportunity"
+msgstr "Ek Satış Fırsatı"
+
+#, python-format
+msgid "Burger category is up 20%% vs last week. Consider a combo upsell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Product Performance"
+msgid "Kitchen Performance"
+msgstr "Ürün Performansı"
+
+msgid "Average prep time down to 8 min — great efficiency!"
+msgstr ""
+
+msgid "Peak Hour Alert"
+msgstr "Yoğun Saat Uyarısı"
+
+#, fuzzy
+#| msgid "Predicted peak at 7:30 PM. Ensure 3 waiters are on the floor."
+msgid "Expected rush at 7:30 PM. Prepare 3 staff on floor."
+msgstr "19:30'da yoğun saat bekleniyor. 3 garsonun hazır olduğundan emin olun."
+
+msgid "View All Insights"
+msgstr "Tüm Öngörüleri Görüntüle"
+
+msgid "Best Sellers"
+msgstr ""
+
+msgid "Last 30 days"
+msgstr ""
+
+msgid "Rank"
+msgstr "Sıralama"
+
+msgid "sold"
+msgstr ""
+
+msgid "No sales data yet"
+msgstr ""
+
+msgid "Restaurant Profile"
+msgstr "Restoran Profili"
+
+#, fuzzy
+#| msgid "QR Menu URL"
+msgid "QR Menu"
+msgstr "QR Menü URL'si"
+
+#, fuzzy
+#| msgid "System Settings"
+msgid "System Status"
+msgstr "Sistem Ayarları"
+
+#, fuzzy
+#| msgid "Your Information"
+msgid "General Information"
+msgstr "Bilgileriniz"
+
+msgid "Basic details about your restaurant visible to customers."
+msgstr ""
+
+msgid "Brand Logo"
+msgstr ""
+
+msgid "Recommended: Square SVG or PNG (min 512x512px)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Upload"
+msgid "Upload New"
+msgstr "Yükle"
+
+msgid "Restaurant Name"
+msgstr "Restoran Adı"
+
+msgid "Public Slug"
+msgstr ""
+
+msgid "Slugs are permanent identifiers for your URL."
+msgstr ""
+
+#, fuzzy
+#| msgid "Save Table"
+msgid "Save Profile"
+msgstr "Masayı Kaydet"
+
+#, fuzzy
+#| msgid "Pro Tip"
+msgid "Pro Tips"
+msgstr "Profesyonel İpucu"
+
+msgid "High Quality Logo"
+msgstr ""
+
+msgid "A clear logo increases customer trust and brand recognition."
+msgstr ""
+
+msgid "Accurate Contact"
+msgstr ""
+
+msgid "Ensure your phone and email are correct for booking inquiries."
+msgstr ""
+
+#, fuzzy
+#| msgid "Description"
+msgid "SEO Description"
+msgstr "Açıklama"
+
+msgid ""
+"Use keywords like 'Turkish food', 'Baku' in description for better ranking."
+msgstr ""
+
+msgid "PROFILE COMPLETION"
+msgstr ""
+
+msgid "Complete your profile to unlock all AI growth features."
+msgstr ""
+
+#, fuzzy
+#| msgid "General Settings"
+msgid "Global Settings"
+msgstr "Genel Ayarlar"
+
+#, fuzzy
+#| msgid "Order"
+msgid "Ordering"
+msgstr "Sipariş"
+
+msgid "AI & Loyalty"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+#, fuzzy
+#| msgid "Operations"
+msgid "Integrations"
+msgstr "Operasyonlar"
+
+#, fuzzy
+#| msgid "Order Served"
+msgid "Ordering & Service"
+msgstr "Sipariş Servis Edildi"
+
+msgid "Control how customers and staff place orders."
+msgstr ""
+
+msgid "Configure smart features and customer retention programs."
+msgstr ""
+
+msgid "Display & Info"
+msgstr ""
+
+msgid "Customize how your menu looks to customers."
+msgstr ""
+
+msgid "Integrations & Payments"
+msgstr ""
+
+msgid "Connect WhatsApp ordering and configure payment gateways."
+msgstr ""
+
+msgid "Update Settings"
+msgstr "Ayarları Güncelle"
+
+msgid "Pro Tip"
+msgstr "Profesyonel İpucu"
+
+msgid ""
+"These settings affect all branches and customer-facing menus globally. "
+"Changes are applied instantly."
+msgstr ""
+"Bu ayarlar tüm şubeleri ve müşteriye yönelik menüleri global olarak etkiler. "
+"Değişiklikler anında uygulanır."
+
+msgid "Ürünü Değerlendir"
+msgstr ""
+
+msgid "Bu Yemeği Puanlayın"
+msgstr ""
+
+msgid "Yemeğiniz nasıldı? Geri bildiriminiz başkalarına yardımcı olur!"
+msgstr ""
+
+msgid "Yorumunuz"
+msgstr ""
+
+msgid "Neleri beğendiniz veya beğenmediniz?"
+msgstr ""
+
+msgid "Yorumu Gönder"
+msgstr ""
+
+msgid "İptal"
+msgstr ""
 
 msgid "Reviews Dashboard"
 msgstr "Değerlendirmeler Panosu"
 
-msgid "Reviews will appear after customers rate their experience."
-msgstr "Müşteriler deneyimlerini puanladıktan sonra değerlendirmeler görünecek."
+msgid "Feedback & Sentiment Analysis"
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete Expense"
+msgid "Guest Experience"
+msgstr "Gideri Sil"
+
+#, fuzzy
+#| msgid "Reviews"
+msgid "All Reviews"
+msgstr "Değerlendirmeler"
+
+#, fuzzy
+#| msgid "Negative"
+msgid "Negative Only"
+msgstr "Negatif"
 
 msgid "Total Reviews"
 msgstr "Toplam Değerlendirme"
+
+msgid "Submissions"
+msgstr "Gönderilenler"
+
+msgid "Recent Feedbacks"
+msgstr "Son Geri Bildirimler"
+
+msgid "Read Full Analysis"
+msgstr "Tam Analizi Oku"
+
+msgid "No reviews yet."
+msgstr ""
+
+msgid "Monitor customer feedback and ratings."
+msgstr ""
+
+msgid "Analytics"
+msgstr "Analitik"
 
 msgid "Rating"
 msgstr "Puan"
@@ -590,122 +3405,265 @@ msgstr "Puan"
 msgid "Sentiment"
 msgstr "Duygu"
 
-msgid "Recent Feedbacks"
-msgstr "Son Geri Bildirimler"
+msgid "Comment"
+msgstr ""
 
-msgid "Rate our service"
-msgstr "Hizmetimizi değerlendirin"
+msgid "Bu yorumu silmek istediğinize emin misiniz?"
+msgstr ""
 
-msgid "AI Engine"
-msgstr "Yapay Zeka Motoru"
+msgid "Reviews will appear after customers rate their experience."
+msgstr ""
+"Müşteriler deneyimlerini puanladıktan sonra değerlendirmeler görünecek."
 
-msgid "View All Insights"
-msgstr "Tüm Öngörüleri Görüntüle"
+msgid "Record Payment"
+msgstr ""
 
-msgid "Read Full Analysis"
-msgstr "Tam Analizi Oku"
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to history"
+msgstr "Listeye Geri Dön"
 
-msgid "Refresh Data"
-msgstr "Verileri Yenile"
+msgid "Record Salary Payment"
+msgstr ""
 
-msgid "Refresh"
-msgstr "Yenile"
+msgid "Staff Member"
+msgstr ""
 
-msgid "Run Deep Scan"
-msgstr "Derin Tarama Yap"
+#, fuzzy
+#| msgid "Total Amount"
+msgid "Payment Amount"
+msgstr "Toplam Tutar"
 
-msgid "Peak Hour Alert"
-msgstr "Yoğun Saat Uyarısı"
+msgid "Salary Period (e.g. May 2026)"
+msgstr ""
 
-msgid "Staffing Tip"
-msgstr "Personel İpucu"
+#, fuzzy
+#| msgid "Confirm"
+msgid "Confirm Payment"
+msgstr "Onayla"
 
-msgid "Upsell Opportunity"
-msgstr "Ek Satış Fırsatı"
+#, fuzzy
+#| msgid "Order History"
+msgid "Payroll History"
+msgstr "Sipariş Geçmişi"
 
-msgid "Pro Tip"
-msgstr "Profesyonel İpucu"
+#, fuzzy
+#| msgid "Salary & Payroll"
+msgid "Salary & Payments"
+msgstr "Maaş ve Bordro"
 
-msgid "Recommended Items"
-msgstr "Önerilen Ürünler"
+msgid "Track all payroll payments to staff"
+msgstr ""
 
-msgid "Recommendation Success"
-msgstr "Öneri Başarısı"
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to Staff"
+msgstr "Listeye Geri Dön"
 
-msgid "Predicted peak at 7:30 PM. Ensure 3 waiters are on the floor."
-msgstr "19:30'da yoğun saat bekleniyor. 3 garsonun hazır olduğundan emin olun."
+#, fuzzy
+#| msgid "View All Payments"
+msgid "New Payment"
+msgstr "Tüm Ödemeleri Görüntüle"
 
-msgid "Salmon stock is depleting faster than usual. AI suggests ordering by 4 PM."
-msgstr "Somon stoğu normalden hızlı azalıyor. Yapay Zeka, saat 16:00'a kadar sipariş vermenizi öneriyor."
+msgid "Employee"
+msgstr ""
 
-msgid "The 'Inactive' segment represents 15% of your database. A re-engagement coupon could recover lost revenue."
-msgstr "'Pasif' segmenti veritabanınızın %15'ini oluşturuyor. Yeniden katılım kuponu kayıp geliri geri kazandırabilir."
+msgid "Created By"
+msgstr ""
 
-msgid "Your current net margin is healthy. To improve further, consider bundling high-margin side dishes with popular main courses."
-msgstr "Mevcut net marjınız sağlıklı. Daha fazla iyileştirmek için yüksek marjlı yan yemekleri popüler ana yemeklerle birleştirin."
+msgid "No payroll records"
+msgstr ""
 
-msgid "Your 'VIP' segment has grown by 12% this month. Consider launching a dedicated loyalty campaign to maintain this momentum."
-msgstr "'VIP' segmentiniz bu ay %12 büyüdü. Bu ivmeyi korumak için özel bir sadakat kampanyası başlatmayı düşünün."
+msgid "Record your first salary payment to see it here."
+msgstr ""
 
-msgid "What should I order for stock tomorrow?"
-msgstr "Yarın stok için ne sipariş etmeliyim?"
+#, fuzzy
+#| msgid "Staff & Payroll"
+msgid "Edit Staff Profile"
+msgstr "Personel & Maaş"
 
-msgid "Which products are performing poorly?"
-msgstr "Hangi ürünler düşük performans gösteriyor?"
+msgid "Add Staff Member"
+msgstr ""
 
-msgid "prioritize high-protein options"
-msgstr "yüksek protein seçeneklerini önceleyin"
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to staff list"
+msgstr "Listeye Geri Dön"
 
-msgid "Restaurant Profile"
-msgstr "Restoran Profili"
-
-msgid "Restaurant Name"
-msgstr "Restoran Adı"
-
-msgid "Restaurant Branches"
-msgstr "Restoran Şubeleri"
-
-msgid "Restaurant Tables"
-msgstr "Restoran Masaları"
-
-msgid "Restaurant"
-msgstr "Restoran"
-
-msgid "Profile Information"
+#, fuzzy
+#| msgid "Profile Information"
+msgid "Edit Profile for"
 msgstr "Profil Bilgileri"
 
-msgid "Update Settings"
-msgstr "Ayarları Güncelle"
+msgid "Link User to Staff Profile"
+msgstr ""
 
-msgid "Save Changes"
-msgstr "Değişiklikleri Kaydet"
+msgid "Select User"
+msgstr ""
 
-msgid "These settings affect all branches and customer-facing menus globally. Changes are applied instantly."
-msgstr "Bu ayarlar tüm şubeleri ve müşteriye yönelik menüleri global olarak etkiler. Değişiklikler anında uygulanır."
+msgid "Select a user to link"
+msgstr ""
 
-msgid "Tables"
-msgstr "Masalar"
+msgid ""
+"Only users from your restaurant who aren't already staff profiles are shown."
+msgstr ""
 
-msgid "Table"
-msgstr "Masa"
+#, fuzzy
+#| msgid "Update Status"
+msgid "Active Status"
+msgstr "Durumu Güncelle"
 
-msgid "Table Number"
-msgstr "Masa Numarası"
+msgid "Disable this to mark the staff member as inactive"
+msgstr ""
 
-msgid "Tables Active"
-msgstr "Aktif Masalar"
+#, fuzzy
+#| msgid "Management"
+msgid "Staff Management"
+msgstr "Yönetim"
+
+msgid "Manage employee profiles and salary details"
+msgstr ""
+
+msgid "Salary"
+msgstr ""
+
+msgid "Hired Date"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit Product"
+msgid "Edit Profile"
+msgstr "Ürün Düzenle"
+
+msgid "Pay Salary"
+msgstr ""
+
+#, fuzzy
+#| msgid "No records found"
+msgid "No staff profiles found"
+msgstr "Kayıt bulunamadı"
+
+msgid "Click 'Add Staff Member' to link a user to a salary profile."
+msgstr ""
+
+#, fuzzy
+#| msgid "Restaurant Tables"
+msgid "Reserve a Table"
+msgstr "Restoran Masaları"
+
+msgid "Plan your visit and we'll have your table ready."
+msgstr ""
+
+msgid "John Doe"
+msgstr ""
+
+#, fuzzy
+#| msgid "Prep Time"
+msgid "Date & Time"
+msgstr "Hazırlama Süresi"
+
+msgid "Guests"
+msgstr ""
+
+#, fuzzy
+#| msgid "Order Note (Optional)"
+msgid "Special Note (Optional)"
+msgstr "Sipariş Notu (İsteğe Bağlı)"
+
+msgid "e.g., Anniversary, Window seat..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "Confirm Reservation"
+msgstr "Rezervasyonlar"
+
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to Menu"
+msgstr "Listeye Geri Dön"
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "Edit Reservation"
+msgstr "Rezervasyonlar"
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "New Reservation"
+msgstr "Rezervasyonlar"
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "Edit Reservation Details"
+msgstr "Rezervasyonlar"
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "Create New Reservation"
+msgstr "Rezervasyonlar"
+
+#, fuzzy
+#| msgid "Reservations"
+msgid "Save Reservation"
+msgstr "Rezervasyonlar"
+
+#, fuzzy
+#| msgid "Review Management"
+msgid "Reservation Management"
+msgstr "Rezervasyon Yönetimi"
+
+msgid "View and manage guest bookings"
+msgstr ""
+
+msgid "Pax"
+msgstr ""
+
+#, fuzzy
+#| msgid "No records found"
+msgid "No reservations found"
+msgstr "Kayıt bulunamadı"
+
+msgid "When guests book a table, they will appear here."
+msgstr ""
+
+#, fuzzy
+#| msgid "Add Table"
+msgid "Edit Table"
+msgstr "Masa Ekle"
 
 msgid "Add Table"
 msgstr "Masa Ekle"
 
-msgid "Save Table"
-msgstr "Masayı Kaydet"
-
 msgid "Update Table Details"
 msgstr "Masa Detaylarını Güncelle"
 
-msgid "QR Code"
-msgstr "QR Kod"
+#, fuzzy
+#| msgid "Save Table"
+msgid "Create New Table"
+msgstr "Masayı Kaydet"
+
+msgid "Save Table"
+msgstr "Masayı Kaydet"
+
+msgid "Restaurant Tables"
+msgstr "Restoran Masaları"
+
+#, fuzzy
+#| msgid "Add Table"
+msgid "Add New Table"
+msgstr "Masa Ekle"
+
+msgid "View QR"
+msgstr "QR'ı Görüntüle"
+
+msgid "Not Generated"
+msgstr ""
+
+#, fuzzy
+#| msgid "No records found"
+msgid "No tables found."
+msgstr "Kayıt bulunamadı"
 
 msgid "QR Code Details"
 msgstr "QR Kod Detayları"
@@ -713,314 +3671,38 @@ msgstr "QR Kod Detayları"
 msgid "QR Code for"
 msgstr "için QR Kodu"
 
-msgid "QR Menu URL"
+#, fuzzy
+#| msgid "QR Menu URL"
+msgid "Direct Menu URL"
 msgstr "QR Menü URL'si"
 
-msgid "View QR"
-msgstr "QR'ı Görüntüle"
+#, fuzzy
+#| msgid "Download"
+msgid "Download PNG"
+msgstr "İndir"
 
 msgid "Print Version"
 msgstr "Yazdır"
 
+msgid "Generating QR Code..."
+msgstr ""
+
 msgid "Please wait while we prepare the digital menu link for this table."
 msgstr "Bu masa için dijital menü bağlantısı hazırlanırken lütfen bekleyin."
 
-msgid "Branch"
-msgstr "Şube"
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to Tables"
+msgstr "Listeye Geri Dön"
 
-msgid "Add Branch"
-msgstr "Şube Ekle"
+msgid "Print QR"
+msgstr "QR Yazdır"
 
-msgid "Save Branch"
-msgstr "Şubeyi Kaydet"
+msgid "Print this page"
+msgstr "Bu sayfayı yazdır"
 
-msgid "Update Branch Details"
-msgstr "Şube Detaylarını Güncelle"
+msgid "Scan to view our menu!"
+msgstr "Menümüzü görüntülemek için tarayın!"
 
-msgid "Our Branches"
-msgstr "Şubelerimiz"
-
-msgid "Profitability Analysis"
-msgstr "Karlılık Analizi"
-
-msgid "Profitability Report"
-msgstr "Karlılık Raporu"
-
-msgid "Purchase Records"
-msgstr "Satın Alma Kayıtları"
-
-msgid "Transaction History"
-msgstr "İşlem Geçmişi"
-
-msgid "Report"
-msgstr "Rapor"
-
-msgid "Rank"
-msgstr "Sıralama"
-
-msgid "Sold"
-msgstr "Satıldı"
-
-msgid "View"
-msgstr "Görüntüle"
-
-msgid "View All"
-msgstr "Tümünü Görüntüle"
-
-msgid "Action"
-msgstr "İşlem"
-
-msgid "Add"
-msgstr "Ekle"
-
-msgid "Edit"
-msgstr "Düzenle"
-
-msgid "Delete"
-msgstr "Sil"
-
-msgid "Cancel"
-msgstr "İptal"
-
-msgid "Confirm"
-msgstr "Onayla"
-
-msgid "Submit"
-msgstr "Gönder"
-
-msgid "Search"
-msgstr "Ara"
-
-msgid "Search dishes..."
-msgstr "Yemek ara..."
-
-msgid "Filter"
-msgstr "Filtrele"
-
-msgid "Reset"
-msgstr "Sıfırla"
-
-msgid "Export"
-msgstr "Dışa Aktar"
-
-msgid "Import"
-msgstr "İçe Aktar"
-
-msgid "Print"
-msgstr "Yazdır"
-
-msgid "Download"
-msgstr "İndir"
-
-msgid "Upload"
-msgstr "Yükle"
-
-msgid "Save"
-msgstr "Kaydet"
-
-msgid "Close"
-msgstr "Kapat"
-
-msgid "Back"
-msgstr "Geri"
-
-msgid "Next"
-msgstr "İleri"
-
-msgid "Previous"
-msgstr "Önceki"
-
-msgid "Required"
-msgstr "Zorunlu"
-
-msgid "Optional"
-msgstr "İsteğe Bağlı"
-
-msgid "Loading..."
-msgstr "Yükleniyor..."
-
-msgid "No data available"
-msgstr "Veri mevcut değil"
-
-msgid "No records found"
-msgstr "Kayıt bulunamadı"
-
-msgid "records"
-msgstr "kayıt"
-
-msgid "Name"
-msgstr "Ad"
-
-msgid "Email"
-msgstr "E-posta"
-
-msgid "Phone"
-msgstr "Telefon"
-
-msgid "Phone Number"
-msgstr "Telefon Numarası"
-
-msgid "Address"
-msgstr "Adres"
-
-msgid "Notes"
-msgstr "Notlar"
-
-msgid "Subject"
-msgstr "Konu"
-
-msgid "Message"
-msgstr "Mesaj"
-
-msgid "Type"
-msgstr "Tür"
-
-msgid "Time"
-msgstr "Süre"
-
-msgid "Title"
-msgstr "Başlık"
-
-msgid "Target"
-msgstr "Hedef"
-
-msgid "Priority"
-msgstr "Öncelik"
-
-msgid "Paid & Trialing"
-msgstr "Ödendi ve Deneme"
-
-msgid "Plans"
-msgstr "Planlar"
-
-msgid "Plan"
-msgstr "Plan"
-
-msgid "Subscriptions"
-msgstr "Abonelikler"
-
-msgid "Support"
-msgstr "Destek"
-
-msgid "Pending Tickets"
-msgstr "Bekleyen Talepler"
-
-msgid "Urgent Tickets"
-msgstr "Acil Talepler"
-
-msgid "SaaS Control Center"
-msgstr "SaaS Kontrol Merkezi"
-
-msgid "Super Admin Dashboard"
-msgstr "Süper Yönetici Panosu"
-
-msgid "Platform Overview"
-msgstr "Platform Genel Bakış"
-
-msgid "System Configuration"
-msgstr "Sistem Yapılandırması"
-
-msgid "System Fully Optimized"
-msgstr "Sistem Tamamen Optimize Edildi"
-
-msgid "System Live"
-msgstr "Sistem Canlı"
-
-msgid "Sync Screen"
-msgstr "Ekranı Senkronize Et"
-
-msgid "Requires immediate action"
-msgstr "Acil müdahale gerektirir"
-
-msgid "Submission"
-msgstr "Gönderim"
-
-msgid "Submissions"
-msgstr "Gönderilenler"
-
-msgid "The Future of Restaurant Management"
-msgstr "Restoran Yönetiminin Geleceği"
-
-msgid "Show My Menu"
-msgstr "Menümü Göster"
-
-msgid "Shows Cal · Protein · Carbs on each card"
-msgstr "Her kartta Kalori · Protein · Karbonhidrat gösterir"
-
-msgid "Shows Cal · Protein · Carbs on each card"
-msgstr "Her kartta Kalori · Protein · Karbonhidrat gösterir"
-
-msgid "Skip - show everything"
-msgstr "Atla - her şeyi göster"
-
-msgid "Your basket is empty"
-msgstr "Sepetiniz boş"
-
-msgid "Your Basket"
-msgstr "Sepetiniz"
-
-msgid "Your Cart"
-msgstr "Sepetiniz"
-
-msgid "Your Order"
-msgstr "Siparişiniz"
-
-msgid "Your Information"
-msgstr "Bilgileriniz"
-
-msgid "Your budget"
-msgstr "Bütçeniz"
-
-msgid "Tell us your budget - we'll design the perfect meal."
-msgstr "Bütçenizi söyleyin - mükemmel yemeği tasarlayalım."
-
-msgid "Review your details and place your order."
-msgstr "Bilgilerinizi gözden geçirin ve siparişinizi verin."
-
-msgid "The kitchen has received your order and will start preparing it shortly."
-msgstr "Mutfak siparişinizi aldı ve kısa süre içinde hazırlamaya başlayacak."
-
-msgid "Your order has been received by the kitchen."
-msgstr "Siparişiniz mutfak tarafından alındı."
-
-msgid "Your order is ready! It will be brought to your table shortly."
-msgstr "Siparişiniz hazır! Kısa süre içinde masanıza getirilecek."
-
-msgid "This order has been cancelled. Please contact staff for details."
-msgstr "Bu sipariş iptal edildi. Detaylar için personelle iletişime geçin."
-
-msgid "Tap 'Served' when the order reaches the customer."
-msgstr "Sipariş müşteriye ulaştığında 'Servis Edildi'ye basın."
-
-msgid "Pre-Order"
-msgstr "Ön Sipariş"
-
-msgid "Takeaway"
-msgstr "Paket"
-
-msgid "Dine-in"
-msgstr "Restoranda"
-
-msgid "Total Today"
-msgstr "Bugün Toplam"
-
-msgid "Total Value"
-msgstr "Toplam Değer"
-
-msgid "Total Volume"
-msgstr "Toplam Hacim"
-
-msgid "Total Items"
-msgstr "Toplam Öğe"
-
-msgid "Suggested"
-msgstr "Önerilen"
-
-msgid "Please enter a product name first."
-msgstr "Lütfen önce bir ürün adı girin."
-
-msgid "Please fix the errors above."
-msgstr "Lütfen yukarıdaki hataları düzeltin."
-
-msgid "Stock Alerts"
-msgstr "Stok Uyarıları"
+msgid "Branch Management"
+msgstr "Şube Yönetimi"

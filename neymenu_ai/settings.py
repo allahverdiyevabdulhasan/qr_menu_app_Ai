@@ -164,9 +164,6 @@ LANGUAGE_CODE = 'tr'
 from django.utils.translation import gettext_lazy as _
 LANGUAGES = [
     ('tr', _('Turkish')),
-    ('en', _('English')),
-    ('ar', _('Arabic')),
-    ('az', _('Azerbaijani')),
 ]
 
 LOCALE_PATHS = [
@@ -213,3 +210,6 @@ if AI_API_KEY:
 # File upload limits
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+
+# QR Code Base Domain
+PUBLIC_DOMAIN = os.environ.get('PUBLIC_DOMAIN', 'http://127.0.0.1:8000')

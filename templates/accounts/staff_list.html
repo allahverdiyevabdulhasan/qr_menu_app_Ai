@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Personel Listesi — Kanatçı Mustafa{% endblock %}
+{% block title %}Personel Listesi — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Personel Yönetimi{% endblock %}
 
 {% block content %}

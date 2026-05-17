@@ -3,11 +3,13 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
 from restaurants.models import Restaurant
-from restaurants.views import RestaurantAccessMixin
+from restaurants.views import RestaurantAccessMixin, PermissionRequiredMixin
 from campaigns.models import Campaign, Coupon
 from campaigns.services import validate_coupon
 
-class CampaignListView(RestaurantAccessMixin, ListView):
+class CampaignListView(PermissionRequiredMixin, ListView):
+    permission_name = 'can_manage_campaigns'
+
     model = Campaign
     template_name = 'campaigns/campaign_list.html'
     context_object_name = 'campaigns'
@@ -15,7 +17,9 @@ class CampaignListView(RestaurantAccessMixin, ListView):
     def get_queryset(self):
         return Campaign.objects.filter(restaurant=self.request.user.restaurant)
 
-class CampaignCreateView(RestaurantAccessMixin, CreateView):
+class CampaignCreateView(PermissionRequiredMixin, CreateView):
+    permission_name = 'can_manage_campaigns'
+
     model = Campaign
     template_name = 'campaigns/campaign_form.html'
     fields = ['title', 'description', 'campaign_type', 'discount_value', 'start_date', 'end_date', 'min_order_amount', 'is_active']
@@ -25,13 +29,17 @@ class CampaignCreateView(RestaurantAccessMixin, CreateView):
         form.instance.restaurant = self.request.user.restaurant
         return super().form_valid(form)
 
-class CampaignUpdateView(RestaurantAccessMixin, UpdateView):
+class CampaignUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_name = 'can_manage_campaigns'
+
     model = Campaign
     template_name = 'campaigns/campaign_form.html'
     fields = ['title', 'description', 'campaign_type', 'discount_value', 'start_date', 'end_date', 'min_order_amount', 'is_active']
     success_url = reverse_lazy('campaign_list')
 
-class CouponListView(RestaurantAccessMixin, ListView):
+class CouponListView(PermissionRequiredMixin, ListView):
+    permission_name = 'can_manage_campaigns'
+
     model = Coupon
     template_name = 'campaigns/coupon_list.html'
     context_object_name = 'coupons'
@@ -39,7 +47,9 @@ class CouponListView(RestaurantAccessMixin, ListView):
     def get_queryset(self):
         return Coupon.objects.filter(restaurant=self.request.user.restaurant)
 
-class CouponCreateView(RestaurantAccessMixin, CreateView):
+class CouponCreateView(PermissionRequiredMixin, CreateView):
+    permission_name = 'can_manage_campaigns'
+
     model = Coupon
     template_name = 'campaigns/coupon_form.html'
     fields = ['code', 'discount_type', 'discount_value', 'usage_limit', 'start_date', 'end_date', 'is_active']
@@ -49,7 +59,9 @@ class CouponCreateView(RestaurantAccessMixin, CreateView):
         form.instance.restaurant = self.request.user.restaurant
         return super().form_valid(form)
 
-class CouponUpdateView(RestaurantAccessMixin, UpdateView):
+class CouponUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_name = 'can_manage_campaigns'
+
     model = Coupon
     template_name = 'campaigns/coupon_form.html'
     fields = ['code', 'discount_type', 'discount_value', 'usage_limit', 'start_date', 'end_date', 'is_active']

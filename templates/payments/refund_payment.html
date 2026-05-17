@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Refund Payment — Kanatçı Mustafa{% endblock %}
+{% block title %}Refund Payment — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Refund Payment{% endblock %}
 
 {% block extra_css %}

@@ -23,6 +23,25 @@ class OwnerOnlyMixin(LoginRequiredMixin, UserPassesTestMixin):
         # Managers can view settings but only owners/admins can edit
         return user.is_authenticated and (user.is_super_admin or user.is_owner or user.is_manager)
 
+class PermissionRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    permission_name = None
+    raise_exception = True
+
+    def test_func(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        
+        # Super admin, Owner and Manager bypass checks
+        if user.is_super_admin or user.role in ['RESTAURANT_OWNER', 'MANAGER']:
+            return True
+            
+        if self.permission_name and getattr(user, self.permission_name, False):
+            return True
+            
+        return False
+
+
 class RestaurantDashboardView(RestaurantAccessMixin, TemplateView):
     template_name = 'restaurants/restaurant_dashboard.html'
 
@@ -83,17 +102,39 @@ class RestaurantDashboardView(RestaurantAccessMixin, TemplateView):
                 })
             context['top_products'] = top_products
 
+            # Avg. Rating (Unified across restaurant and product reviews)
+            from reviews.services import get_unified_reviews
+            unified_reviews = get_unified_reviews(restaurant)
+            if unified_reviews:
+                ratings = [r['rating'] for r in unified_reviews]
+                context['avg_rating'] = sum(ratings) / len(ratings)
+            else:
+                context['avg_rating'] = 0.0
+
         return context
 
-class RestaurantProfileUpdateView(OwnerOnlyMixin, UpdateView):
+class RestaurantProfileUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_name = 'can_manage_settings'
+
     model = Restaurant
     form_class = RestaurantProfileForm
     template_name = 'restaurants/restaurant_profile.html'
     success_url = reverse_lazy('restaurant_dashboard')
 
-    def get_object(self):
-        # Super admin could potentially pass pk, but for now we bind to the owner's restaurant
-        return self.request.user.restaurant
+    def get_object(self, queryset=None):
+        restaurant = self.request.user.restaurant
+        if not restaurant and self.request.user.is_super_admin:
+            restaurant = Restaurant.objects.first()
+        
+        if not restaurant:
+            from django.http import Http404
+            raise Http404(_("No restaurant found for this user."))
+        return restaurant
+
+    def form_valid(self, form):
+        if not form.instance.owner_id:
+            form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 class BranchListView(RestaurantAccessMixin, ListView):
     model = Branch
@@ -104,10 +145,8 @@ class BranchListView(RestaurantAccessMixin, ListView):
         user = self.request.user
         if user.is_super_admin:
             return Branch.objects.all()
-        elif user.is_owner:
+        elif user.is_owner or user.is_manager:
             return Branch.objects.filter(restaurant=user.restaurant)
-        elif user.is_manager:
-            return Branch.objects.filter(id=user.branch_id)
         return Branch.objects.none()
 
 class BranchCreateView(OwnerOnlyMixin, CreateView):
@@ -146,7 +185,9 @@ class BranchDeleteView(OwnerOnlyMixin, DeleteView):
     def get_queryset(self):
         return Branch.objects.filter(restaurant=self.request.user.restaurant)
 
-class RestaurantSettingsUpdateView(OwnerOnlyMixin, UpdateView):
+class RestaurantSettingsUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_name = 'can_manage_settings'
+
     model = RestaurantSettings
     form_class = RestaurantSettingsForm
     template_name = 'restaurants/restaurant_settings.html'

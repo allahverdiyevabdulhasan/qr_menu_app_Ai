@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=neymenu_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  redis:
+    image: redis:7-alpine
+
+  web:
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 neymenu_ai.asgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "80:8000"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=dev_secret_key_123
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=neymenu_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_URL=redis://redis:6379/0
+      - ALLOWED_HOSTS=localhost,127.0.0.1,173.212.232.21
+      - CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1,http://173.212.232.21,http://localhost:8000,http://127.0.0.1:8000
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  postgres_data:

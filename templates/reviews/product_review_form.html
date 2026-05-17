@@ -1,13 +1,13 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Rate Product" %} — NeyMenu AI{% endblock %}
+{% block title %}{% trans "Ürünü Değerlendir" %} — NeyMenu AI{% endblock %}
 
 {% block content %}
 <div class="fade-in" style="padding: 24px; max-width: 500px; margin: 0 auto;">
     <div style="text-align:center; margin-bottom:32px;">
-        <h2 style="font-weight:900; color:var(--dark); margin-bottom:8px;">{% trans "Rate this Dish" %}</h2>
-        <p style="color:var(--text-muted); font-size:0.9rem;">{% trans "How was your meal? Your feedback helps others choose!" %}</p>
+        <h2 style="font-weight:900; color:var(--dark); margin-bottom:8px;">{% trans "Bu Yemeği Puanlayın" %}</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">{% trans "Yemeğiniz nasıldı? Geri bildiriminiz başkalarına yardımcı olur!" %}</p>
     </div>
 
     <form method="post" class="card" style="padding:32px; border-radius:24px;">
@@ -25,16 +25,16 @@
         </div>
 
         <div style="margin-bottom:24px;">
-            <label style="display:block; font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">{% trans "Your Comment" %}</label>
-            <textarea name="comment" rows="4" style="width:100%; border:2px solid var(--border); border-radius:16px; padding:16px; font-family:inherit; outline:none; transition:0.3s;" placeholder="{% trans 'What did you like or dislike?' %}"></textarea>
+            <label style="display:block; font-size:0.75rem; font-weight:800; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">{% trans "Yorumunuz" %}</label>
+            <textarea name="comment" rows="4" style="width:100%; border:2px solid var(--border); border-radius:16px; padding:16px; font-family:inherit; outline:none; transition:0.3s;" placeholder="{% trans 'Neleri beğendiniz veya beğenmediniz?' %}"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block btn-lg" style="border-radius:18px; padding:16px; font-weight:800;">
-            🚀 {% trans "Submit Review" %}
+            🚀 {% trans "Yorumu Gönder" %}
         </button>
         
         <a href="javascript:history.back()" style="display:block; text-align:center; margin-top:20px; font-size:0.9rem; color:var(--text-muted); text-decoration:none; font-weight:600;">
-            {% trans "Cancel" %}
+            {% trans "İptal" %}
         </a>
     </form>
 </div>

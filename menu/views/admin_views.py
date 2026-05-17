@@ -2,11 +2,13 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect
-from restaurants.views import OwnerOnlyMixin, RestaurantAccessMixin
+from restaurants.views import OwnerOnlyMixin, RestaurantAccessMixin, PermissionRequiredMixin
 from menu.models import Category, Product, ProductOption
 from menu.forms import CategoryForm, ProductForm, ProductOptionForm
 
-class CategoryListView(RestaurantAccessMixin, ListView):
+class CategoryListView(PermissionRequiredMixin, ListView):
+    permission_name = 'can_manage_menu'
+
     model = Category
     template_name = 'menu/category_list.html'
     context_object_name = 'categories'
@@ -14,7 +16,9 @@ class CategoryListView(RestaurantAccessMixin, ListView):
     def get_queryset(self):
         return Category.objects.filter(restaurant=self.request.user.restaurant)
 
-class CategoryCreateView(OwnerOnlyMixin, CreateView):
+class CategoryCreateView(PermissionRequiredMixin, CreateView):
+    permission_name = 'can_manage_menu'
+
     model = Category
     form_class = CategoryForm
     template_name = 'menu/category_form.html'
@@ -24,7 +28,9 @@ class CategoryCreateView(OwnerOnlyMixin, CreateView):
         form.instance.restaurant = self.request.user.restaurant
         return super().form_valid(form)
 
-class CategoryUpdateView(OwnerOnlyMixin, UpdateView):
+class CategoryUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_name = 'can_manage_menu'
+
     model = Category
     form_class = CategoryForm
     template_name = 'menu/category_form.html'
@@ -33,7 +39,9 @@ class CategoryUpdateView(OwnerOnlyMixin, UpdateView):
     def get_queryset(self):
         return Category.objects.filter(restaurant=self.request.user.restaurant)
 
-class CategoryDeleteView(OwnerOnlyMixin, DeleteView):
+class CategoryDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_name = 'can_manage_menu'
+
     model = Category
     success_url = reverse_lazy('category_list')
 
@@ -41,7 +49,9 @@ class CategoryDeleteView(OwnerOnlyMixin, DeleteView):
         return Category.objects.filter(restaurant=self.request.user.restaurant)
 
 
-class ProductListView(RestaurantAccessMixin, ListView):
+class ProductListView(PermissionRequiredMixin, ListView):
+    permission_name = 'can_manage_menu'
+
     model = Product
     template_name = 'menu/product_list.html'
     context_object_name = 'products'
@@ -49,7 +59,19 @@ class ProductListView(RestaurantAccessMixin, ListView):
     def get_queryset(self):
         return Product.objects.filter(restaurant=self.request.user.restaurant)
 
-class ProductCreateView(OwnerOnlyMixin, CreateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurant = self.request.user.restaurant
+        context['categories'] = Category.objects.filter(restaurant=restaurant)
+        
+        from django.db.models import Avg
+        avg_val = self.get_queryset().aggregate(Avg('price'))['price__avg']
+        context['avg_price'] = round(avg_val, 2) if avg_val is not None else 0
+        return context
+
+class ProductCreateView(PermissionRequiredMixin, CreateView):
+    permission_name = 'can_manage_menu'
+
     model = Product
     form_class = ProductForm
     template_name = 'menu/product_form.html'
@@ -64,7 +86,9 @@ class ProductCreateView(OwnerOnlyMixin, CreateView):
         form.instance.restaurant = self.request.user.restaurant
         return super().form_valid(form)
 
-class ProductUpdateView(OwnerOnlyMixin, UpdateView):
+class ProductUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_name = 'can_manage_menu'
+
     model = Product
     form_class = ProductForm
     template_name = 'menu/product_form.html'
@@ -91,7 +115,9 @@ class ProductDetailAdminView(RestaurantAccessMixin, DetailView):
         context['option_form'] = ProductOptionForm()
         return context
 
-class ProductOptionCreateView(OwnerOnlyMixin, CreateView):
+class ProductOptionCreateView(PermissionRequiredMixin, CreateView):
+    permission_name = 'can_manage_menu'
+
     model = ProductOption
     form_class = ProductOptionForm
 
@@ -103,7 +129,9 @@ class ProductOptionCreateView(OwnerOnlyMixin, CreateView):
     def get_success_url(self):
         return reverse('product_detail_admin', kwargs={'pk': self.kwargs['product_id']})
 
-class ProductToggleActionView(OwnerOnlyMixin, DetailView):
+class ProductToggleActionView(PermissionRequiredMixin, DetailView):
+    permission_name = 'can_manage_menu'
+
     model = Product
 
     def get_queryset(self):

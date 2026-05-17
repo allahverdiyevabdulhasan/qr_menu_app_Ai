@@ -8,123 +8,317 @@
 
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand" style="flex-direction: column; align-items: flex-start; padding: 12px 16px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-          <div class="logo-mark">🍗</div>
-          <div style="font-weight: 900; font-size: 1.3rem;">Kanatçı Mustafa</div>
+    <div class="sidebar-brand" style="padding: 20px 16px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        {% if request.user.restaurant.logo %}
+        <img src="{{ request.user.restaurant.logo.url }}" alt="{{ request.user.restaurant.name }}"
+          style="height: 40px; width: 40px; object-fit: contain; border-radius: 8px;">
+        {% else %}
+        <div class="logo-mark">🍽️</div>
+        {% endif %}
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-weight: 900; font-size: 1.1rem; line-height: 1.2;">{{
+            request.user.restaurant.name|default:"Panel" }}</span>
+          {% if request.user.branch %}
+          <span style="font-size: 0.7rem; color: var(--text-muted);">{{ request.user.branch.name }}</span>
+          {% endif %}
+        </div>
       </div>
     </div>
 
     <nav class="sidebar-nav" style="padding: 10px;">
-      <a href="{% url 'restaurant_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_dashboard' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
-        Kontrol Paneli
+      <a href="{% url 'restaurant_dashboard' %}"
+        class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_dashboard' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="9"></rect>
+          <rect x="14" y="3" width="7" height="5"></rect>
+          <rect x="14" y="12" width="7" height="9"></rect>
+          <rect x="3" y="16" width="7" height="5"></rect>
+        </svg>
+        {% trans "Dashboard" %}
       </a>
 
-      {% if user.is_super_admin or user.is_owner or user.is_manager %}
-      <a href="{% url 'analytics_dashboard' %}" class="sidebar-link {% if 'analytics' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path></svg>
-        Analizler & Raporlar
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_analytics %}
+      <a href="{% url 'analytics_dashboard' %}"
+        class="sidebar-link {% if 'analytics' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"></path>
+          <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path>
+        </svg>
+        {% trans "Analytics & Reports" %}
       </a>
       {% endif %}
 
-      <div class="sidebar-section">Operasyonlar</div>
-      
-      <a href="{% url 'order_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'order_list' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Siparişler
+      <div class="sidebar-section">{% trans "Operations" %}</div>
+
+      <a href="{% url 'order_list' %}"
+        class="sidebar-link {% if request.resolver_match.url_name == 'order_list' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        {% trans "Orders" %}
       </a>
 
-      <a href="{% url 'reservation_list' %}" class="sidebar-link {% if 'reservation' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        Rezervasyonlar
+      <a href="{% url 'reservation_list' %}"
+        class="sidebar-link {% if 'reservation' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        {% trans "Reservations" %}
       </a>
 
-      {% if user.is_super_admin or user.is_owner or user.is_manager or user.is_kitchen or user.is_cashier %}
-      <a href="{% url 'kitchen_screen' %}" class="sidebar-link {% if request.resolver_match.url_name == 'kitchen_screen' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-        Mutfak Ekranı
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or user.is_kitchen or request.user.can_view_kitchen_screen
+      %}
+      <a href="{% url 'kitchen_screen' %}"
+        class="sidebar-link {% if request.resolver_match.url_name == 'kitchen_screen' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20"></path>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        {% trans "Kitchen Screen" %}
       </a>
       {% endif %}
 
-      {% if user.is_super_admin or user.is_owner or user.is_manager or user.is_waiter or user.is_cashier %}
-      <a href="{% url 'waiter_panel' %}" class="sidebar-link {% if request.resolver_match.url_name == 'waiter_panel' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path></svg>
-        Garson Paneli
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or user.is_waiter or request.user.can_view_waiter_panel %}
+      <a href="{% url 'waiter_panel' %}"
+        class="sidebar-link {% if request.resolver_match.url_name == 'waiter_panel' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        {% trans "Waiter Panel" %}
       </a>
       {% endif %}
 
-      {% if user.is_super_admin or user.is_owner or user.is_manager or user.is_cashier %}
-      <a href="{% url 'cashier_panel' %}" class="sidebar-link {% if request.resolver_match.url_name == 'cashier_panel' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-        Kasiyer Paneli
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or user.is_cashier or request.user.can_view_cashier_panel %}
+      <a href="{% url 'cashier_panel' %}"
+        class="sidebar-link {% if request.resolver_match.url_name == 'cashier_panel' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
+        {% trans "Cashier Panel" %}
       </a>
       {% endif %}
 
-      <a href="{% url 'table_list' %}" class="sidebar-link {% if 'table' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-        Masalar
+      <a href="{% url 'table_list' %}"
+        class="sidebar-link {% if 'table' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        {% trans "Tables" %}
       </a>
 
-      {% if user.is_super_admin or user.is_owner or user.is_manager or user.is_cashier %}
-      <div class="sidebar-section">Yönetim</div>
-      <a href="{% url 'product_list' %}" class="sidebar-link {% if 'product' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        Menü Öğeleri
-      </a>
-      <a href="{% url 'category_list' %}" class="sidebar-link {% if 'category' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-        Kategoriler
-      </a>
-      <a href="{% url 'inventory_list' %}" class="sidebar-link {% if 'inventory' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-        Stok & Envanter
-      </a>
-      <a href="{% url 'expense_list' %}" class="sidebar-link {% if 'expense' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-        Gider Yönetimi
-      </a>
-      <a href="{% url 'staff_profile_list' %}" class="sidebar-link {% if 'staff' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-        Personel & Maaş
-      </a>
-      <a href="{% url 'invoice_list' %}" class="sidebar-link {% if 'invoice' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Faturalar
-      </a>
-      <a href="{% url 'customer_list' %}" class="sidebar-link {% if 'customer' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        Müşteriler (CRM)
-      </a>
 
-      <div class="sidebar-section">Büyüme & Yapay Zeka</div>
-      <a href="{% url 'ai_insights' %}" class="sidebar-link {% if request.resolver_match.url_name == 'ai_insights' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-        Yapay Zeka Raporları
-      </a>
-      <a href="{% url 'ai_manager_chat' %}" class="sidebar-link {% if 'manager' in request.resolver_match.url_name|default:'' and 'chat' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        Yapay Zeka Asistanı
-      </a>
-      <a href="{% url 'campaign_list' %}" class="sidebar-link {% if 'campaign' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 5 22 5 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
-        Kampanyalar
-      </a>
-      <a href="{% url 'review_list' %}" class="sidebar-link {% if 'review' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-        Değerlendirmeler
-      </a>
 
-      <div class="sidebar-section">Sistem Ayarları</div>
-      <a href="{% url 'restaurant_profile' %}" class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_profile' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        Genel Ayarlar
-      </a>
-      <a href="{% url 'role_permission_list' %}" class="sidebar-link {% if 'permission' in request.resolver_match.url_name|default:'' %}active{% endif %}">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        Roller & İzinler
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_settings %}
+      <div class="sidebar-section">Şubeler</div>
+      <a href="{% url 'branch_list' %}"
+        class="sidebar-link {% if 'branch' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18"></path>
+          <path d="M10 21V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v15"></path>
+          <path d="M2 21V14a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v7"></path>
+          <rect x="6" y="16" width="2" height="2"></rect>
+          <rect x="12" y="8" width="2" height="2"></rect>
+          <rect x="12" y="12" width="2" height="2"></rect>
+          <rect x="12" y="16" width="2" height="2"></rect>
+        </svg>
+        Şube Yönetimi
       </a>
       {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_menu or request.user.can_manage_inventory
+      or request.user.can_view_expenses or request.user.can_view_payroll or request.user.can_manage_customers or request.user.can_manage_settings %}
+      <div class="sidebar-section">{% trans "Management" %}</div>
+
+
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_menu %}
+      <a href="{% url 'product_list' %}"
+        class="sidebar-link {% if 'product' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        {% trans "Menu Items" %}
+      </a>
+      <a href="{% url 'category_list' %}"
+        class="sidebar-link {% if 'category' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+        {% trans "Categories" %}
+      </a>
+      {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_inventory %}
+      <a href="{% url 'inventory_list' %}"
+        class="sidebar-link {% if 'inventory' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+          </path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        {% trans "Stock & Inventory" %}
+      </a>
+      {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_expenses %}
+      <a href="{% url 'expense_list' %}"
+        class="sidebar-link {% if 'expense' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        {% trans "Expense Management" %}
+      </a>
+      {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_payroll %}
+      <a href="{% url 'staff_profile_list' %}"
+        class="sidebar-link {% if 'staff' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        {% trans "Staff & Payroll" %}
+      </a>
+      {% endif %}
+
+      <a href="{% url 'invoice_list' %}"
+        class="sidebar-link {% if 'invoice' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        {% trans "Invoices" %}
+      </a>
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_customers %}
+      <a href="{% url 'customer_list' %}"
+        class="sidebar-link {% if 'customer' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        {% trans "Customers (CRM)" %}
+      </a>
+
+      {% endif %}
+      {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_ai_reports or
+      request.user.can_manage_campaigns or request.user.can_view_reviews %}
+      <div class="sidebar-section">{% trans "Growth & AI" %}</div>
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_ai_reports %}
+      <a href="{% url 'ai_insights' %}"
+        class="sidebar-link {% if request.resolver_match.url_name == 'ai_insights' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        {% trans "AI Reports" %}
+      </a>
+      <a href="{% url 'ai_manager_chat' %}"
+        class="sidebar-link {% if 'manager' in request.resolver_match.url_name|default:'' and 'chat' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        {% trans "AI Assistant" %}
+      </a>
+      {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_campaigns %}
+      <a href="{% url 'campaign_list' %}"
+        class="sidebar-link {% if 'campaign' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 12 20 22 5 22 5 12"></polyline>
+          <rect x="2" y="7" width="20" height="5"></rect>
+          <line x1="12" y1="22" x2="12" y2="7"></line>
+          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+        </svg>
+        {% trans "Campaigns" %}
+      </a>
+      {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_reviews %}
+      <a href="{% url 'review_list' %}"
+        class="sidebar-link {% if 'review' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+          </polygon>
+        </svg>
+        {% trans "Reviews" %}
+      </a>
+      {% endif %}
+      {% endif %}
+
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_settings %}
+      <div class="sidebar-section">{% trans "System Settings" %}</div>
+      <a href="{% url 'restaurant_profile' %}"
+        class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_profile' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+        {% trans "General Settings" %}
+      </a>
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager %}
+      <a href="{% url 'role_permission_list' %}"
+        class="sidebar-link {% if 'permission' in request.resolver_match.url_name|default:'' %}active{% endif %}">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        {% trans "Roles & Permissions" %}
+      </a>
+      {% endif %}
+      {% endif %}
+
     </nav>
   </aside>
 
@@ -139,109 +333,163 @@
       </div>
       <div class="topbar-right" style="display: flex; align-items: center; gap: 20px;">
         {% if request.user.restaurant %}
-        <a href="/m/{{ request.user.restaurant.slug }}/" target="_blank"
-           class="btn btn-sm hide-mobile"
-           style="background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px; padding: 6px 12px; transition: all 0.2s;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          <span style="font-size: 0.85rem;">Canlı Menü</span>
+        <a href="{% url 'public_menu' restaurant_slug=request.user.restaurant.slug %}#menu"
+          class="btn btn-sm hide-mobile"
+          style="background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px; padding: 6px 12px; transition: all 0.2s;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span style="font-size: 0.85rem;">{% trans "Live Menu" %}</span>
         </a>
         {% endif %}
-        
+
         <div style="width:1px; height:24px; background:var(--border);" class="hide-mobile"></div>
-        
+
         <div style="display: flex; align-items: center; gap: 12px;">
-            <!-- Notification Bell Container -->
-            <div class="notification-dropdown-container" style="position: relative;">
-              <button onclick="toggleNotificationDropdown(event)" class="topbar-icon-btn" style="background: transparent; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; color: var(--text-muted); position: relative; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <!-- Notification Bell Container -->
+          <div class="notification-dropdown-container" style="position: relative;">
+            <button onclick="toggleNotificationDropdown(event)" class="topbar-icon-btn"
+              style="background: transparent; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; color: var(--text-muted); position: relative; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              {% if header_notifications_count > 0 %}
+              <span class="notification-badge"
+                style="position: absolute; top: -2px; right: -2px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 10px; border: 2px solid #fff; min-width: 18px; text-align: center;">{{
+                header_notifications_count }}</span>
+              {% endif %}
+            </button>
+
+            <div id="notificationDropdown" class="dropdown-menu"
+              style="display: none; position: absolute; right: 0; top: 56px; background: #fff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; z-index: 1000; overflow: hidden;">
+              <div
+                style="padding: 14px 16px; border-bottom: 1px solid var(--border); font-weight: 800; color: var(--text); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+                <span>🔔 {% trans "Notifications" %}</span>
                 {% if header_notifications_count > 0 %}
-                <span class="notification-badge" style="position: absolute; top: -2px; right: -2px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 10px; border: 2px solid #fff; min-width: 18px; text-align: center;">{{ header_notifications_count }}</span>
+                <span
+                  style="background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 0.72rem; padding: 2px 8px; border-radius: 20px;">{{
+                  header_notifications_count }} {% trans "New" %}</span>
                 {% endif %}
-              </button>
-              
-              <div id="notificationDropdown" class="dropdown-menu" style="display: none; position: absolute; right: 0; top: 56px; background: #fff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; z-index: 1000; overflow: hidden;">
-                <div style="padding: 14px 16px; border-bottom: 1px solid var(--border); font-weight: 800; color: var(--text); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
-                  <span>🔔 Bildirimler</span>
-                  {% if header_notifications_count > 0 %}
-                  <span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 0.72rem; padding: 2px 8px; border-radius: 20px;">{{ header_notifications_count }} Yeni</span>
-                  {% endif %}
-                </div>
-                
-                <div style="max-height: 280px; overflow-y: auto;">
-                  {% if header_waiter_calls or header_pending_orders %}
-                    {# Pending Orders in notifications #}
-                    {% for order in header_pending_orders %}
-                    <a href="{% url 'waiter_panel' %}" style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
-                      <div style="width: 36px; height: 36px; border-radius: 50%; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">🛍️</div>
-                      <div style="flex: 1;">
-                        <div style="font-weight: 700; color: #1e293b; font-size: 0.8rem;">Yeni Sipariş Geldi!</div>
-                        <div style="color: #64748b; font-size: 0.72rem; margin-top: 2px;">{% if order.table %}Masa {{ order.table.table_number }}{% else %}Paket Servis{% endif %} · #{{ order.id }}</div>
-                        <div style="color: #94a3b8; font-size: 0.65rem; margin-top: 4px;">⏱️ {{ order.created_at|date:"H:i" }}</div>
-                      </div>
-                    </a>
-                    {% endfor %}
-                    
-                    {# Waiter Calls in notifications #}
-                    {% for call in header_waiter_calls %}
-                    <a href="{% url 'waiter_panel' %}" style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
-                      <div style="width: 36px; height: 36px; border-radius: 50%; background: #fee2e2; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">🚨</div>
-                      <div style="flex: 1;">
-                        <div style="font-weight: 700; color: #b91c1c; font-size: 0.8rem;">Garson Çağrısı!</div>
-                        <div style="color: #64748b; font-size: 0.72rem; margin-top: 2px;">Masa #{{ call.table.table_number }} garson çağırıyor.</div>
-                        <div style="color: #94a3b8; font-size: 0.65rem; margin-top: 4px;">⏱️ {{ call.created_at|date:"H:i" }}</div>
-                      </div>
-                    </a>
-                    {% endfor %}
-                  {% else %}
-                    <div style="padding: 40px 20px; text-align: center; color: #94a3b8;">
-                      <div style="font-size: 2rem; margin-bottom: 8px;">🎉</div>
-                      <div style="font-size: 0.82rem; font-weight: 600;">Her şey yolunda! Bildirim yok.</div>
+              </div>
+
+              <div style="max-height: 280px; overflow-y: auto;">
+                {% if header_waiter_calls or header_pending_orders %}
+                {# Pending Orders in notifications #}
+                {% for order in header_pending_orders %}
+                <a href="{% url 'waiter_panel' %}"
+                  style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
+                  <div
+                    style="width: 36px; height: 36px; border-radius: 50%; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+                    🛍️</div>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 700; color: #1e293b; font-size: 0.8rem;">{% trans "New Order Received!" %}
                     </div>
-                  {% endif %}
+                    <div style="color: #64748b; font-size: 0.72rem; margin-top: 2px;">{% if order.table %}{% trans
+                      "Table" %} {{ order.table.table_number }}{% else %}{% trans "Takeaway" %}{% endif %} · #{{
+                      order.id }}</div>
+                    <div style="color: #94a3b8; font-size: 0.65rem; margin-top: 4px;">⏱️ {{ order.created_at|date:"H:i"
+                      }}</div>
+                  </div>
+                </a>
+                {% endfor %}
+
+                {# Waiter Calls in notifications #}
+                {% for call in header_waiter_calls %}
+                <a href="{% url 'waiter_panel' %}"
+                  style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
+                  <div
+                    style="width: 36px; height: 36px; border-radius: 50%; background: #fee2e2; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+                    🚨</div>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 700; color: #b91c1c; font-size: 0.8rem;">{% trans "Waiter Call!" %}</div>
+                    <div style="color: #64748b; font-size: 0.72rem; margin-top: 2px;">{% trans "Table" %} #{{
+                      call.table.table_number }} {% trans "is calling a waiter." %}</div>
+                    <div style="color: #94a3b8; font-size: 0.65rem; margin-top: 4px;">⏱️ {{ call.created_at|date:"H:i"
+                      }}</div>
+                  </div>
+                </a>
+                {% endfor %}
+                {% else %}
+                <div style="padding: 40px 20px; text-align: center; color: #94a3b8;">
+                  <div style="font-size: 2rem; margin-bottom: 8px;">🎉</div>
+                  <div style="font-size: 0.82rem; font-weight: 600;">{% trans "Everything is good! No notifications." %}
+                  </div>
                 </div>
-                
-                <div style="padding: 10px; border-top: 1px solid var(--border); text-align: center; background: #fafafa;">
-                  <a href="{% url 'waiter_panel' %}" style="font-size: 0.78rem; font-weight: 800; color: var(--primary); text-decoration: none;">Garson Paneline Git →</a>
-                </div>
+                {% endif %}
+              </div>
+
+              <div style="padding: 10px; border-top: 1px solid var(--border); text-align: center; background: #fafafa;">
+                <a href="{% url 'waiter_panel' %}"
+                  style="font-size: 0.78rem; font-weight: 800; color: var(--primary); text-decoration: none;">{% trans
+                  "Go to Waiter Panel" %} →</a>
               </div>
             </div>
-            
-            <!-- Messages -->
-            <button class="topbar-icon-btn hide-mobile" style="background: transparent; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; color: var(--text-muted); position: relative; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            </button>
+          </div>
+
+          <!-- Messages -->
+          <button class="topbar-icon-btn hide-mobile"
+            style="background: transparent; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; color: var(--text-muted); position: relative; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
         </div>
 
         <!-- User Dropdown -->
         <div class="user-dropdown-container" style="position: relative; margin-left: 8px;">
           <div onclick="toggleUserDropdown()" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
-              <div class="top-user-avatar" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), #818cf8); color: white; border-radius: 50%; font-weight: 600; font-size: 15px; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);" title="{{ user.get_full_name|default:user.username }}">
-                {% if request.user.restaurant.logo %}
-                    <img src="{{ request.user.restaurant.logo.url }}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
-                {% else %}
-                    {{ user.username|slice:":1"|upper }}
-                {% endif %}
-              </div>
-              <div class="hide-mobile" style="display: flex; align-items: center; gap: 6px;">
-                  <span style="font-weight: 500; font-size: 0.9rem; color: var(--text);">{{ user.get_full_name|default:user.username }}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </div>
+            <div class="top-user-avatar"
+              style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), #818cf8); color: white; border-radius: 50%; font-weight: 600; font-size: 15px; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);"
+              title="{{ user.get_full_name|default:user.username }}">
+              {% if request.user.restaurant.logo %}
+              <img src="{{ request.user.restaurant.logo.url }}"
+                style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+              {% else %}
+              {{ user.username|slice:":1"|upper }}
+              {% endif %}
+            </div>
+            <div class="hide-mobile" style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-weight: 500; font-size: 0.9rem; color: var(--text);">{{
+                user.get_full_name|default:user.username }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
           </div>
-          
-          <div id="userDropdown" class="dropdown-menu" style="display: none; position: absolute; right: 0; top: 56px; background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 220px; z-index: 1000; overflow: hidden; padding: 8px 0;">
+
+          <div id="userDropdown" class="dropdown-menu"
+            style="display: none; position: absolute; right: 0; top: 56px; background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 220px; z-index: 1000; overflow: hidden; padding: 8px 0;">
             <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); margin-bottom: 8px;">
-              <div style="font-weight: 600; color: var(--text); font-size: 14px;">{{ user.get_full_name|default:user.username }}</div>
+              <div style="font-weight: 600; color: var(--text); font-size: 14px;">{{
+                user.get_full_name|default:user.username }}</div>
               <div style="color: var(--text-muted); font-size: 12px; margin-top: 2px;">{{ user.get_role_display }}</div>
             </div>
-            <a href="{% url 'restaurant_profile' %}" style="display: flex; align-items: center; gap: 10px; padding: 8px 16px; color: var(--text); text-decoration: none; font-size: 14px; transition: background 0.2s;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              Profil Ayarları
+            <a href="{% url 'restaurant_profile' %}"
+              style="display: flex; align-items: center; gap: 10px; padding: 8px 16px; color: var(--text); text-decoration: none; font-size: 14px; transition: background 0.2s;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              {% trans "Profile Settings" %}
             </a>
             <form action="{% url 'logout' %}" method="post" style="margin: 0; padding: 0;">
               {% csrf_token %}
-              <button type="submit" style="width: 100%; text-align: left; background: none; border: none; display: flex; align-items: center; gap: 10px; padding: 8px 16px; color: var(--danger); font-size: 14px; cursor: pointer; transition: background 0.2s; margin-top: 4px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                Çıkış Yap
+              <button type="submit"
+                style="width: 100%; text-align: left; background: none; border: none; display: flex; align-items: center; gap: 10px; padding: 8px 16px; color: var(--danger); font-size: 14px; cursor: pointer; transition: background 0.2s; margin-top: 4px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                {% trans "Logout" %}
               </button>
             </form>
           </div>
@@ -261,206 +509,220 @@
       </div>
       {% endif %}
       {% block content %}{% endblock %}
-      
+
       <!-- Footer -->
-      <footer style="text-align: center; padding: 20px 0; margin-top: auto; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted);">
-          &copy; {% now "Y" %} <a href="https://neymantech.com" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none;">Neyman Enterprise Technologies</a>. Tüm hakları saklıdır.
+      <footer
+        style="text-align: center; padding: 20px 0; margin-top: auto; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted);">
+        &copy; {% now "Y" %} <a href="https://neymantech.com" target="_blank"
+          style="color: var(--primary); font-weight: 700; text-decoration: none;">Neyman Enterprise Technologies</a>. {%
+        trans "All rights reserved." %}
       </footer>
     </div>
   </main>
 </div>
 
 <script>
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('active');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('active');
-}
-function toggleUserDropdown() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-  // Hide notification dropdown if open
-  const notifDropdown = document.getElementById('notificationDropdown');
-  if (notifDropdown) notifDropdown.style.display = 'none';
-}
-function toggleNotificationDropdown(event) {
-  if (event) event.stopPropagation();
-  const dropdown = document.getElementById('notificationDropdown');
-  dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-  // Hide user dropdown if open
-  const userDropdown = document.getElementById('userDropdown');
-  if (userDropdown) userDropdown.style.display = 'none';
-}
-
-// Chime Synthesis using Web Audio API
-function playChimeAlert() {
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    
-    // Play a sequence of beautiful marimba/bell notes: E5, G5, A5, C6 (ascending pentatonic scale)
-    const notes = [
-      { freq: 659.25, time: 0.0, duration: 0.8 }, // E5
-      { freq: 783.99, time: 0.15, duration: 0.8 }, // G5
-      { freq: 880.00, time: 0.3, duration: 0.8 },  // A5
-      { freq: 1046.50, time: 0.45, duration: 1.2 } // C6
-    ];
-    
-    notes.forEach(note => {
-      // Primary bell sound
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(note.freq, ctx.currentTime + note.time);
-      
-      gain.gain.setValueAtTime(0, ctx.currentTime + note.time);
-      gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + note.time + 0.05); // soft attack
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.time + note.duration); // smooth decay
-      
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      
-      // Subtle metallic overtone (bell harmonic)
-      const overtone = ctx.createOscillator();
-      const overtoneGain = ctx.createGain();
-      overtone.type = 'sine';
-      overtone.frequency.setValueAtTime(note.freq * 2, ctx.currentTime + note.time); // double the frequency
-      
-      overtoneGain.gain.setValueAtTime(0, ctx.currentTime + note.time);
-      overtoneGain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + note.time + 0.03);
-      overtoneGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.time + 0.4); // faster decay
-      
-      overtone.connect(overtoneGain);
-      overtoneGain.connect(ctx.destination);
-      
-      osc.start(ctx.currentTime + note.time);
-      osc.stop(ctx.currentTime + note.time + note.duration);
-      
-      overtone.start(ctx.currentTime + note.time);
-      overtone.stop(ctx.currentTime + note.time + note.duration);
-    });
-  } catch (e) {
-    console.error("Failed to play chime alert:", e);
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebar-overlay').classList.toggle('active');
   }
-}
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('active');
+  }
+  function toggleUserDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    // Hide notification dropdown if open
+    const notifDropdown = document.getElementById('notificationDropdown');
+    if (notifDropdown) notifDropdown.style.display = 'none';
+  }
+  function toggleNotificationDropdown(event) {
+    if (event) event.stopPropagation();
+    const dropdown = document.getElementById('notificationDropdown');
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    // Hide user dropdown if open
+    const userDropdown = document.getElementById('userDropdown');
+    if (userDropdown) userDropdown.style.display = 'none';
+  }
 
-// Track notification counts and trigger sound on increment
-document.addEventListener('DOMContentLoaded', () => {
-  let lastCount = parseInt(localStorage.getItem('last_notif_count') || '0', 10);
-  
-  function fetchNotifications() {
-    fetch('/en/orders/api/notifications/')
-      .then(response => response.json())
-      .then(data => {
-        const count = data.count;
-        
-        // Update top bell badge count
-        const bellBtn = document.querySelector('.notification-dropdown-container button');
-        if (!bellBtn) return;
-        
-        let badge = document.querySelector('.notification-badge');
-        
-        if (count > 0) {
-          if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'notification-badge';
-            badge.style.cssText = 'position: absolute; top: -2px; right: -2px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 10px; border: 2px solid #fff; min-width: 18px; text-align: center;';
-            bellBtn.appendChild(badge);
+  // Chime Synthesis using Web Audio API
+  function playChimeAlert() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+
+      // Play a sequence of beautiful marimba/bell notes: E5, G5, A5, C6 (ascending pentatonic scale)
+      const notes = [
+        { freq: 659.25, time: 0.0, duration: 0.8 }, // E5
+        { freq: 783.99, time: 0.15, duration: 0.8 }, // G5
+        { freq: 880.00, time: 0.3, duration: 0.8 },  // A5
+        { freq: 1046.50, time: 0.45, duration: 1.2 } // C6
+      ];
+
+      notes.forEach(note => {
+        // Primary bell sound
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.freq, ctx.currentTime + note.time);
+
+        gain.gain.setValueAtTime(0, ctx.currentTime + note.time);
+        gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + note.time + 0.05); // soft attack
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.time + note.duration); // smooth decay
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        // Subtle metallic overtone (bell harmonic)
+        const overtone = ctx.createOscillator();
+        const overtoneGain = ctx.createGain();
+        overtone.type = 'sine';
+        overtone.frequency.setValueAtTime(note.freq * 2, ctx.currentTime + note.time); // double the frequency
+
+        overtoneGain.gain.setValueAtTime(0, ctx.currentTime + note.time);
+        overtoneGain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + note.time + 0.03);
+        overtoneGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.time + 0.4); // faster decay
+
+        overtone.connect(overtoneGain);
+        overtoneGain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime + note.time);
+        osc.stop(ctx.currentTime + note.time + note.duration);
+
+        overtone.start(ctx.currentTime + note.time);
+        overtone.stop(ctx.currentTime + note.time + note.duration);
+      });
+    } catch (e) {
+      console.error("Failed to play chime alert:", e);
+    }
+  }
+
+  // Track notification counts and trigger sound on increment
+  document.addEventListener('DOMContentLoaded', () => {
+    let lastCount = parseInt(localStorage.getItem('last_notif_count') || '0', 10);
+
+    function fetchNotifications() {
+      fetch('{% url "api_notifications" %}')
+        .then(response => response.json())
+        .then(data => {
+          const count = data.count;
+
+          // Update top bell badge count
+          const bellBtn = document.querySelector('.notification-dropdown-container button');
+          if (!bellBtn) return;
+
+          let badge = document.querySelector('.notification-badge');
+
+          if (count > 0) {
+            if (!badge) {
+              badge = document.createElement('span');
+              badge.className = 'notification-badge';
+              badge.style.cssText = 'position: absolute; top: -2px; right: -2px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 10px; border: 2px solid #fff; min-width: 18px; text-align: center;';
+              bellBtn.appendChild(badge);
+            }
+            badge.textContent = count;
+          } else {
+            if (badge) badge.remove();
           }
-          badge.textContent = count;
-        } else {
-          if (badge) badge.remove();
-        }
-        
-        // Play sound if count increased
-        if (count > lastCount) {
-          playChimeAlert();
-        }
-        lastCount = count;
-        localStorage.setItem('last_notif_count', count.toString());
-        
-        // Update dropdown menu content dynamically
-        const dropdown = document.getElementById('notificationDropdown');
-        if (dropdown) {
-          const titleArea = dropdown.querySelector('div:first-child');
-          titleArea.innerHTML = `
-            <span>🔔 Bildirimler</span>
-            ${count > 0 ? `<span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 0.72rem; padding: 2px 8px; border-radius: 20px;">${count} Yeni</span>` : ''}
+
+          // Play sound if count increased
+          if (count > lastCount) {
+            playChimeAlert();
+          }
+          lastCount = count;
+          localStorage.setItem('last_notif_count', count.toString());
+
+          // Update dropdown menu content dynamically
+          const dropdown = document.getElementById('notificationDropdown');
+          if (dropdown) {
+            const titleArea = dropdown.querySelector('div:first-child');
+            titleArea.innerHTML = `
+            <span>🔔 {% trans "Notifications" %}</span>
+            ${count > 0 ? `<span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 0.72rem; padding: 2px 8px; border-radius: 20px;">${count} {% trans "New" %}</span>` : ''}
           `;
-          
-          const itemsArea = dropdown.querySelector('div:nth-child(2)');
-          if (data.calls.length > 0 || data.orders.length > 0) {
-            let html = '';
-            // Render pending orders
-            data.orders.forEach(order => {
-              const tableText = order.table_number ? `Masa ${order.table_number}` : 'Paket Servis';
-              html += `
-                <a href="/en/orders/waiter/" style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
+
+            const itemsArea = dropdown.querySelector('div:nth-child(2)');
+            if (data.calls.length > 0 || data.orders.length > 0) {
+              let html = '';
+              // Render pending orders
+              data.orders.forEach(order => {
+                const tableText = order.table_number ? `{% trans "Table" %} ${order.table_number}` : '{% trans "Takeaway" %}';
+                html += `
+                <a href="{% url 'waiter_panel' %}" style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
                   <div style="width: 36px; height: 36px; border-radius: 50%; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">🛍️</div>
                   <div style="flex: 1;">
-                    <div style="font-weight: 700; color: #1e293b; font-size: 0.8rem;">Yeni Sipariş Geldi!</div>
+                    <div style="font-weight: 700; color: #1e293b; font-size: 0.8rem;">{% trans "New Order Received!" %}</div>
                     <div style="color: #64748b; font-size: 0.72rem; margin-top: 2px;">${tableText} · #${order.id}</div>
                     <div style="color: #94a3b8; font-size: 0.65rem; margin-top: 4px;">⏱️ ${order.created_at}</div>
                   </div>
                 </a>
               `;
-            });
-            // Render waiter calls
-            data.calls.forEach(call => {
-              html += `
-                <a href="/en/orders/waiter/" style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
+              });
+              // Render waiter calls
+              data.calls.forEach(call => {
+                html += `
+                <a href="{% url 'waiter_panel' %}" style="display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; text-decoration: none; transition: background 0.2s;">
                   <div style="width: 36px; height: 36px; border-radius: 50%; background: #fee2e2; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">🚨</div>
                   <div style="flex: 1;">
-                    <div style="font-weight: 700; color: #b91c1c; font-size: 0.8rem;">Garson Çağrısı!</div>
-                    <div style="color: #64748b; font-size: 0.72rem; margin-top: 2px;">Masa #${call.table_number} garson çağırıyor.</div>
+                    <div style="font-weight: 700; color: #b91c1c; font-size: 0.8rem;">{% trans "Waiter Call!" %}</div>
+                    <div style="color: #64748b; font-size: 0.72rem; margin-top: 2px;">{% trans "Table" %} #${call.table_number} {% trans "is calling a waiter." %}</div>
                     <div style="color: #94a3b8; font-size: 0.65rem; margin-top: 4px;">⏱️ ${call.created_at}</div>
                   </div>
                 </a>
               `;
-            });
-            itemsArea.innerHTML = html;
-          } else {
-            itemsArea.innerHTML = `
+              });
+              itemsArea.innerHTML = html;
+            } else {
+              itemsArea.innerHTML = `
               <div style="padding: 40px 20px; text-align: center; color: #94a3b8;">
                 <div style="font-size: 2rem; margin-bottom: 8px;">🎉</div>
-                <div style="font-size: 0.82rem; font-weight: 600;">Her şey yolunda! Bildirim yok.</div>
+                <div style="font-size: 0.82rem; font-weight: 600;">{% trans "Everything is good! No notifications." %}</div>
               </div>
             `;
+            }
           }
-        }
-      })
-      .catch(err => console.error("Error fetching notifications:", err));
-  }
-  
-  // Fetch immediately and poll every 5 seconds
-  fetchNotifications();
-  setInterval(fetchNotifications, 5000);
-});
+        })
+        .catch(err => console.error("Error fetching notifications:", err));
+    }
 
-// Close dropdowns when clicking outside
-document.addEventListener('click', function(event) {
-  const userContainer = document.querySelector('.user-dropdown-container');
-  const userDropdown = document.getElementById('userDropdown');
-  if (userContainer && userDropdown && !userContainer.contains(event.target)) {
-    userDropdown.style.display = 'none';
-  }
-  
-  const notifContainer = document.querySelector('.notification-dropdown-container');
-  const notifDropdown = document.getElementById('notificationDropdown');
-  if (notifContainer && notifDropdown && !notifContainer.contains(event.target)) {
-    notifDropdown.style.display = 'none';
-  }
-});
+    // Fetch immediately and poll every 30 seconds to reduce server load
+    fetchNotifications();
+    setInterval(fetchNotifications, 30000);
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function (event) {
+    const userContainer = document.querySelector('.user-dropdown-container');
+    const userDropdown = document.getElementById('userDropdown');
+    if (userContainer && userDropdown && !userContainer.contains(event.target)) {
+      userDropdown.style.display = 'none';
+    }
+
+    const notifContainer = document.querySelector('.notification-dropdown-container');
+    const notifDropdown = document.getElementById('notificationDropdown');
+    if (notifContainer && notifDropdown && !notifContainer.contains(event.target)) {
+      notifDropdown.style.display = 'none';
+    }
+  });
 </script>
 
 <style>
-@media (max-width: 1024px) { .hide-mobile { display:none !important; } }
-.messages-container { margin-bottom: 20px; }
-.dropdown-menu a:hover, .dropdown-menu button:hover { background: rgba(99, 102, 241, 0.05); }
+  @media (max-width: 1024px) {
+    .hide-mobile {
+      display: none !important;
+    }
+  }
+
+  .messages-container {
+    margin-bottom: 20px;
+  }
+
+  .dropdown-menu a:hover,
+  .dropdown-menu button:hover {
+    background: rgba(99, 102, 241, 0.05);
+  }
 </style>
 {% endblock %}

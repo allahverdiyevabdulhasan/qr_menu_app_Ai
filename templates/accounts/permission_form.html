@@ -77,6 +77,91 @@
                     </div>
                 </div>
 
+                <h4 class="mt-8 mb-4">{% trans "Dashboard Module Access" %}</h4>
+                
+                <div class="space-y-4">
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Kitchen Screen" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow access to the order preparation screen" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_kitchen_screen }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Waiter Panel" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow access to table management and ordering" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_waiter_panel }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Cashier Panel" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow access to payments and checkout" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_cashier_panel }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Menu Management" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow editing products and categories" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_manage_menu }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Stock & Inventory" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow managing stock levels" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_manage_inventory }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Customers (CRM)" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing customer database" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_manage_customers }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "AI Reports" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow viewing AI generated insights" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_ai_reports }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Campaigns" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow managing marketing campaigns" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_manage_campaigns }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "Reviews" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow managing customer reviews" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_view_reviews }}<span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-row-info">
+                            <div class="toggle-row-title">{% trans "System Settings" %}</div>
+                            <div class="toggle-row-desc">{% trans "Allow managing restaurant profile and roles" %}</div>
+                        </div>
+                        <label class="toggle">{{ form.can_manage_settings }}<span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+
+
                 <div class="mt-8 flex gap-4">
                     <button type="submit" class="btn btn-primary flex-1">{% trans "Update Permissions" %}</button>
                     <a href="{% url 'role_permission_list' %}" class="btn btn-secondary flex-1">{% trans "Cancel" %}</a>

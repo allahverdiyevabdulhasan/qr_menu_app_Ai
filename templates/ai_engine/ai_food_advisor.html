@@ -1,8 +1,8 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "AI Food Advisor" %}{% endblock %}
-{% block page_title %}🍽️ {% trans "AI Food Advisor" %}{% endblock %}
+{% block title %}{% trans "Yapay Zeka Menü Danışmanı" %}{% endblock %}
+{% block page_title %}🍽️ {% trans "AI Menü Danışmanı" %}{% endblock %}
 
 {% block content %}
 <div style="max-width: 700px; margin: 0 auto;">
@@ -16,9 +16,9 @@
           🤖
         </div>
         <div>
-          <h2 style="font-size:1.15rem; font-weight:800; margin-bottom:4px;">{% trans "AI Food Advisor" %}</h2>
+          <h2 style="font-size:1.15rem; font-weight:800; margin-bottom:4px;">{% trans "Yapay Zeka Danışmanı" %}</h2>
           <p class="text-muted text-sm">
-            {% trans 'Ask anything — "What\'s good for a date night?", "Show something spicy under 15 ₺"' %}
+            {% trans 'Her şeyi sorabilirsiniz — "Akşam yemeği için ne önerirsin?", "15 ₺ altı acılı ne var?"' %}
           </p>
         </div>
       </div>
@@ -26,10 +26,10 @@
       <form method="post" style="display:flex; gap:10px;">
         {% csrf_token %}
         <input type="text" name="question" value="{{ question|default:'' }}"
-               placeholder="{% trans 'Ask a question…' %}" required
+               placeholder="{% trans 'Bir soru sorun…' %}" required
                class="form-control" style="flex:1; border-radius:12px;">
         <button type="submit" class="btn btn-primary" style="border-radius:12px; padding:12px 22px; flex-shrink:0;">
-          ✨ {% trans "Ask AI" %}
+          ✨ {% trans "AI'ya Sor" %}
         </button>
       </form>
     </div>
@@ -40,27 +40,27 @@
     <button onclick="document.querySelector('[name=question]').value=this.textContent; this.closest('form') && this.closest('form').submit();"
             style="background:#fff; border:1.5px solid var(--border); border-radius:20px; padding:7px 16px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; transition:all 0.2s; color:var(--dark);"
             onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-      {% trans "What's the most popular dish?" %}
+      {% trans "En popüler yemek hangisi?" %}
     </button>
     <button onclick="document.querySelector('[name=question]').value=this.textContent; this.closest('form') && this.closest('form').submit();"
             style="background:#fff; border:1.5px solid var(--border); border-radius:20px; padding:7px 16px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; transition:all 0.2s; color:var(--dark);"
             onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-      {% trans "Best option under 20 ₺" %}
+      {% trans "20 ₺ altı en iyi seçenek" %}
     </button>
     <button onclick="document.querySelector('[name=question]').value=this.textContent; this.closest('form') && this.closest('form').submit();"
             style="background:#fff; border:1.5px solid var(--border); border-radius:20px; padding:7px 16px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; transition:all 0.2s; color:var(--dark);"
             onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-      {% trans "High protein meal" %}
+      {% trans "Yüksek proteinli öğün" %}
     </button>
     <button onclick="document.querySelector('[name=question]').value=this.textContent; this.closest('form') && this.closest('form').submit();"
             style="background:#fff; border:1.5px solid var(--border); border-radius:20px; padding:7px 16px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; transition:all 0.2s; color:var(--dark);"
             onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-      {% trans "Vegetarian recommendation" %}
+      {% trans "Vejetaryen önerisi" %}
     </button>
     <button onclick="document.querySelector('[name=question]').value=this.textContent; this.closest('form') && this.closest('form').submit();"
             style="background:#fff; border:1.5px solid var(--border); border-radius:20px; padding:7px 16px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; transition:all 0.2s; color:var(--dark);"
             onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-      {% trans "Quick under 10 minutes" %}
+      {% trans "10 dakikadan hızlılar" %}
     </button>
   </div>
 
@@ -68,8 +68,8 @@
   {% if result %}
   <div class="card fade-in">
     <div class="card-header">
-      <span>🎯 {% trans "AI Response" %}</span>
-      <span class="badge badge-primary">{% trans "AI Generated" %}</span>
+      <span>🎯 {% trans "Yapay Zeka Cevabı" %}</span>
+      <span class="badge badge-primary">{% trans "AI Tarafından Oluşturuldu" %}</span>
     </div>
     <div class="card-body">
       {% if result.reason %}
@@ -81,7 +81,7 @@
       {% if result.products %}
       <div style="background:var(--bg); border-radius:16px; padding:16px; border:1px solid var(--border);">
         <div class="text-xs font-bold uppercase text-muted mb-4" style="letter-spacing:0.08em;">
-          {% trans "Recommended Items" %}
+          {% trans "Önerilen Ürünler" %}
         </div>
         <ul style="display:flex; flex-direction:column; gap:10px;">
           {% for name in result.products %}
@@ -89,7 +89,7 @@
                      border-radius:12px; padding:12px 16px;">
             <span style="font-size:1.2rem;">🍴</span>
             <span style="font-weight:600; font-size:0.92rem; color:var(--dark);">{{ name }}</span>
-            <span class="badge badge-success" style="margin-left:auto;">{% trans "Suggested" %}</span>
+            <span class="badge badge-success" style="margin-left:auto;">{% trans "Önerilen" %}</span>
           </li>
           {% endfor %}
         </ul>

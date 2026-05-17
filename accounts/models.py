@@ -27,6 +27,19 @@ class User(AbstractUser):
     can_view_expenses = models.BooleanField(_("Can View Expenses"), default=False)
     can_view_payroll = models.BooleanField(_("Can View Payroll"), default=False)
     can_view_analytics = models.BooleanField(_("Can View Analytics"), default=False)
+    
+    # Module Access Permissions
+    can_view_kitchen_screen = models.BooleanField(_("Can View Kitchen Screen"), default=False)
+    can_view_waiter_panel = models.BooleanField(_("Can View Waiter Panel"), default=False)
+    can_view_cashier_panel = models.BooleanField(_("Can View Cashier Panel"), default=False)
+    can_manage_menu = models.BooleanField(_("Can Manage Menu"), default=False)
+    can_manage_inventory = models.BooleanField(_("Can Manage Inventory"), default=False)
+    can_manage_customers = models.BooleanField(_("Can Manage Customers"), default=False)
+    can_view_ai_reports = models.BooleanField(_("Can View AI Reports"), default=False)
+    can_manage_campaigns = models.BooleanField(_("Can Manage Campaigns"), default=False)
+    can_view_reviews = models.BooleanField(_("Can View Reviews"), default=False)
+    can_manage_settings = models.BooleanField(_("Can Manage Settings"), default=False)
+
 
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)

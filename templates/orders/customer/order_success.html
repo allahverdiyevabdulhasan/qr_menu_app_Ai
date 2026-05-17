@@ -1,7 +1,7 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Order Placed!" %} 🎉{% endblock %}
+{% block title %}{% trans "Order Received!" %} 🎉{% endblock %}
 
 {% block content %}
 <div style="max-width:520px; margin:0 auto; padding:40px 18px 80px; text-align:center;">
@@ -15,10 +15,10 @@
   </div>
 
   <h1 style="font-size:1.75rem; font-weight:900; color:var(--dark); margin-bottom:8px;">
-    {% trans "Order Placed!" %}
+    {% trans "Order Received!" %}
   </h1>
   <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:32px;">
-    {% trans "Your order has been received by the kitchen." %}
+    {% trans "Your order has been sent to the kitchen." %}
   </p>
 
   {# ── Order Number Card ── #}
@@ -40,7 +40,7 @@
       🚚 {% trans "Track My Order" %}
     </a>
     <a href="{% url 'review_add' order.order_number %}" class="btn btn-secondary btn-block" style="border-radius:18px; height:52px;">
-      ⭐ {% trans "Leave a Review" %}
+      ⭐ {% trans "Write a Review" %}
     </a>
   </div>
 

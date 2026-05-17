@@ -166,7 +166,7 @@ class CheckoutView(View):
                 phone=customer_phone, 
                 name=customer_name
             )
-            order.customer_id = customer_profile.id
+            order.customer_profile = customer_profile
             
             # 2. Apply Loyalty Points if requested
             if use_loyalty and customer_profile.loyalty_points > 0:

@@ -213,59 +213,127 @@
       </div>
       {% endif %}
 
-      <div class="cashier-foot">
-        <button type="button" class="btn btn-primary" style="flex:1; border-radius:14px; font-weight:900; padding:14px; box-shadow:0 6px 15px rgba(99,102,241,0.2);" onclick="openOrderModal('{{ order.id }}', '{{ order.id }}', '{{ order.total_amount }}')">
-          🚀 Hızlı Yönet
+      <div class="cashier-foot" style="flex-direction:column; gap:10px;">
+        {# ── Hızlı Ödeme Al ── #}
+        <button type="button"
+          onclick="openPayModal('{{ order.id }}', '{{ order.id }}', '{% url 'order_quick_pay' order.pk %}', '{{ order.total_amount|floatformat:2 }}')"
+          style="width:100%; padding:16px; border-radius:14px; font-size:1.1rem; font-weight:900; border:none; cursor:pointer;
+                 background:linear-gradient(135deg,#10b981,#059669); color:#fff;
+                 box-shadow:0 8px 20px rgba(16,185,129,0.35); transition:all 0.2s;">
+          💰 Ödeme Al
         </button>
-        <a href="{% url 'order_detail' order.id %}" class="btn btn-secondary" style="border-radius:14px; font-weight:900; display:flex; align-items:center; justify-content:center; text-decoration:none; padding:14px 20px;">
-          ✏️ Detay / Düzenle
-        </a>
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="btn btn-primary" style="flex:1; border-radius:12px; font-weight:800; padding:11px;"
+                  onclick="openOrderModal('{{ order.id }}', '{{ order.id }}', '{% url 'order_status_update' order.pk %}')">
+            🚀 Hızlı Yönet
+          </button>
+          <a href="{% url 'order_detail' order.id %}" class="btn btn-secondary"
+             style="border-radius:12px; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none; padding:11px 16px;">
+            ✏️ Detay
+          </a>
+        </div>
       </div>
     </div>
     {% endfor %}
   </div>
 
-  {# ── Order Management Modal ── #}
-  <div id="orderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.6); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(8px);">
-    <div style="background:#fff; width:95%; max-width:450px; border-radius:28px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.2); animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+  {# ══════════════ HIZLI ÖDEME MODALI ══════════════ #}
+  <div id="payModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:10001; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+    <div style="background:#fff; width:95%; max-width:420px; border-radius:32px; overflow:hidden; box-shadow:0 30px 60px rgba(0,0,0,0.35); animation:modalIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+      {# Header #}
+      <div style="padding:28px 32px 20px; background:linear-gradient(135deg,#10b981,#059669); color:#fff; position:relative;">
+        <button onclick="closePayModal()" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>
+        <div style="font-size:0.85rem;font-weight:700;opacity:0.85;text-transform:uppercase;letter-spacing:1px;">Sipariş #<span id="payModalNum"></span></div>
+        <div id="payModalAmount" style="font-size:3rem;font-weight:900;margin-top:4px;line-height:1;">0,00 ₺</div>
+        <div style="font-size:0.9rem;opacity:0.8;margin-top:6px;font-weight:600;">Ödeme yöntemini seçin ve onaylayın</div>
+      </div>
+
+      <form id="payModalForm" method="post" style="padding:28px 32px;">
+        {% csrf_token %}
+        {# Ödeme Yöntemi Seçimi #}
+        <div style="margin-bottom:24px;">
+          <div style="font-size:0.8rem;font-weight:800;text-transform:uppercase;color:#64748b;letter-spacing:0.5px;margin-bottom:12px;">Ödeme Yöntemi</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+            <label class="pay-method-label" for="pm_cash">
+              <input type="radio" id="pm_cash" name="payment_method" value="CASH" checked style="display:none;">
+              <div class="pay-method-card active" onclick="selectMethod(this,'pm_cash')">
+                <span style="font-size:2rem;">💵</span>
+                <span style="font-size:0.85rem;font-weight:800;margin-top:4px;">Nakit</span>
+              </div>
+            </label>
+            <label class="pay-method-label" for="pm_card">
+              <input type="radio" id="pm_card" name="payment_method" value="CARD" style="display:none;">
+              <div class="pay-method-card" onclick="selectMethod(this,'pm_card')">
+                <span style="font-size:2rem;">💳</span>
+                <span style="font-size:0.85rem;font-weight:800;margin-top:4px;">Kart</span>
+              </div>
+            </label>
+            <label class="pay-method-label" for="pm_online">
+              <input type="radio" id="pm_online" name="payment_method" value="ONLINE" style="display:none;">
+              <div class="pay-method-card" onclick="selectMethod(this,'pm_online')">
+                <span style="font-size:2rem;">📱</span>
+                <span style="font-size:0.85rem;font-weight:800;margin-top:4px;">Online</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {# Onayla Butonu #}
+        <button type="submit"
+          style="width:100%;padding:20px;border-radius:16px;font-size:1.15rem;font-weight:900;border:none;cursor:pointer;
+                 background:linear-gradient(135deg,#10b981,#059669);color:#fff;
+                 box-shadow:0 8px 25px rgba(16,185,129,0.4);transition:all 0.2s;">
+          ✅ Ödemeyi Onayla &amp; Kapat
+        </button>
+        <button type="button" onclick="closePayModal()"
+          style="width:100%;margin-top:10px;padding:12px;border-radius:14px;font-weight:700;border:none;cursor:pointer;background:#f1f5f9;color:#64748b;font-size:0.95rem;">
+          Vazgeç
+        </button>
+      </form>
+    </div>
+  </div>
+
+  {# ══════════════ HIZLI YÖNET MODALI ══════════════ #}
+  <div id="orderModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center;">
+    <div style="background:#fff; width:95%; max-width:450px; border-radius:28px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.3); animation:modalIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
         <div style="padding:24px 30px; background:var(--primary); color:#fff; display:flex; justify-content:space-between; align-items:center;">
             <h3 style="margin:0; font-weight:900; font-size:1.4rem;">Sipariş #<span id="modalOrderNum"></span></h3>
-            <button onclick="closeOrderModal()" style="background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer; opacity:0.8; transition:0.2s;">&times;</button>
+            <button onclick="closeOrderModal()" style="background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer;">&times;</button>
         </div>
         <div style="padding:30px;">
-            
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
-                <form method="post" id="acceptForm">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="ACCEPTED">
-                    <button type="submit" class="btn btn-primary btn-block" style="padding:16px; border-radius:16px; font-weight:800; box-shadow:0 6px 15px rgba(99,102,241,0.2);">✅ Siparişi Onayla</button>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                <form method="post" class="status-form">
+                    {% csrf_token %}<input type="hidden" name="status" value="ACCEPTED">
+                    <button type="submit" class="btn btn-primary btn-block" style="padding:16px;border-radius:16px;font-weight:800;">✅ {% trans "Onayla" %}</button>
                 </form>
-                <form method="post" id="completeForm">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="COMPLETED">
-                    <button type="submit" class="btn btn-success btn-block" style="padding:16px; border-radius:16px; font-weight:800; background:#10b981; border:none; box-shadow:0 6px 15px rgba(16,185,129,0.2);">💰 Ödendi Kapat</button>
+                <form method="post" class="status-form">
+                    {% csrf_token %}<input type="hidden" name="status" value="SERVED">
+                    <button type="submit" class="btn btn-block" style="padding:16px;border-radius:16px;font-weight:800;background:#3b82f6;border:none;color:#fff;">🍽️ {% trans "Servis Edildi" %}</button>
                 </form>
             </div>
-
-            <div style="border-top:1px solid #e2e8f0; padding-top:24px;">
-                <h4 style="margin:0 0 16px 0; font-weight:800; color:var(--text-main);">Hızlı İşlemler</h4>
-                <div style="display:flex; gap:12px;">
-                    <form method="post" id="cancelForm" style="flex:1;">
-                        {% csrf_token %}
-                        <input type="hidden" name="status" value="CANCELLED">
-                        <button type="submit" class="btn btn-block" style="background:#fee2e2; color:#ef4444; border:none; padding:14px; border-radius:14px; font-weight:800;">❌ İptal Et</button>
-                    </form>
-                </div>
-            </div>
+            <form method="post" class="status-form" style="margin-bottom:16px;">
+                {% csrf_token %}<input type="hidden" name="status" value="COMPLETED">
+                <button type="submit" class="btn btn-block" style="width:100%;padding:18px;border-radius:16px;font-weight:900;background:#10b981;border:none;color:#fff;font-size:1.05rem;">💰 {% trans "Ödendi / Kapat" %}</button>
+            </form>
+            <form method="post" class="status-form">
+                {% csrf_token %}<input type="hidden" name="status" value="CANCELLED">
+                <button type="submit" class="btn btn-block" style="width:100%;padding:14px;border-radius:14px;font-weight:800;background:#fee2e2;color:#ef4444;border:none;">❌ {% trans "İptal Et" %}</button>
+            </form>
         </div>
     </div>
   </div>
+
   <style>
-    @keyframes modalIn {
-        from { opacity: 0; transform: translateY(30px) scale(0.95); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
+    @keyframes modalIn { from{opacity:0;transform:translateY(30px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .pay-method-card {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:16px 8px; border-radius:16px; border:2px solid #e2e8f0;
+      cursor:pointer; transition:all 0.2s; background:#f8fafc;
     }
-    #orderModal button:hover { opacity: 1; transform: translateY(-1px); }
+    .pay-method-card.active {
+      border-color:#10b981; background:#f0fdf4; box-shadow:0 4px 15px rgba(16,185,129,0.2);
+    }
+    .pay-method-label { cursor:pointer; }
   </style>
 
   {% else %}
@@ -278,22 +346,47 @@
 </div>
 
 <script>
-function openOrderModal(id, num, total) {
+function openOrderModal(id, num, actionUrl) {
     document.getElementById('modalOrderNum').innerText = num;
-    const finalUrl = `/tr/orders/${id}/status/`; // Hardcoded to Turkish path prefix 'tr' or remove language prefix logic if unnecessary, using safe relative paths.
-    // Ensure accurate URL mapping for Django
-    const baseAction = `{% url 'order_list' %}`.replace('orders/', `orders/${id}/status/`);
-    
-    document.getElementById('acceptForm').action = baseAction;
-    document.getElementById('completeForm').action = baseAction;
-    document.getElementById('cancelForm').action = baseAction;
-    
+    document.querySelectorAll('.status-form').forEach(form => {
+        form.action = actionUrl;
+    });
     document.getElementById('orderModal').style.display = 'flex';
 }
 
 function closeOrderModal() {
     document.getElementById('orderModal').style.display = 'none';
 }
+
+// ── Hızlı Ödeme Modal ──
+function openPayModal(id, num, actionUrl, amount) {
+    document.getElementById('payModalNum').innerText = num;
+    document.getElementById('payModalAmount').innerText = amount + ' ₺';
+    document.getElementById('payModalForm').action = actionUrl;
+    document.querySelectorAll('.pay-method-card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.pay-method-card')[0].classList.add('active');
+    document.getElementById('pm_cash').checked = true;
+    document.getElementById('payModal').style.display = 'flex';
+}
+
+function closePayModal() {
+    document.getElementById('payModal').style.display = 'none';
+}
+
+function selectMethod(card, radioId) {
+    document.querySelectorAll('.pay-method-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    document.getElementById(radioId).checked = true;
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('payModal').addEventListener('click', function(e) {
+        if (e.target === this) closePayModal();
+    });
+    document.getElementById('orderModal').addEventListener('click', function(e) {
+        if (e.target === this) closeOrderModal();
+    });
+});
 
 // WebSocket for Real-time updates
 const restaurantSlug = "{{ request.user.restaurant.slug }}";
@@ -341,7 +434,7 @@ orderSocket.onmessage = function(e) {
     }
 
     showNotification(data.message, data.call_type);
-    setTimeout(() => location.reload(), 6000);
+    setTimeout(() => location.reload(), 10000);
 };
 
 function showNotification(msg, type) {

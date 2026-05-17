@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
-from restaurants.views import RestaurantAccessMixin
+from restaurants.views import RestaurantAccessMixin, PermissionRequiredMixin
+
 from accounts.decorators import role_required
 from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -7,19 +8,14 @@ from datetime import timedelta
 from analytics.services import (
     get_revenue_metrics, get_order_metrics, get_payment_metrics,
     get_net_profit, get_top_products, get_sales_by_hour, get_customer_metrics,
-    get_top_tables, get_top_customers
+    get_top_tables, get_top_customers, get_daily_sales_trend,
+    get_category_distribution
 )
 from orders.models import Order
 from analytics.forms import DateRangeFilterForm
 
-class AnalyticsBaseView(RestaurantAccessMixin, TemplateView):
-    @method_decorator(role_required(['SUPER_ADMIN', 'RESTAURANT_OWNER', 'MANAGER', 'CASHIER']))
-    def dispatch(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_cashier and not user.can_view_analytics:
-            from django.core.exceptions import PermissionDenied
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
+class AnalyticsBaseView(PermissionRequiredMixin, TemplateView):
+    permission_name = 'can_view_analytics'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -86,6 +82,16 @@ class AnalyticsDashboardView(AnalyticsBaseView):
         payment_metrics = get_payment_metrics(r, context['start_date'], context['end_date'])
         context['payment_labels'] = list(payment_metrics.keys())
         context['payment_data'] = list(payment_metrics.values())
+        
+        # Sales Trend Chart (Last 7 days)
+        trend_labels, trend_values = get_daily_sales_trend(r)
+        context['trend_labels'] = trend_labels
+        context['trend_values'] = trend_values
+
+        # Category Distribution Chart
+        cat_labels, cat_values = get_category_distribution(r, context['start_date'], context['end_date'])
+        context['cat_labels'] = cat_labels
+        context['cat_values'] = cat_values
         
         return context
 

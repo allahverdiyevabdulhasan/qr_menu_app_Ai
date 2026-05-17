@@ -99,11 +99,15 @@
               </div>
             </td>
             <td style="text-align:right;">
-              {% if not review.is_product_review %}
-              <a href="{{ review.detail_url }}" class="btn btn-secondary btn-sm" style="padding:5px 12px;">{% trans "View" %}</a>
-              {% else %}
-              <span class="text-xs text-muted">—</span>
-              {% endif %}
+              <div style="display:flex; gap:8px; justify-content:flex-end; align-items:center;">
+                {% if not review.is_product_review %}
+                <a href="{{ review.detail_url }}" class="btn btn-secondary btn-sm" style="padding:5px 12px;">{% trans "View" %}</a>
+                {% endif %}
+                <form method="post" action="{{ review.delete_url }}" onsubmit='return confirm("{% trans "Bu yorumu silmek istediğinize emin misiniz?" %}")' style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm" style="padding:5px 10px; background:#fee2e2; border:none; color:#ef4444;">🗑️</button>
+                </form>
+              </div>
             </td>
           </tr>
           {% empty %}

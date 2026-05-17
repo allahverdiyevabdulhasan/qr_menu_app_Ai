@@ -13,15 +13,15 @@ def broadcast_order_update(sender, instance, created, **kwargs):
             # 1. Staff Notification (Restaurant Group)
             restaurant_group = f'orders_{instance.restaurant.slug}'
             # 2. Customer Notification (Order Group)
-            order_group = f'order_{instance.order_number}'
+            order_group = f'order_{str(instance.order_number)}'
             
             message_data = {
                 'type': 'order_status_update',
                 'order_id': instance.id,
-                'order_number': instance.order_number,
+                'order_number': str(instance.order_number),
                 'status': instance.status,
                 'estimated_prep_time': instance.estimated_prep_time,
-                'message': f"Order {instance.order_number} is now {instance.status}",
+                'message': f"Order {str(instance.order_number)} is now {instance.status}",
                 'call_type': 'new_order' if created else 'status_update'
             }
 
@@ -100,7 +100,7 @@ def broadcast_order_item_update(sender, instance, created, **kwargs):
             message_data = {
                 'type': 'order_status_update',
                 'order_id': instance.order.id,
-                'message': f"New items added to Order #{instance.order.order_number}",
+                'message': f"New items added to Order #{str(instance.order.order_number)}",
                 'call_type': 'status_update'
             }
             async_to_sync(channel_layer.group_send)(restaurant_group, message_data)

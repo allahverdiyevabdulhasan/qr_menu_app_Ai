@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Delete Branch — Kanatçı Mustafa{% endblock %}
+{% block title %}Delete Branch — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Delete Branch{% endblock %}
 
 {% block extra_css %}

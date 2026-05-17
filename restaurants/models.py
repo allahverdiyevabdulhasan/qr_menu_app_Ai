@@ -20,6 +20,27 @@ class Restaurant(models.Model):
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
 
+    @property
+    def average_rating(self):
+        from reviews.models import Review, ProductReview
+        from django.db.models import Avg
+        
+        # Combined reviews for a unified score
+        restaurant_reviews = list(Review.objects.filter(restaurant=self).values_list('rating', flat=True))
+        product_reviews = list(ProductReview.objects.filter(product__restaurant=self).values_list('rating', flat=True))
+        
+        all_ratings = restaurant_reviews + product_reviews
+        if not all_ratings:
+            return 0.0
+            
+        result = sum(all_ratings) / len(all_ratings)
+        return round(result, 1)
+
+    @property
+    def review_count(self):
+        from reviews.models import Review, ProductReview
+        return Review.objects.filter(restaurant=self).count() + ProductReview.objects.filter(product__restaurant=self).count()
+
     class Meta:
         verbose_name = _('Restaurant')
         verbose_name_plural = _('Restaurants')

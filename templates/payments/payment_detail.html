@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Payment Details — Kanatçı Mustafa{% endblock %}
+{% block title %}Payment Details — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Payment Details{% endblock %}
 
 {% block extra_css %}

@@ -72,7 +72,7 @@
       <a href="{% url 'ai_manager_chat' %}" class="quick-action">🤖 {% trans "Ask AI" %}</a>
       <a href="{% url 'kitchen_screen' %}" class="quick-action">🍳 {% trans "Kitchen" %}</a>
       <a href="{% url 'order_list' %}" class="quick-action">📋 {% trans "Orders" %}</a>
-      <a href="/en/m/{{ restaurant.slug }}/" target="_blank" class="quick-action">👁️ {% trans "Live Menu" %}</a>
+      <a href="{% url 'public_menu' restaurant_slug=restaurant.slug %}#menu" class="quick-action">👁️ {% trans "Live Menu" %}</a>
     </div>
   </div>
 
@@ -111,7 +111,7 @@
     <div class="metric-card metric-warning" style="position: relative;">
       <div class="icon">⭐</div>
       <div class="label">{% trans "Avg. Rating" %}</div>
-      <div class="value">4.8</div>
+      <div class="value">{{ avg_rating|default:"0.0"|floatformat:1 }}</div>
       <div class="text-muted text-xs">{% trans "Based on reviews" %}</div>
       <div style="position: absolute; top: 16px; right: 16px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>

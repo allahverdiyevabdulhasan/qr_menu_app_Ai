@@ -1,7 +1,7 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}Ödeme — NeyMenu AI{% endblock %}
+{% block title %}{% trans "Checkout" %} — NeyMenu AI{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -158,8 +158,8 @@
 {% block content %}
 <div class="checkout-container">
     <div class="checkout-title-section">
-        <h1 class="text-3xl font-black mb-2" style="font-family:'Outfit', sans-serif;">Neredeyse Hazır! 🚀</h1>
-        <p class="text-muted">Sipariş bilgilerinizi kontrol edin ve siparişinizi verin.</p>
+        <h1 class="text-3xl font-black mb-2" style="font-family:'Outfit', sans-serif;">{% trans "Almost Ready!" %} 🚀</h1>
+        <p class="text-muted">{% trans "Review your order details and place your order." %}</p>
     </div>
 
     <form method="post">
@@ -167,7 +167,7 @@
         <div class="checkout-grid">
             <div class="premium-form-card">
                 <div class="section-title">
-                    <span>📍</span> Teslimat Tercihi
+                    <span>📍</span> {% trans "Delivery Preference" %}
                 </div>
                 
                 <div style="display: flex; gap: 16px; margin-bottom: 40px;">
@@ -175,20 +175,20 @@
                         <input type="radio" name="order_type" value="DINE_IN" checked>
                         <div class="type-card">
                             <span class="type-icon">🍽️</span>
-                            <span class="type-label">Masa Servisi</span>
+                            <span class="type-label">{% trans "Dine-in" %}</span>
                         </div>
                     </label>
                     <label class="type-option">
                         <input type="radio" name="order_type" value="TAKEAWAY">
                         <div class="type-card">
                             <span class="type-icon">🥡</span>
-                            <span class="type-label">Paket Servis</span>
+                            <span class="type-label">{% trans "Takeaway" %}</span>
                         </div>
                     </label>
                 </div>
 
                 <div class="section-title">
-                    <span>💳</span> Sipariş Yöntemi
+                    <span>💳</span> {% trans "Ordering Method" %}
                 </div>
                 
                 <div style="display: flex; gap: 16px; margin-bottom: 40px;">
@@ -196,7 +196,7 @@
                         <input type="radio" name="order_method" value="standard" checked>
                         <div class="type-card">
                             <span class="type-icon">🔔</span>
-                            <span class="type-label">Standart (Web)</span>
+                            <span class="type-label">{% trans "Standard (Web)" %}</span>
                         </div>
                     </label>
                     {% if restaurant.settings.enable_whatsapp_ordering %}
@@ -211,46 +211,46 @@
                 </div>
 
                 <div class="section-title">
-                    <span>👤</span> Bilgileriniz
+                    <span>👤</span> {% trans "Your Information" %}
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
                     <div>
-                        <label class="text-xs font-black uppercase text-muted">Ad Soyad</label>
-                        <input type="text" name="customer_name" class="input-field" required placeholder="Örn. Ali Ahmedov">
+                        <label class="text-xs font-black uppercase text-muted">{% trans "Full Name" %}</label>
+                        <input type="text" name="customer_name" class="input-field" required placeholder="{% trans 'e.g. Ali Ahmedov' %}">
                     </div>
                     <div>
-                        <label class="text-xs font-black uppercase text-muted">Telefon Numarası</label>
-                        <input type="tel" name="customer_phone" class="input-field" required placeholder="Örn. +90 500 123 45 67">
+                        <label class="text-xs font-black uppercase text-muted">{% trans "Phone Number" %}</label>
+                        <input type="tel" name="customer_phone" class="input-field" required placeholder="{% trans 'e.g. +90 500 123 45 67' %}">
                     </div>
                 </div>
 
                 {% if not table %}
                 <div style="margin-bottom: 24px;">
-                    <label class="text-xs font-black uppercase text-muted">Masa Numarası</label>
+                    <label class="text-xs font-black uppercase text-muted">{% trans "Table Number" %}</label>
                     <select name="table_id" class="input-field" required>
-                        <option value="">Masanızı seçin...</option>
+                        <option value="">{% trans "Select your table..." %}</option>
                         {% for t in restaurant.tables.all %}
-                        <option value="{{ t.id }}">Masa {{ t.table_number }}</option>
+                        <option value="{{ t.id }}">{% trans "Table" %} {{ t.table_number }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 {% else %}
                 <div style="margin-bottom: 24px; padding: 16px; background: rgba(99, 102, 241, 0.05); border-radius: 16px; border: 1px dashed var(--primary);">
-                    <div class="text-xs font-black uppercase text-primary">Masa Siparişi</div>
+                    <div class="text-xs font-black uppercase text-primary">{% trans "Table Order" %}</div>
                     <div class="text-lg font-black">#{{ table.table_number }}</div>
                     <input type="hidden" name="table_id" value="{{ table.id }}">
                 </div>
                 {% endif %}
 
                 <div>
-                    <label class="text-xs font-black uppercase text-muted">Sipariş Notu (İsteğe Bağlı)</label>
-                    <textarea name="note" class="input-field" rows="3" placeholder="Örn. Soğan olmasın, acısı bol olsun vb..."></textarea>
+                    <label class="text-xs font-black uppercase text-muted">{% trans "Order Note (Optional)" %}</label>
+                    <textarea name="note" class="input-field" rows="3" placeholder="{% trans 'e.g. No onions, make it spicy etc...' %}"></textarea>
                 </div>
             </div>
 
             <div class="order-summary-card">
-                <h3 class="text-xl font-black mb-8">Sipariş Özeti</h3>
+                <h3 class="text-xl font-black mb-8">{% trans "Order Summary" %}</h3>
                 
                 <div style="max-height: 250px; overflow-y: auto; margin-bottom: 32px; padding-right: 8px;">
                     {% for item in cart %}
@@ -265,20 +265,20 @@
                 </div>
 
                 <div style="display: flex; justify-content: space-between; margin-bottom: 12px; opacity: 0.6;">
-                    <span>Ara Toplam</span>
+                    <span>{% trans "Subtotal" %}</span>
                     <span class="font-bold">{{ cart_total|floatformat:2 }} ₺</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 1.5rem; font-weight: 900; margin-top: 24px; padding-top: 24px; border-top: 1px dashed rgba(255,255,255,0.2);">
-                    <span>Toplam</span>
+                    <span>{% trans "Total" %}</span>
                     <span style="color: var(--primary);">{{ cart_total|floatformat:2 }} ₺</span>
                 </div>
 
                 <button type="submit" class="place-order-btn">
-                    Siparişi Tamamla
+                    {% trans "Complete Order" %}
                 </button>
                 
                 <p class="text-center text-xs opacity-40 mt-6">
-                    Bu siparişi vererek Hizmet Koşullarımızı kabul etmiş olursunuz.
+                    {% trans "By placing this order, you agree to our Terms of Service." %}
                 </p>
             </div>
         </div>

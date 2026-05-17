@@ -9,20 +9,20 @@ def broadcast_order_update(order, message=None, call_type='status'):
         {
             'type': 'order_status_update',
             'order_id': order.id,
-            'order_number': order.order_number,
+            'order_number': str(order.order_number),
             'status': order.status,
-            'message': message or f"Order {order.order_number} updated to {order.get_status_display()}",
+            'message': message or f"Order {str(order.order_number)} updated to {order.get_status_display()}",
             'estimated_prep_time': order.estimated_prep_time,
             'call_type': call_type
         }
     )
     # Also broadcast to tracking page
     async_to_sync(channel_layer.group_send)(
-        f'order_{order.order_number}',
+        f'order_{str(order.order_number)}',
         {
             'type': 'order_status_update',
             'order_id': order.id,
-            'order_number': order.order_number,
+            'order_number': str(order.order_number),
             'status': order.status,
             'message': message,
             'estimated_prep_time': order.estimated_prep_time

@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Yapay Zeka Stok Tahmini — Kanatçı Mustafa{% endblock %}
+{% block title %}Yapay Zeka Stok Tahmini — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Yapay Zeka Stok Tahmini (Beta){% endblock %}
 
 {% block content %}

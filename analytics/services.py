@@ -165,3 +165,55 @@ def get_top_tables(restaurant, start_date=None, end_date=None, limit=5):
 
 def get_top_customers(restaurant, start_date=None, end_date=None, limit=5):
     return Customer.objects.filter(restaurant=restaurant).order_by('-total_spent')[:limit]
+
+def get_daily_sales_trend(restaurant, days=7):
+    from django.db.models.functions import TruncDate
+    end_date = timezone.now()
+    start_date = end_date - timedelta(days=days-1)
+    
+    qs = Payment.objects.filter(
+        restaurant=restaurant, 
+        status='PAID',
+        created_at__date__range=[start_date.date(), end_date.date()]
+    )
+    
+    daily_stats = qs.annotate(date=TruncDate('created_at')).values('date').annotate(
+        total=Sum('amount')
+    ).order_by('date')
+    
+    # Fill in gaps
+    date_map = {item['date']: item['total'] for item in daily_stats}
+    
+    labels = []
+    values = []
+    
+    # Turkish day abbreviations
+    day_map = {
+        0: 'Pzt', 1: 'Sal', 2: 'Çar', 3: 'Per', 4: 'Cum', 5: 'Cmt', 6: 'Paz'
+    }
+    
+    for i in range(days):
+        current_date = start_date.date() + timedelta(days=i)
+        labels.append(day_map[current_date.weekday()])
+        values.append(float(date_map.get(current_date, 0)))
+        
+    return labels, values
+
+def get_category_distribution(restaurant, start_date=None, end_date=None):
+    qs = OrderItem.objects.filter(order__restaurant=restaurant, order__payment_status='PAID')
+    if start_date:
+        qs = qs.filter(order__created_at__gte=start_date)
+    if end_date:
+        qs = qs.filter(order__created_at__lte=end_date)
+        
+    results = qs.values('product__category__name').annotate(
+        total_revenue=Sum('total_price')
+    ).order_by('-total_revenue')
+    
+    labels = []
+    values = []
+    for item in results:
+        labels.append(item['product__category__name'] or "Genel")
+        values.append(float(item['total_revenue'] or 0))
+        
+    return labels, values

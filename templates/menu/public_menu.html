@@ -370,15 +370,15 @@
 
 {% block content %}
 {# ── QR Budget + Athlete Modal ── #}
-<div id="budgetModal">
+<div id="budgetModal" class="hidden">
   <div class="budget-sheet">
     <div class="sheet-handle-wrap"><span class="sheet-handle"></span></div>
     <div class="sheet-inner">
       <h2 class="sheet-title">🍽️ {% trans "Welcome!" %}</h2>
-      <p class="sheet-sub">{% trans "Enter your budget and we'll show what fits. Athlete mode highlights nutrition." %}</p>
+      <p class="sheet-sub">{% trans "Enter your budget, and we'll show you the most suitable products. Athlete mode highlights nutritional values." %}</p>
 
       <label style="font-weight:700; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.05em; color:#64748b; display:block; margin-bottom:10px;">
-        💰 {% trans "Your budget" %}
+        💰 {% trans "Your Budget" %}
       </label>
       <div class="budget-input-row">
         <input type="number" id="budgetInput" class="budget-amount-input" placeholder="50" min="0" step="0.5">
@@ -388,7 +388,7 @@
       <div class="toggle-row">
         <div class="toggle-row-info">
           <div class="toggle-row-title">💪 {% trans "Athlete Mode" %}</div>
-          <div class="toggle-row-desc">{% trans "Shows Cal · Protein · Carbs on each card" %}</div>
+          <div class="toggle-row-desc">{% trans "Shows Calories · Protein · Carbohydrates on each card" %}</div>
         </div>
         <label class="toggle" style="margin-left:16px;">
           <input type="checkbox" id="athleteToggle">
@@ -399,7 +399,7 @@
       <button class="sheet-submit-btn" onclick="applyBudget()">
         ✨ {% trans "Show My Menu" %}
       </button>
-      <span class="skip-link" onclick="skipBudget()">{% trans "Skip — show everything" %}</span>
+      <span class="skip-link" onclick="skipBudget()">{% trans "Skip — Show everything" %}</span>
     </div>
   </div>
 </div>
@@ -410,14 +410,14 @@
         <div class="restaurant-glass-card">
             <h1 style="color:var(--dark); font-size:1.6rem; font-weight:800; margin-bottom:4px;">{{ restaurant.name }}</h1>
             <p style="color:var(--text-muted); font-size:0.83rem; margin-bottom:14px;">
-                {{ restaurant.description|default:_("AI-Enhanced Dining Experience") }}
+                {{ restaurant.description|default:_("AI Destekli Lezzet Deneyimi") }}
             </p>
             <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:0.72rem;">
                 <span style="background:rgba(0,0,0,0.05); padding:5px 12px; border-radius:20px; font-weight:600; color:var(--dark);">
-                  📍 {{ restaurant.address|default:_("Main Location") }}
+                  📍 {{ restaurant.address|default:_("Main Branch") }}
                 </span>
                 <span style="background:rgba(0,0,0,0.05); padding:5px 12px; border-radius:20px; font-weight:600; color:var(--dark);">
-                  ⭐ 4.9 (500+)
+                  ⭐ {{ restaurant.average_rating|floatformat:1 }} ({{ restaurant.review_count }})
                 </span>
             </div>
         </div>
@@ -426,10 +426,10 @@
                 💰 {% trans "Budget Filter" %}
             </button>
             <a href="{% url 'ai_food_advisor' restaurant_slug=restaurant.slug %}" class="btn" style="flex:1; background:#8b5cf6; color:#fff; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; border-radius:20px; font-size:0.85rem; font-weight:700; box-shadow: 0 4px 16px rgba(139,92,246,0.5);">
-                🤖 {% trans "AI Advisor" %}
+                🤖 {% trans "Artificial Intelligence" %}
             </a>
             <a href="{% url 'ai_budget_recommendation' restaurant_slug=restaurant.slug %}" class="btn" style="flex:1; background:#f59e0b; color:#fff; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; border-radius:20px; font-size:0.85rem; font-weight:700; box-shadow: 0 4px 16px rgba(245,158,11,0.5);">
-                ✨ {% trans "AI Combos" %}
+                ✨ {% trans "AI Menu" %}
             </a>
         </div>
     </div>
@@ -437,7 +437,7 @@
     {# ── Budget Status Bar ── #}
     <div class="budget-bar" id="budgetBar">
       <span>💰</span>
-      <span id="budgetBarText">Budget: — ₺</span>
+      <span id="budgetBarText">{% trans "Budget" %}: — ₺</span>
       <button class="budget-reset" onclick="resetBudget()">✕ {% trans "Reset" %}</button>
     </div>
 
@@ -453,16 +453,16 @@
         </button>
         <a href="{% url 'public_reservation' restaurant_slug=restaurant.slug %}" class="f-btn reserve-btn">
             <span class="f-icon">📅</span>
-            <span class="f-label">{% trans "Reserve" %}</span>
+            <span class="f-label">{% trans "Reservation" %}</span>
         </a>
     </div>
 
     {# ── Search ── #}
-    <div class="search-container">
+    <div class="search-container" id="menu">
         <div class="search-wrapper">
             <span style="font-size:1rem;">🔍</span>
             <input type="text" id="searchInput" class="search-input"
-                   placeholder="{% trans "Search dishes..." %}" onkeyup="searchProducts()">
+                   placeholder="{% trans 'Search for food...' %}" onkeyup="searchProducts()">
         </div>
     </div>
 
@@ -500,8 +500,8 @@
                                         display:flex; align-items:center; justify-content:center; font-size:2.5rem;">🥗</div>
                         {% endif %}
                         <div class="price-tag">{{ p.price|floatformat:2 }} ₺</div>
-                        {% if p.is_popular %}<div style="position:absolute;top:8px;left:8px;background:#f59e0b;color:#fff;padding:3px 9px;border-radius:20px;font-size:0.65rem;font-weight:700;">🔥 Popular</div>{% endif %}
-                        <div class="budget-badge-overlay" style="display:none;">💰 {% trans "Over Budget" %}</div>
+                        {% if p.is_popular %}<div style="position:absolute;top:8px;left:8px;background:#f59e0b;color:#fff;padding:3px 9px;border-radius:20px;font-size:0.65rem;font-weight:700;">🔥 {% trans "Popular" %}</div>{% endif %}
+                        <div class="budget-badge-overlay" style="display:none;">💰 {% trans "Exceeds Budget" %}</div>
                     </div>
 
                     <div class="product-content">
@@ -524,7 +524,7 @@
 
                         <div class="product-bottom">
                             <span class="cal-tag">🔥 {{ p.calories|default:"—" }} kcal</span>
-                            <a href="{% url 'public_product' restaurant_slug=restaurant.slug pk=p.id %}" class="add-btn" title="{% trans 'View Detail & Add' %}">+</a>
+                            <a href="{% url 'public_product' restaurant_slug=restaurant.slug pk=p.id %}" class="add-btn" title="{% trans 'View Details and Add' %}">+</a>
                         </div>
                     </div>
                 </div>
@@ -628,15 +628,18 @@ function applyAllFilters() {
 
 function callWaiter() {
     const restaurantSlug = "{{ restaurant.slug }}";
-    const pathParts = window.location.pathname.split('/');
-    const tableToken = pathParts[3]; // m/slug/token/
+    const pathParts = window.location.pathname.split('/').filter(p => p !== "");
+    // Expecting: [m, slug, token] or [en, m, slug, token]
+    let tableToken = "";
+    if (pathParts[0] === 'm') tableToken = pathParts[2];
+    else if (pathParts[1] === 'm') tableToken = pathParts[3];
 
     if (!tableToken || tableToken.length < 32) {
         alert("{% trans 'Please scan a table QR code to call a waiter.' %}");
         return;
     }
 
-    fetch(`/en/m/${restaurantSlug}/${tableToken}/call-waiter/`, {
+    fetch(`/m/${restaurantSlug}/${tableToken}/call-waiter/`, {
         method: 'POST',
         headers: {
             'X-CSRFToken': '{{ csrf_token }}',
@@ -646,22 +649,24 @@ function callWaiter() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert("{% trans 'Waiter has been called.' %}");
+            alert("{% trans 'Waiter called.' %}");
         }
     });
 }
 
 function requestBill() {
     const restaurantSlug = "{{ restaurant.slug }}";
-    const pathParts = window.location.pathname.split('/');
-    const tableToken = pathParts[3];
+    const pathParts = window.location.pathname.split('/').filter(p => p !== "");
+    let tableToken = "";
+    if (pathParts[0] === 'm') tableToken = pathParts[2];
+    else if (pathParts[1] === 'm') tableToken = pathParts[3];
 
     if (!tableToken || tableToken.length < 32) {
-        alert("{% trans 'Please scan a table QR code to request the bill.' %}");
+        alert("{% trans 'Please scan a table QR code to request a bill.' %}");
         return;
     }
 
-    fetch(`/en/m/${restaurantSlug}/${tableToken}/call-waiter/bill/`, {
+    fetch(`/m/${restaurantSlug}/${tableToken}/call-waiter/bill/`, {
         method: 'POST',
         headers: {
             'X-CSRFToken': '{{ csrf_token }}',
@@ -671,7 +676,7 @@ function requestBill() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert("{% trans 'Bill has been requested.' %}");
+            alert("{% trans 'Bill requested.' %}");
         }
     });
 }

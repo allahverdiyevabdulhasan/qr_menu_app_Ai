@@ -7,7 +7,7 @@ from restaurants.views import RestaurantAccessMixin
 from orders.models import Order, OrderItem
 from menu.models import Product
 from tables.models import RestaurantTable
-from accounts.decorators import role_required
+from accounts.decorators import role_required, permission_required_custom
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from ..utils import broadcast_order_update, log_order_status_change
@@ -83,7 +83,7 @@ class KitchenScreenView(RestaurantAccessMixin, ListView):
     template_name = 'orders/staff/kitchen_screen.html'
     context_object_name = 'orders'
 
-    @method_decorator(role_required(['SUPER_ADMIN', 'RESTAURANT_OWNER', 'MANAGER', 'KITCHEN_STAFF']))
+    @method_decorator(permission_required_custom('can_view_kitchen_screen'))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -99,7 +99,7 @@ class WaiterPanelView(RestaurantAccessMixin, ListView):
     template_name = 'orders/staff/waiter_panel.html'
     context_object_name = 'orders'
 
-    @method_decorator(role_required(['SUPER_ADMIN', 'RESTAURANT_OWNER', 'MANAGER', 'WAITER']))
+    @method_decorator(permission_required_custom('can_view_waiter_panel'))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -126,7 +126,7 @@ class CashierPanelView(RestaurantAccessMixin, ListView):
     template_name = 'orders/staff/cashier_panel.html'
     context_object_name = 'orders'
 
-    @method_decorator(role_required(['SUPER_ADMIN', 'RESTAURANT_OWNER', 'MANAGER', 'CASHIER']))
+    @method_decorator(permission_required_custom('can_view_cashier_panel'))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -412,3 +412,46 @@ class NotificationAPIView(View):
             'calls': calls_data,
             'orders': orders_data
         })
+
+
+class QuickPayView(RestaurantAccessMixin, View):
+    """
+    Hızlı ödeme al: ödeme yöntemini seçip siparişi COMPLETED yapar,
+    Payment kaydı ve fatura otomatik oluşturulur.
+    """
+    @method_decorator(permission_required_custom('can_view_cashier_panel'))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, pk, *args, **kwargs):
+        from django.utils import timezone
+        from payments.models import Payment
+
+        order = get_object_or_404(Order, pk=pk, restaurant=request.user.restaurant)
+
+        VALID_METHODS = ['CASH', 'CARD', 'ONLINE']
+        payment_method = request.POST.get('payment_method', 'CASH').upper()
+        if payment_method not in VALID_METHODS:
+            payment_method = 'CASH'
+
+        old_status = order.status
+        order.status = 'COMPLETED'
+        order.payment_status = 'PAID'
+        log_order_status_change(order, old_status, 'COMPLETED', user=request.user)
+        order.save()
+
+        if not Payment.objects.filter(order=order, status='PAID').exists():
+            Payment.objects.create(
+                order=order,
+                restaurant=order.restaurant,
+                amount=order.total_amount,
+                method=payment_method,
+                status='PAID',
+                paid_at=timezone.now(),
+            )
+
+        order.refresh_from_db()
+        create_invoice_from_order(order)
+        broadcast_order_update(order, message=_("Ödeme alındı ve sipariş kapatıldı."), call_type='status_update')
+
+        return redirect('cashier_panel')

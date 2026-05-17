@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}{% if object %}Personel Düzenle{% else %}Personel Ekle{% endif %} — Kanatçı Mustafa{% endblock %}
+{% block title %}{% if object %}Personel Düzenle{% else %}Personel Ekle{% endif %} — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}{% if object %}Personel Düzenle{% else %}Personel Ekle{% endif %}{% endblock %}
 
 {% block content %}

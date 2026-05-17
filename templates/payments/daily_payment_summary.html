@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 {% load i18n %}
 
-{% block title %}Günlük Kasa Özeti — Kanatçı Mustafa{% endblock %}
+{% block title %}Günlük Kasa Özeti — {{ request.user.restaurant.name|default:"Panel" }}{% endblock %}
 {% block page_title %}Kasa Özeti ({{ today|date:"d M Y" }}){% endblock %}
 
 {% block content %}

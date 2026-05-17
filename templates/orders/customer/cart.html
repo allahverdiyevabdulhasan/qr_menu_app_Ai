@@ -1,7 +1,7 @@
 {% extends 'customer_base.html' %}
 {% load i18n %}
 
-{% block title %}Sepetiniz — NeyMenu AI{% endblock %}
+{% block title %}{% trans "Your Basket" %} — NeyMenu AI{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -145,9 +145,9 @@
 <div class="cart-container">
 
     <div class="cart-header">
-        <h1 style="font-size:1.4rem; font-weight:800;">🛒 Sepetiniz</h1>
+        <h1 style="font-size:1.4rem; font-weight:800;">🛒 {% trans "Your Basket" %}</h1>
         {% if cart_count > 0 %}
-        <span class="badge badge-primary" style="font-weight: 800; font-size: 0.8rem;">{{ cart_count }} ürün</span>
+        <span class="badge badge-primary" style="font-weight: 800; font-size: 0.8rem;">{{ cart_count }} {% trans "items" %}</span>
         {% endif %}
     </div>
 
@@ -177,7 +177,7 @@
                     {% endif %}
                     {% if item.removed_ingredients %}
                         {% for ing in item.removed_ingredients %}
-                            <div style="color:#ef4444; font-weight: 600;">- Olmasın: {{ ing }}</div>
+                            <div style="color:#ef4444; font-weight: 600;">- {% trans "Remove" %}: {{ ing }}</div>
                         {% endfor %}
                     {% endif %}
                     {% if item.note %}
@@ -211,7 +211,7 @@
 
         {# ── Nutrition Summary ── #}
         <div class="nutri-summary">
-          <div class="nutri-summary-title">💪 Sepet Besin Değerleri</div>
+          <div class="nutri-summary-title">💪 {% trans "Cart Nutritional Values" %}</div>
           <div class="nutri-summary-grid">
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalCal">—</div>
@@ -219,15 +219,15 @@
             </div>
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalProt">—</div>
-              <div class="nutri-cell-lbl">Protein</div>
+              <div class="nutri-cell-lbl">{% trans "Protein" %}</div>
             </div>
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalCarb">—</div>
-              <div class="nutri-cell-lbl">Karbonh.</div>
+              <div class="nutri-cell-lbl">{% trans "Carbohydrates" %}</div>
             </div>
             <div class="nutri-cell">
               <div class="nutri-cell-val" id="totalFat">—</div>
-              <div class="nutri-cell-lbl">Yağ</div>
+              <div class="nutri-cell-lbl">{% trans "Fat" %}</div>
             </div>
           </div>
         </div>
@@ -235,15 +235,15 @@
         {# ── Summary ── #}
         <div class="summary-card">
             <div class="summary-row">
-                <span>Ara Toplam</span>
+                <span>{% trans "Subtotal" %}</span>
                 <span>{{ cart_total|floatformat:2 }} ₺</span>
             </div>
             <div class="summary-row">
-                <span>Servis Ücreti</span>
-                <span>Ödeme adımlarında hesaplanır</span>
+                <span>{% trans "Service Fee" %}</span>
+                <span>{% trans "Calculated at checkout" %}</span>
             </div>
             <div class="summary-total">
-                <span>Toplam</span>
+                <span>{% trans "Total" %}</span>
                 <span>{{ cart_total|floatformat:2 }} ₺</span>
             </div>
         </div>
@@ -255,12 +255,12 @@
                     {% csrf_token %}
                     <button type="submit" class="btn btn-secondary"
                             style="height:56px; width:56px; border-radius:16px; font-size:1.2rem; padding:0; display:flex; align-items:center; justify-content:center; cursor:pointer;"
-                            title="Sepeti temizle">🗑️</button>
+                            title="{% trans 'Clear cart' %}">🗑️</button>
                 </form>
                 <a href="{% url 'checkout' restaurant_slug=restaurant.slug %}"
                    class="btn btn-primary btn-block"
                    style="flex:1; height:56px; border-radius:16px; font-size:1rem; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none; color:#fff; background:var(--primary-gradient);">
-                    Ödemeye Devam Et →
+                    {% trans "Continue to Checkout" %} →
                 </a>
             </div>
         </div>
@@ -268,10 +268,10 @@
     {% else %}
         <div class="empty-state fade-in">
             <div class="empty-state-emoji">🍱</div>
-            <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:12px;">Sepetiniz Boş</h2>
-            <p class="text-muted mb-8">Aç mısınız? Menümüzü inceleyin ve leziz bir şeyler seçin!</p>
+            <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:12px;">{% trans "Your Basket is Empty" %}</h2>
+            <p class="text-muted mb-8">{% trans "Hungry? Browse our menu and pick something delicious!" %}</p>
             <a href="{% url 'public_menu' restaurant_slug=restaurant.slug %}" class="btn btn-primary btn-lg" style="border-radius:20px; text-decoration:none; display:inline-block; font-weight:800; background:var(--primary-gradient);">
-                🍽️ Menüyü İncele
+                🍽️ {% trans "Browse Menu" %}
             </a>
         </div>
     {% endif %}

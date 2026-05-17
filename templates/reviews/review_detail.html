@@ -1,34 +1,213 @@
-﻿{% extends 'dashboard_base.html' %}
-{% block content %}
-<h2>Review Details</h2>
+{% extends 'dashboard_base.html' %}
+{% load i18n %}
 
-<div style="border: 1px solid #ccc; padding: 20px;">
-    <p><strong>Customer:</strong> {{ review.customer.name|default:"Anonymous" }}</p>
-    <p><strong>Date:</strong> {{ review.created_at|date:"M d, Y H:i" }}</p>
-    <p><strong>Order:</strong> #{{ review.order.order_number|slice:"-6:" }}</p>
-    
-    <hr>
-    
-    <h3>Overall Rating: {{ review.rating }} / 5</h3>
-    <p><strong>Taste:</strong> {{ review.taste_rating|default:"-" }} / 5</p>
-    <p><strong>Service:</strong> {{ review.service_rating|default:"-" }} / 5</p>
-    <p><strong>Speed:</strong> {{ review.speed_rating|default:"-" }} / 5</p>
-    <p><strong>Price:</strong> {{ review.price_rating|default:"-" }} / 5</p>
-    
-    <hr>
-    
-    <h3>Comment</h3>
-    <p><em>"{{ review.comment }}"</em></p>
-    
-    <hr>
-    
-    <h3>AI Analysis</h3>
-    <p><strong>Sentiment:</strong> {{ review.get_ai_sentiment_display }}</p>
-    <p><strong>Category:</strong> {{ review.get_ai_category_display }}</p>
-    <p><strong>Summary:</strong> {{ review.ai_summary }}</p>
-</div>
+{% block title %}Değerlendirme Detayları | NeyMenu AI{% endblock %}
+{% block page_title %}💬 Müşteri Geri Bildirimi{% endblock %}
 
-<br>
-<a href="{% url 'review_list' %}" class="btn">Back to List</a>
+{% block extra_css %}
+<style>
+    :root {
+        --review-bg: #f8fafc;
+        --review-card: #ffffff;
+        --star-active: #f59e0b;
+        --star-inactive: #e2e8f0;
+    }
+
+    body, .main-content, .page-content {
+        background-color: var(--review-bg) !important;
+    }
+
+    .review-detail-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px;
+    }
+
+    /* Info Header */
+    .review-header-card {
+        background: #fff;
+        padding: 32px;
+        border-radius: 24px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .customer-info { display: flex; align-items: center; gap: 16px; }
+    .avatar-circle {
+        width: 64px; height: 64px; border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #818cf8);
+        color: #fff; display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem; font-weight: 800;
+    }
+    .customer-name { font-size: 1.25rem; font-weight: 900; color: #0f172a; margin-bottom: 4px; }
+    .review-date { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+
+    /* Rating Grid */
+    .rating-section {
+        background: #fff;
+        border-radius: 24px;
+        border: 1px solid #e2e8f0;
+        padding: 32px;
+        margin-bottom: 24px;
+    }
+
+    .stars-row { display: flex; gap: 4px; font-size: 1.5rem; color: var(--star-active); margin-bottom: 24px; }
+    
+    .detailed-ratings {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+    }
+    .rating-item {
+        background: #f8fafc;
+        padding: 16px;
+        border-radius: 16px;
+        text-align: center;
+    }
+    .rating-label { font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
+    .rating-value { font-size: 1.25rem; font-weight: 900; color: #1e293b; }
+
+    /* Comment Section */
+    .comment-card {
+        background: #fff;
+        border-radius: 24px;
+        border: 1px solid #e2e8f0;
+        padding: 32px;
+        margin-bottom: 24px;
+    }
+    .comment-card h4 { font-size: 0.85rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
+    .comment-text { font-size: 1.15rem; font-style: italic; color: #1e293b; line-height: 1.6; }
+
+    /* AI Analysis Section */
+    .ai-analysis-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #fff;
+        border-radius: 24px;
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+    }
+    .ai-analysis-card::after {
+        content: "AI"; position: absolute; top: -10px; right: -10px;
+        font-size: 8rem; font-weight: 900; color: rgba(255,255,255,0.03);
+    }
+    .ai-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .ai-badge { background: #6366f1; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; }
+
+    .ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .ai-info-label { font-size: 0.7rem; font-weight: 800; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 4px; }
+    .ai-info-value { font-size: 1.1rem; font-weight: 700; }
+    
+    .sentiment-positive { color: #10b981; }
+    .sentiment-negative { color: #ef4444; }
+    .sentiment-neutral { color: #94a3b8; }
+
+    .ai-summary-box {
+        background: rgba(255,255,255,0.05);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+</style>
 {% endblock %}
 
+{% block content %}
+<div class="review-detail-container fade-in">
+    <!-- Top Actions -->
+    <div style="margin-bottom: 24px;">
+        <a href="{% url 'review_list' %}" style="text-decoration: none; color: #64748b; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+            ← Listeye Geri Dön
+        </a>
+    </div>
+
+    <!-- Header Card -->
+    <div class="review-header-card">
+        <div class="customer-info">
+            <div class="avatar-circle">
+                {{ review.customer.name|default:"M"|slice:":1"|upper }}
+            </div>
+            <div>
+                <div class="customer-name">{{ review.customer.name|default:"Misafir Müşteri" }}</div>
+                <div class="review-date">📅 {{ review.created_at|date:"d F Y, H:i" }}</div>
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <div style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase;">Sipariş</div>
+            <div style="font-size: 1.1rem; font-weight: 900; color: #6366f1;">#{{ review.order.order_number|slice:"-6:" }}</div>
+        </div>
+    </div>
+
+    <!-- Ratings Section -->
+    <div class="rating-section">
+        <div style="font-size: 0.85rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 12px;">Genel Deneyim</div>
+        <div class="stars-row">
+            {% with ""|center:review.rating as range %}
+            {% for _ in range %}★{% endfor %}
+            {% endwith %}
+            <span style="color: #64748b; font-size: 1.1rem; margin-left: 8px; font-weight: 800;">{{ review.rating }} / 5</span>
+        </div>
+
+        <div class="detailed-ratings">
+            <div class="rating-item">
+                <div class="rating-label">Lezzet</div>
+                <div class="rating-value">{{ review.taste_rating|default:"-" }}</div>
+            </div>
+            <div class="rating-item">
+                <div class="rating-label">Servis</div>
+                <div class="rating-value">{{ review.service_rating|default:"-" }}</div>
+            </div>
+            <div class="rating-item">
+                <div class="rating-label">Hız</div>
+                <div class="rating-value">{{ review.speed_rating|default:"-" }}</div>
+            </div>
+            <div class="rating-item">
+                <div class="rating-label">Fiyat</div>
+                <div class="rating-value">{{ review.price_rating|default:"-" }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Card -->
+    <div class="comment-card">
+        <h4>Müşteri Yorumu</h4>
+        <p class="comment-text">"{{ review.comment|default:"Müşteri yorum bırakmadı." }}"</p>
+    </div>
+
+    <!-- AI Analysis Card -->
+    <div class="ai-analysis-card">
+        <div class="ai-header">
+            <span style="font-size: 1.5rem;">✨</span>
+            <span style="font-weight: 900; letter-spacing: 1px;">YAPAY ZEKA ANALİZİ</span>
+            <span class="ai-badge">BETA</span>
+        </div>
+
+        <div class="ai-grid">
+            <div>
+                <div class="ai-info-label">Duygu Durumu</div>
+                <div class="ai-info-value sentiment-{{ review.ai_sentiment|lower }}">
+                    {% if review.ai_sentiment == 'POSITIVE' %}😊 Pozitif
+                    {% elif review.ai_sentiment == 'NEGATIVE' %}😔 Negatif
+                    {% else %}😐 Nötr{% endif %}
+                </div>
+            </div>
+            <div>
+                <div class="ai-info-label">Kategori</div>
+                <div class="ai-info-value">🏷️ {{ review.get_ai_category_display|default:"Belirlenmedi" }}</div>
+            </div>
+        </div>
+
+        <div class="ai-info-label">Özet & Analiz</div>
+        <div class="ai-summary-box">
+            <p style="font-size: 0.95rem; line-height: 1.6; color: rgba(255,255,255,0.85); margin: 0;">
+                {{ review.ai_summary|default:"Analiz henüz tamamlanmadı." }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
