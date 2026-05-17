@@ -78,8 +78,7 @@
         {% trans "Reservations" %}
       </a>
 
-      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or user.is_kitchen or request.user.can_view_kitchen_screen
-      %}
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or user.is_kitchen or request.user.can_view_kitchen_screen %}
       <a href="{% url 'kitchen_screen' %}"
         class="sidebar-link {% if request.resolver_match.url_name == 'kitchen_screen' %}active{% endif %}">
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -145,8 +144,7 @@
       </a>
       {% endif %}
 
-      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_menu or request.user.can_manage_inventory
-      or request.user.can_view_expenses or request.user.can_view_payroll or request.user.can_manage_customers or request.user.can_manage_settings or request.user.can_manage_branches %}
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_manage_menu or request.user.can_manage_inventory or request.user.can_view_expenses or request.user.can_view_payroll or request.user.can_manage_customers or request.user.can_manage_settings or request.user.can_manage_branches %}
       <div class="sidebar-section">{% trans "Management" %}</div>
 
 
@@ -239,8 +237,7 @@
       {% endif %}
       {% endif %}
 
-      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_ai_reports or
-      request.user.can_manage_campaigns or request.user.can_view_reviews %}
+      {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_ai_reports or request.user.can_manage_campaigns or request.user.can_view_reviews %}
       <div class="sidebar-section">{% trans "Growth & AI" %}</div>
 
       {% if request.user.is_super_admin or request.user.is_owner or request.user.is_manager or request.user.can_view_ai_reports %}
