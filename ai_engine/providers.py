@@ -210,16 +210,27 @@ class DifyProvider(BaseAIProvider):
                 timeout=45,
             )
             
-            # Eğer workflow yayınlanmadıysa dost canlısı bir hata mesajı dönelim
-            if resp.status_code == 400 and "Workflow not published" in resp.text:
-                logger.error("Dify error: Workflow not published in the Dify dashboard.")
-                return "Yapay Zeka Hatası: Dify panelinizde sağ üstteki 'Yayınla' (Publish) butonuna tıklamadığınız için bu özellik henüz kullanılamıyor. Lütfen Dify panelinizden uygulamanızı yayınlayın ve tekrar deneyin."
+            logger.info("Dify Response Code: %s", resp.status_code)
+            logger.info("Dify Response Body: %s", resp.text)
+            
+            # Dify hatalarını yakalayıp dost canlısı Türkçe mesajlar dönelim
+            if resp.status_code == 400:
+                body_text = resp.text
+                if "Workflow not published" in body_text:
+                    logger.error("Dify error: Workflow not published.")
+                    return "Yapay Zeka Hatası: Dify panelinizde sağ üstteki 'Yayınla' (Publish) butonuna tıklamadığınız için bu özellik henüz kullanılamıyor. Lütfen Dify panelinizden uygulamanızı yayınlayın ve tekrar deneyin."
+                elif "Model is not configured" in body_text:
+                    logger.error("Dify error: Model is not configured.")
+                    return "Yapay Zeka Hatası: Dify panelinizde bir yapay zeka modeli (Örn: OpenAI, Claude, Gemini, DeepSeek vb.) yapılandırılmamış veya model sağlayıcınızın API anahtarı girilmemiş. Lütfen Dify panelinizde Ayarlar -> Model Sağlayıcıları (Model Provider) sayfasına giderek bir model kurun ve model sağlayıcınızın API anahtarını girin."
+                else:
+                    logger.error("Dify 400 error: %s", body_text)
+                    return f"Yapay Zeka Hatası (Dify): {body_text}"
             
             resp.raise_for_status()
             return resp.json().get("answer", "")
         except Exception as exc:
             logger.error("Dify provider error: %s", exc)
-            return ""
+            return "Yapay Zeka Hatası: Şu anda yapay zeka servisine bağlanılamıyor. Lütfen Dify bağlantılarınızı kontrol edin."
 
 
 # ---------------------------------------------------------------------------
