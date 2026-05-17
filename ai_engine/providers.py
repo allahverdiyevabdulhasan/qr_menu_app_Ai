@@ -158,6 +158,16 @@ class OpenAICompatibleProvider(BaseAIProvider):
     def complete(self, system_prompt: str, user_message: str, **kwargs) -> str:
         try:
             import httpx  # lightweight HTTP client; pip install httpx
+            
+            # Tüm yapay zeka yanıtlarının kesinlikle Türkçe olmasını zorunlu kılalım
+            turkish_instruction = (
+                "\n\nCRITICAL LANGUAGE REQUIREMENT: You MUST speak, answer, and output text ONLY in Turkish. "
+                "Even if the question is in English or context is in English, translate your thoughts and respond strictly in Turkish. "
+                "If you are generating a JSON structure, every user-facing string field (such as 'reason', 'summary', 'name', 'title', 'recommendation') MUST be in Turkish. "
+                "Do not use English or any other language for human-readable output under any circumstances."
+            )
+            system_prompt = f"{system_prompt}{turkish_instruction}"
+            
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
@@ -201,6 +211,16 @@ class DifyProvider(BaseAIProvider):
     def complete(self, system_prompt: str, user_message: str, **kwargs) -> str:
         try:
             import httpx
+            
+            # Tüm yapay zeka yanıtlarının kesinlikle Türkçe olmasını zorunlu kılalım
+            turkish_instruction = (
+                "\n\nCRITICAL LANGUAGE REQUIREMENT: You MUST speak, answer, and output text ONLY in Turkish. "
+                "Even if the question is in English or context is in English, translate your thoughts and respond strictly in Turkish. "
+                "If you are generating a JSON structure, every user-facing string field (such as 'reason', 'summary', 'name', 'title', 'recommendation') MUST be in Turkish. "
+                "Do not use English or any other language for human-readable output under any circumstances."
+            )
+            system_prompt = f"{system_prompt}{turkish_instruction}"
+            
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
