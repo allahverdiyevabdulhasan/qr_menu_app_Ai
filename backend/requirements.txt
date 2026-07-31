@@ -179,7 +179,7 @@ rlPyCairo==0.4.0
 rpds-py==2026.5.1
 s3transfer==0.19.0
 scikit-image==0.26.0
-scipy==1.18.0
+scipy==1.14.1
 selenium==4.23.1
 service-identity==24.2.0
 shellingham==1.5.4
