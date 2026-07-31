@@ -9,6 +9,7 @@ import {
   CheckCircle2, Wallet, Bot, Sparkles, MessageCircle, Info, ListOrdered, Clock, Package, User, Calendar, ChevronRight, Trash2
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import Cookies from 'js-cookie';
 import { useTranslation } from '@/components/LanguageProvider';
 
 interface Category { id: number; name: string; }
@@ -24,7 +25,7 @@ interface Product {
   spicy_level?: number; options: Option[]; modifier_groups: ModifierGroup[]; ingredients: Ingredient[];
 }
 
-interface Restaurant { id: number; name: string; slug: string; logo: string | null; description?: string; active_campaign?: string | null; }
+interface Restaurant { id: number; name: string; slug: string; logo: string | null; description?: string; active_campaign?: string | null; currency?: string; }
 interface RestaurantSettings { 
   hasTableOrder: boolean; 
   hasOnlineOrder: boolean; 
@@ -32,7 +33,7 @@ interface RestaurantSettings {
   enable_orders: boolean;
 }
 interface SelectedOptionsState { options: Record<number, boolean>; modifiers: Record<number, Record<number, boolean>>; removed_ingredients: Record<number, boolean>; }
-interface CartItem { product: Product; quantity: number; selected_options: any; options_price_total: number; selections_text: string[]; }
+interface CartItem { product: Product; quantity: number; selected_options: any; options_price_total: number; selections_text: string[]; note?: string; }
 
 export default function PublicMenuPage({ params }: { params: Promise<{ slug: string }> }) {
   const router = useRouter();
@@ -46,7 +47,8 @@ export default function PublicMenuPage({ params }: { params: Promise<{ slug: str
     }
   }, [searchParams, resolvedParams.slug]);
   
-  const { isAuthenticated, user, accessToken } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const accessToken = Cookies.get('access_token');
   
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [settings, setSettings] = useState<RestaurantSettings | null>(null);
@@ -764,7 +766,7 @@ export default function PublicMenuPage({ params }: { params: Promise<{ slug: str
                 </div>
                 <button onClick={addToCart} className="flex-1 bg-zinc-900 text-white h-14 rounded-2xl font-medium text-sm flex items-center justify-between px-4 active:scale-95 transition-transform shadow-xl shadow-zinc-900/10 min-w-0">
                   <span className="truncate mr-2">{t('menu_add_to_cart')}</span>
-                  <span className="font-bold whitespace-nowrap">{((Number(selectedProduct.price) + calculateSelectionPrice()) * productQuantity).toFixed(2)} {restaurant?.currency || '₺'}</span>
+                  <span className="font-bold whitespace-nowrap">{((Number(selectedProduct.price) + calculateSelectionPrice()) * Number(productQuantity)).toFixed(2)} {restaurant?.currency || '₺'}</span>
                 </button>
              </div>
           </div>

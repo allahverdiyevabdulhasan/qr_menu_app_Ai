@@ -38,7 +38,7 @@ export default function middleware(req: NextRequest) {
   let locale = req.cookies.get('NEXT_LOCALE')?.value;
   if (!locale) {
     // Vercel Geo-IP kontrolü
-    const country = req.geo?.country || req.headers.get('x-vercel-ip-country');
+    const country = req.headers.get('x-vercel-ip-country');
     
     if (country === 'TR') locale = 'tr';
     else if (country === 'AZ') locale = 'az';

@@ -3,6 +3,7 @@
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import Cookies from 'js-cookie';
 import { api } from '@/lib/api';
 import { ChevronLeft, Loader2, Save } from 'lucide-react';
 import { useTranslation } from '@/components/LanguageProvider';
@@ -11,7 +12,8 @@ export default function PreferencesPage({ params }: { params: Promise<{ slug: st
   const resolvedParams = use(params);
   const router = useRouter();
   
-  const { isAuthenticated, accessToken, isLoading: authLoading } = useAuthStore();
+  const { isAuthenticated, isLoading: authLoading } = useAuthStore();
+  const accessToken = Cookies.get('access_token');
   const { t } = useTranslation();
   const [preferences, setPreferences] = useState<{dietary_preferences: string[], allergies: string[]}>({
     dietary_preferences: [],

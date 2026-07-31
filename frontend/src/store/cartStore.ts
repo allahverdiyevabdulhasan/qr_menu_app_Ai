@@ -24,7 +24,7 @@ interface CartState {
   items: CartItem[];
   
   // Actions
-  setOrderContext: (type: OrderType, tableId?: string) => void;
+  setOrderContext: (type: OrderType, tableId?: string | null) => void;
   addItem: (item: Omit<CartItem, 'cartItemId'>) => void;
   removeItem: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;

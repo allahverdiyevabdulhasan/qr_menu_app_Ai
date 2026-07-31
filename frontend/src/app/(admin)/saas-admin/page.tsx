@@ -20,6 +20,7 @@ interface RestaurantStats {
   total_orders: number;
   status: string;
   settings?: any;
+  custom_domain?: string;
 }
 
 interface SuperAdminStats {

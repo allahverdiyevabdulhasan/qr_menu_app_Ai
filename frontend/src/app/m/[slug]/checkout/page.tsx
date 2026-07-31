@@ -5,13 +5,15 @@ import { useRouter } from 'next/navigation';
 import { ChevronLeft, Loader2, CreditCard, Banknote, MapPin, Store, ReceiptText, CheckCircle2, Gift, Clock, Heart, Sparkles, Plus, Package, Trash2 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useTranslation } from '@/components/LanguageProvider';
 
 export default function CheckoutPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { isAuthenticated, accessToken } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
+  const accessToken = Cookies.get('access_token');
   const { t } = useTranslation();
   
   const [cart, setCart] = useState<any[]>([]);

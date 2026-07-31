@@ -3,6 +3,7 @@
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import Cookies from 'js-cookie';
 import { api } from '@/lib/api';
 import { 
   ChevronLeft, Package, Clock, 
@@ -17,7 +18,8 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
   const resolvedParams = use(params);
   const router = useRouter();
   
-  const { isAuthenticated, accessToken, isLoading: authLoading, user } = useAuthStore();
+  const { isAuthenticated, isLoading: authLoading, user } = useAuthStore();
+  const accessToken = Cookies.get('access_token');
   const { t } = useTranslation();
   const { addItem, clearCart } = useCartStore();
   const [orders, setOrders] = useState<any[]>([]);

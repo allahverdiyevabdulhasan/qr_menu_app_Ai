@@ -96,7 +96,7 @@ export default function OrderPage({ params }: { params: Promise<{ restaurantSlug
             : 'Siparişiniz gel-al için hazırlanıyor. 🛍️'}
         </p>
         <button 
-          onClick={() => router.push(`/${params.restaurantSlug}/menu`)}
+          onClick={() => router.push(`/${restaurantSlug}/menu`)}
           className="px-6 py-3 bg-black text-white rounded-xl font-medium w-full max-w-xs"
         >
           Menüye Dön

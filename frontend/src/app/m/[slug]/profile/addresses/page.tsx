@@ -3,6 +3,7 @@
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import Cookies from 'js-cookie';
 import { api } from '@/lib/api';
 import { 
   ChevronLeft, MapPin, Plus, Trash2, CheckCircle2, Loader2, Home, Building2
@@ -13,7 +14,8 @@ export default function AddressesPage({ params }: { params: Promise<{ slug: stri
   const resolvedParams = use(params);
   const router = useRouter();
   
-  const { isAuthenticated, accessToken, isLoading: authLoading } = useAuthStore();
+  const { isAuthenticated, isLoading: authLoading } = useAuthStore();
+  const accessToken = Cookies.get('access_token');
   const { t } = useTranslation();
   const [addresses, setAddresses] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -5,10 +5,12 @@ import axios from 'axios';
 import { Loader2, Package, MapPin, CheckCircle2, Navigation, LogOut, Info, Phone } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 export default function CourierAppPage() {
   const router = useRouter();
-  const { isAuthenticated, accessToken, logout } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
+  const accessToken = Cookies.get('access_token');
   const [isClient, setIsClient] = useState(false);
   
   const [orders, setOrders] = useState<any[]>([]);

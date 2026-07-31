@@ -27,7 +27,7 @@ export default function TableCheckoutPage({
       <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
         <h1 className="text-xl font-bold mb-2">Sepetiniz Boş</h1>
         <button 
-          onClick={() => router.push(`/${params.restaurantSlug}/table/${params.tableId}`)}
+          onClick={() => router.push(`/${restaurantSlug}/table/${tableId}`)}
           className="mt-4 px-6 py-2 bg-black text-white rounded-full font-medium"
         >
           Menüye Dön
@@ -95,7 +95,7 @@ export default function TableCheckoutPage({
         <div className="bg-white rounded-2xl shadow-sm border p-4 mb-4">
           <div className="flex justify-between items-center mb-4 pb-4 border-b">
             <span className="text-gray-500">Masa Numarası</span>
-            <span className="font-bold text-lg">{params.tableId}</span>
+            <span className="font-bold text-lg">{tableId}</span>
           </div>
 
           <h2 className="font-semibold text-gray-900 mb-3">Siparişleriniz</h2>

@@ -7,6 +7,7 @@ interface User {
   email: string;
   first_name?: string;
   last_name?: string;
+  phone?: string;
   restaurant_slug?: string;
   role?: string;
   is_superuser?: boolean;
@@ -25,6 +26,10 @@ interface User {
     enable_ai: boolean;
     enable_marketing: boolean;
     enable_reports: boolean;
+    enable_branches?: boolean;
+    enable_overview?: boolean;
+    enable_orders?: boolean;
+    [key: string]: any;
   };
   
   // Financial Permissions

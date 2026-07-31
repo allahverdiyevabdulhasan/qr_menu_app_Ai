@@ -89,9 +89,9 @@ export default function CustomerProfilePage({ params }: { params: Promise<{ slug
         {/* User Info Panel */}
         <div className="bg-white rounded-[32px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 mb-6 flex flex-col items-center text-center -mt-2">
           <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center text-[#7A5CFF] font-black text-3xl mb-4 border-[4px] border-white shadow-sm">
-             {getInitials(user?.first_name || user?.name)}
+             {getInitials(user?.first_name || user?.username)}
           </div>
-          <h2 className="text-2xl font-black tracking-tight text-slate-800">{user?.first_name || user?.name || 'Değerli Müşterimiz'}</h2>
+          <h2 className="text-2xl font-black tracking-tight text-slate-800">{user?.first_name || user?.username || 'Değerli Müşterimiz'}</h2>
           
           <div className="flex items-center gap-4 mt-4 w-full justify-center">
             {user?.email && (
