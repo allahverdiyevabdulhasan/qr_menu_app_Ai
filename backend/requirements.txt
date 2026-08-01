@@ -193,7 +193,7 @@ stripe==15.3.1
 svglib==1.6.0
 tablib==3.7.0
 tenacity==9.1.4
-textract==1.6.5
+textract==1.6.4
 tifffile==2026.6.1
 tinycss2==1.5.1
 tornado==6.5.7
