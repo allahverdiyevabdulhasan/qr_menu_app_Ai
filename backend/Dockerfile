@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install python dependencies
 COPY requirements.txt /app/
-RUN pip install "pip<24.1" && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy project
 COPY . /app/
